@@ -1,6 +1,6 @@
 # Part 3: Admin Section `/admin`
 
-This plan covers administrative features including branches, employee management, ticket classification categories, system configuration, and audit logs.
+This plan covers administrative features including branches, employee management, ticket classification categories, system configuration, and audit logs. **Note: All user-facing views, forms, modals, tables, badges, and alerts must be in Arabic (RTL) only.**
 
 ---
 

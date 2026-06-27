@@ -4,9 +4,9 @@ require_once __DIR__ . '/../bootstrap.php';
 // Apply security headers
 set_security_headers();
 
-// If already logged in as employee, redirect to support dashboard
-if (isset($_SESSION['user_id']) && ($_SESSION['user_role'] ?? '') === 'employee') {
-    header('Location: ' . BASE_URL . 'support/dashboard.php');
+// If already logged in as admin, redirect to admin dashboard
+if (isset($_SESSION['user_id']) && ($_SESSION['user_role'] ?? '') === 'admin') {
+    header('Location: ' . BASE_URL . 'admin/dashboard.php');
     exit();
 }
 
@@ -26,11 +26,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         try {
             $db = getDBConnection();
-            // Query for support employee account
+            // Query for administrative account
             $stmt = $db->prepare("
                 SELECT * FROM employees 
                 WHERE (username = :username OR email = :email) 
-                  AND role = 'employee' 
+                  AND role = 'admin' 
                   AND status = 'active'
             ");
             $stmt->execute([
@@ -60,8 +60,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $update = $db->prepare("UPDATE employees SET last_login_at = NOW() WHERE id = :id");
                 $update->execute(['id' => $user['id']]);
                 
-                $_SESSION['success'] = 'مرحباً بك! تم تسجيل الدخول بنجاح كموظف دعم فني.';
-                header('Location: ' . BASE_URL . 'support/dashboard.php');
+                $_SESSION['success'] = 'مرحباً بك! تم تسجيل الدخول بنجاح كمدير للنظام.';
+                header('Location: ' . BASE_URL . 'admin/dashboard.php');
                 exit();
             } else {
                 // Failed
@@ -70,12 +70,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         } catch (PDOException $e) {
             $error_message = 'حدث خطأ غير متوقع بالخادم. يرجى المحاولة لاحقاً.';
-            error_log("Support employee login database error: " . $e->getMessage());
+            error_log("Admin login database error: " . $e->getMessage());
         }
     }
 }
 
-$pageTitle = 'تسجيل دخول موظفي الدعم الفني';
+$pageTitle = 'تسجيل دخول الإدارة';
 require_once __DIR__ . '/../includes/header.php';
 ?>
 
@@ -83,8 +83,8 @@ require_once __DIR__ . '/../includes/header.php';
 <div class="flex-1 flex flex-col min-h-screen justify-center items-center bg-gray-50 dark:bg-gray-900 pt-20 px-4">
     <div class="w-full max-w-md p-6 space-y-6 bg-white rounded-2xl border border-gray-100 shadow-xl dark:bg-gray-800 dark:border-gray-700">
         <div class="text-center">
-            <h2 class="text-2xl font-bold text-gray-900 dark:text-white">بوابة موظفي الدعم الفني</h2>
-            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">سجل الدخول لإدارة ومتابعة تذاكر الدعم الفني للفروع</p>
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-white">بوابة الإدارة</h2>
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">سجل الدخول لإدارة الفروع والموظفين والتذاكر</p>
         </div>
 
         <?php if (!empty($error_message)): ?>
@@ -103,7 +103,7 @@ require_once __DIR__ . '/../includes/header.php';
             <!-- Username/Email Field -->
             <div>
                 <label for="username" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">اسم المستخدم أو البريد الإلكتروني</label>
-                <input type="text" name="username" id="username" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="employee" required value="<?php echo isset($_POST['username']) ? htmlspecialchars($_POST['username']) : ''; ?>">
+                <input type="text" name="username" id="username" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="admin" required value="<?php echo isset($_POST['username']) ? htmlspecialchars($_POST['username']) : ''; ?>">
             </div>
 
             <!-- Password Field -->

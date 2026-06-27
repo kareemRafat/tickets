@@ -31,7 +31,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 // Global constant definitions
 if (!defined('SYSTEM_NAME')) {
-    define('SYSTEM_NAME', 'CRV Tickets System');
+    define('SYSTEM_NAME', 'نظام تذاكر CRV');
 }
 
 if (!defined('BASE_URL')) {

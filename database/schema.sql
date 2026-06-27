@@ -48,7 +48,22 @@ CREATE TABLE IF NOT EXISTS `categories` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- -------------------------------------------------------------
--- 4. Table: support_tickets (internal support/employee tickets)
+-- 4. Table: all_students (imported student database for verification)
+-- -------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `all_students` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `national_id` VARCHAR(50) UNIQUE NOT NULL,
+    `full_name` VARCHAR(150) NOT NULL,
+    `email` VARCHAR(100) NOT NULL,
+    `phone` VARCHAR(20) NOT NULL,
+    `student_code` VARCHAR(50) UNIQUE NULL,
+    `branch_id` INT NOT NULL,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT `fk_all_students_branch` FOREIGN KEY (`branch_id`) REFERENCES `branches` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- -------------------------------------------------------------
+-- 5. Table: support_tickets (internal support/employee tickets)
 -- -------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `support_tickets` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
@@ -71,7 +86,7 @@ CREATE TABLE IF NOT EXISTS `support_tickets` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- -------------------------------------------------------------
--- 5. Table: support_ticket_replies
+-- 6. Table: support_ticket_replies
 -- -------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `support_ticket_replies` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
@@ -86,7 +101,7 @@ CREATE TABLE IF NOT EXISTS `support_ticket_replies` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- -------------------------------------------------------------
--- 6. Table: student_tickets
+-- 7. Table: student_tickets
 -- -------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `student_tickets` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
@@ -111,7 +126,7 @@ CREATE TABLE IF NOT EXISTS `student_tickets` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- -------------------------------------------------------------
--- 7. Table: student_ticket_replies
+-- 8. Table: student_ticket_replies
 -- -------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `student_ticket_replies` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
@@ -126,7 +141,7 @@ CREATE TABLE IF NOT EXISTS `student_ticket_replies` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- -------------------------------------------------------------
--- 8. Table: audit_logs
+-- 9. Table: audit_logs
 -- -------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `audit_logs` (
     `id` BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -143,7 +158,7 @@ CREATE TABLE IF NOT EXISTS `audit_logs` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- -------------------------------------------------------------
--- 9. Table: login_attempts
+-- 10. Table: login_attempts
 -- -------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `login_attempts` (
     `id` BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -154,7 +169,7 @@ CREATE TABLE IF NOT EXISTS `login_attempts` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- -------------------------------------------------------------
--- 10. Table: system_settings
+-- 11. Table: system_settings
 -- -------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `system_settings` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
@@ -213,3 +228,10 @@ INSERT INTO `categories` (`id`, `name`, `type`, `status`) VALUES
 (7, 'Technical Issue', 'student', 'active'),
 (8, 'General Complaint', 'student', 'active')
 ON DUPLICATE KEY UPDATE `name` = VALUES(`name`), `type` = VALUES(`type`), `status` = VALUES(`status`);
+
+-- 4. Seed predefined test students in all_students table
+INSERT INTO `all_students` (`id`, `national_id`, `full_name`, `email`, `phone`, `student_code`, `branch_id`) VALUES
+(1, '12345678901234', 'John Doe', 'john.doe@student.com', '01012345678', 'STD001', 1),
+(2, '29876543210987', 'Jane Smith', 'jane.smith@student.com', '01187654321', 'STD002', 2),
+(3, '23456789012345', 'Ahmed Aly', 'ahmed.aly@student.com', '01234567890', 'STD003', 3)
+ON DUPLICATE KEY UPDATE `national_id` = VALUES(`national_id`), `full_name` = VALUES(`full_name`), `email` = VALUES(`email`), `phone` = VALUES(`phone`), `student_code` = VALUES(`student_code`), `branch_id` = VALUES(`branch_id`);
