@@ -338,7 +338,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
                         <input type="hidden" name="action" value="reply">
 
                         <div class="mb-4">
-                            <textarea name="reply" rows="4" class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="اكتب ردك هنا..." required></textarea>
+                            <textarea name="reply" rows="4" class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 placeholder-gray-400 dark:placeholder-gray-500 dark:text-white" placeholder="اكتب ردك هنا..." required></textarea>
                         </div>
 
                         <div class="flex flex-col sm:flex-row sm:items-center gap-3">

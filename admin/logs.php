@@ -76,7 +76,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
             </div>
             <div>
                 <label class="block mb-1 text-xs font-medium text-gray-900 dark:text-white">بحث في الإجراء</label>
-                <input type="text" name="search_action" value="<?php echo htmlspecialchars($search_action); ?>" placeholder="مثال: إضافة موظف" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-56 p-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                <input type="text" name="search_action" value="<?php echo htmlspecialchars($search_action); ?>" placeholder="مثال: إضافة موظف" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-56 p-2 dark:bg-gray-700 dark:border-gray-600 placeholder-gray-400 dark:placeholder-gray-500 dark:text-white">
             </div>
             <div class="flex gap-2">
                 <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-all">بحث</button>

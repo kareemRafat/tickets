@@ -31,7 +31,13 @@ try {
         FROM student_tickets st
         JOIN categories c ON st.category_id = c.id
         WHERE {$where_clause}
-        ORDER BY st.created_at DESC
+        ORDER BY
+            CASE st.status
+                WHEN 'open' THEN 1
+                WHEN 'in_progress' THEN 2
+                WHEN 'closed' THEN 3
+            END,
+            st.created_at DESC
     ");
     $stmt->execute($params);
     $tickets = $stmt->fetchAll();
@@ -61,7 +67,7 @@ require_once __DIR__ . '/../includes/header.php';
         <form class="flex flex-wrap items-end gap-4" method="GET" action="">
             <div>
                 <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">بحث برقم التذكرة</label>
-                <input type="text" name="search" value="<?php echo htmlspecialchars($search); ?>" placeholder="رقم التذكرة أو الموضوع..." class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-56 p-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                <input type="text" name="search" value="<?php echo htmlspecialchars($search); ?>" placeholder="رقم التذكرة أو الموضوع..." class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-56 p-2 dark:bg-gray-700 dark:border-gray-600 placeholder-gray-400 dark:placeholder-gray-500 dark:text-white">
             </div>
             <div>
                 <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">تصفية بالحالة</label>
@@ -79,17 +85,15 @@ require_once __DIR__ . '/../includes/header.php';
 
     <style>
     .ticket-item.active {
-        background-color: rgba(59, 130, 246, 0.08);
-        border-right: 3px solid #3b82f6;
+        background-color: rgba(0, 0, 0, 0.04);
     }
     .dark .ticket-item.active {
-        background-color: rgba(59, 130, 246, 0.12);
-        border-right-color: #60a5fa;
+        background-color: rgba(255, 255, 255, 0.06);
     }
 </style>
 
 <div class="flex-1 grid grid-cols-1 lg:grid-cols-6 gap-4 min-h-0">
-        <div id="ticket-details" data-api-url="<?php echo BASE_URL; ?>students/ajax/ticket-details.php" class="lg:col-span-4 bg-white border border-gray-100 rounded-2xl shadow-sm dark:bg-gray-800 dark:border-gray-700 p-6 order-2 lg:order-2 min-h-[300px] lg:min-h-0 overflow-y-auto">
+        <div id="ticket-details" data-api-url="<?php echo BASE_URL; ?>students/ajax/ticket-details.php" class="lg:col-span-4 bg-white border border-gray-300 rounded-2xl shadow-sm dark:bg-gray-800 dark:border-gray-700 p-6 order-2 lg:order-2 min-h-[300px] lg:min-h-0 overflow-y-auto">
             <div class="flex items-center justify-center h-full py-20">
                 <div class="text-center">
                     <svg class="w-16 h-16 mx-auto mb-4 text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -100,12 +104,12 @@ require_once __DIR__ . '/../includes/header.php';
             </div>
         </div>
 
-        <div id="ticket-list" class="lg:col-span-2 bg-white border border-gray-100 rounded-2xl shadow-sm dark:bg-gray-800 dark:border-gray-700 overflow-hidden order-1 lg:order-1 flex flex-col max-h-[300px] lg:max-h-[calc(100vh-280px)]">
-            <div class="px-4 py-3 border-b border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50 flex items-center justify-between shrink-0">
-                <span class="text-sm font-semibold text-gray-700 dark:text-gray-300">التذاكر</span>
-                <span class="text-xs text-gray-500 dark:text-gray-400"><?php echo count($tickets); ?> تذكرة</span>
+        <div id="ticket-list" class="lg:col-span-2 bg-white border border-gray-300 rounded-2xl shadow-sm dark:bg-gray-800 dark:border-gray-700 overflow-hidden order-1 lg:order-1 flex flex-col max-h-[300px] lg:max-h-[calc(100vh-280px)]">
+            <div class="px-4 py-3 border-b border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50 flex items-center justify-between shrink-0">
+                <span class="text-sm text-gray-700 dark:text-gray-300 font-bold">التذاكر</span>
+                <span class="text-xs text-gray-500 dark:text-gray-400 font-bold"><?php echo count($tickets); ?> تذكرة</span>
             </div>
-            <div class="overflow-y-auto flex-1 divide-y divide-gray-100 dark:divide-gray-700">
+            <div class="overflow-y-auto flex-1 p-3 space-y-2">
                 <?php if (empty($tickets)): ?>
                     <div class="px-4 py-8 text-center text-gray-500 dark:text-gray-400">
                         لا توجد تذاكر مسجلة تطابق معايير البحث.
@@ -114,20 +118,23 @@ require_once __DIR__ . '/../includes/header.php';
                     <?php foreach ($tickets as $t): ?>
                         <?php
                         $status_ar = $t['status'] === 'open' ? 'مفتوحة' : ($t['status'] === 'in_progress' ? 'قيد التنفيذ' : 'مغلقة');
-                        $priority_ar = $t['priority'] === 'high' ? 'عالية' : ($t['priority'] === 'medium' ? 'متوسطة' : 'منخفضة');
-                        $status_bg = $t['status'] === 'open' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' : ($t['status'] === 'in_progress' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200');
-                        $priority_bg = $t['priority'] === 'high' ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' : ($t['priority'] === 'medium' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300');
+                        $status_bg = $t['status'] === 'open' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : ($t['status'] === 'in_progress' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200');
+                        $border_color = $t['status'] === 'open' ? '#22c55e' : ($t['status'] === 'in_progress' ? '#eab308' : '#ef4444');
+                        $status_icon = $t['status'] === 'open'
+                            ? '<svg class="w-4 h-4 inline ml-1 -mt-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M5 11a2 2 0 00-2 2v7a2 2 0 002 2h14a2 2 0 002-2v-7a2 2 0 00-2-2H5z"/><path d="M12 14a2 2 0 100 4 2 2 0 000-4z"/><path d="M12 16v2"/><path d="M7 11V8a5 5 0 0110-2" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>'
+                            : ($t['status'] === 'in_progress'
+                                ? '<svg class="w-4 h-4 inline ml-1 -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg>'
+                                : '<svg class="w-4 h-4 inline ml-1 -mt-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M5 11a2 2 0 00-2 2v7a2 2 0 002 2h14a2 2 0 002-2v-7a2 2 0 00-2-2H5z"/><path d="M12 14a2 2 0 100 4 2 2 0 000-4z"/><path d="M12 16v2"/><path d="M7 11V8a5 5 0 0110 0v3" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>');
                         ?>
-                        <div class="ticket-item cursor-pointer px-5 py-4 hover:bg-gray-50 dark:hover:bg-gray-700/40 transition-colors" data-ticket-id="<?php echo $t['id']; ?>">
+                        <div class="ticket-item cursor-pointer px-5 py-4 hover:bg-gray-50 dark:hover:bg-gray-700/40 transition-colors" data-ticket-id="<?php echo $t['id']; ?>" style="border-right: 3px solid <?php echo $border_color; ?>">
                             <div class="flex items-center justify-between mb-1.5">
                                 <span class="font-mono text-base font-bold text-gray-900 dark:text-white"><?php echo htmlspecialchars($t['ticket_number']); ?></span>
                                 <span class="text-sm text-gray-400 dark:text-gray-500"><?php echo date('Y-m-d', strtotime($t['created_at'])); ?></span>
                             </div>
                             <p class="text-base font-semibold text-gray-800 dark:text-gray-200 truncate mb-2"><?php echo htmlspecialchars($t['subject']); ?></p>
                             <div class="flex items-center gap-2.5">
-                                <span class="px-2.5 py-0.5 text-sm font-medium rounded-full <?php echo $status_bg; ?>"><?php echo $status_ar; ?></span>
-                                <span class="px-2.5 py-0.5 text-sm font-medium rounded-full <?php echo $priority_bg; ?>"><?php echo $priority_ar; ?></span>
-                                <span class="text-sm text-gray-500 dark:text-gray-400 mr-auto"><?php echo htmlspecialchars($t['category_name']); ?></span>
+                                <span class="px-2.5 py-0.5 text-sm font-medium rounded-full <?php echo $status_bg; ?>"><?php echo $status_icon . $status_ar; ?></span>
+                                <span class="text-sm text-gray-600 dark:text-gray-400 mr-auto font-bold"><?php echo htmlspecialchars($t['category_name']); ?></span>
                             </div>
                         </div>
                     <?php endforeach; ?>

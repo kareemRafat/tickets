@@ -99,7 +99,7 @@ require_once __DIR__ . '/../includes/header.php';
             <!-- National ID Field -->
             <div>
                 <label for="national_id" class="block mb-2 text-base font-medium text-gray-900 dark:text-white">الرقم القومي للطالب</label>
-                <input type="text" pattern="[0-9]{14}" maxlength="14" name="national_id" id="national_id" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-center tracking-widest font-semibold" placeholder="29000000000000" required value="<?php echo isset($_POST['national_id']) ? htmlspecialchars($_POST['national_id']) : ''; ?>">
+                <input type="text" pattern="[0-9]{14}" maxlength="14" name="national_id" id="national_id" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 placeholder-gray-400 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-center tracking-widest font-semibold" placeholder="29000000000000" required value="<?php echo isset($_POST['national_id']) ? htmlspecialchars($_POST['national_id']) : ''; ?>">
             </div>
 
             <!-- Submit Button -->

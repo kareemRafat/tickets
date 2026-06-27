@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
         var replies = data.replies || [];
         var sl = data.status_labels || {};
 
-        var statusClass = t.status === 'open' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' : t.status === 'in_progress' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
+        var statusClass = t.status === 'open' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : t.status === 'in_progress' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
 
         var priorityClass = t.priority === 'high' ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' : t.priority === 'medium' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300';
 
@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     '<span class="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -right-3 ring-8 ring-white dark:ring-gray-800 dark:bg-blue-900">' +
                     '<svg class="w-3 h-3 text-blue-800 dark:text-blue-200" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a8 8 0 100 16 8 8 0 000-16zm1 11a1 1 0 11-2 0 1 1 0 012 0zm0-3a1 1 0 01-2 0V7a1 1 0 112 0v3z"/></svg>' +
                     '</span>' +
-                    '<div class="p-4 bg-gray-50 rounded-xl border border-gray-100 dark:bg-gray-700/30 dark:border-gray-700/50">' +
+                    '<div class="p-4 bg-gray-50 rounded-xl border border-gray-300 dark:bg-gray-700/30 dark:border-gray-700/50">' +
                     '<div class="flex items-center justify-between mb-2">' +
                     '<span class="text-base font-semibold text-gray-900 dark:text-white">' + r.employee_name + '</span>' +
                     '<time class="text-sm text-gray-500 dark:text-gray-400">' + formatDate(r.created_at) + '</time>' +
@@ -105,20 +105,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
             '<h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">' + t.subject + '</h3>' +
 
-            '<div class="p-5 bg-white rounded-2xl border border-gray-100 shadow-sm dark:bg-gray-800 dark:border-gray-700">' +
+            '<div class="p-5 bg-white rounded-2xl border border-gray-300 shadow-sm dark:bg-gray-800 dark:border-gray-700">' +
             '<h4 class="text-base font-bold text-gray-900 dark:text-white mb-3">الوصف</h4>' +
             '<p class="text-base text-gray-700 dark:text-gray-300 whitespace-pre-wrap leading-relaxed">' + t.description + '</p>' +
-            '<div class="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700 text-sm text-gray-500 dark:text-gray-400">' +
+            '<div class="mt-4 pt-4 border-t border-gray-300 dark:border-gray-700 text-sm text-gray-500 dark:text-gray-400">' +
             'تم الإنشاء: ' + formatDate(t.created_at) +
             '</div>' +
             '</div>' +
 
-            '<div class="p-5 bg-white rounded-2xl border border-gray-100 shadow-sm dark:bg-gray-800 dark:border-gray-700">' +
+            '<div class="p-5 bg-white rounded-2xl border border-gray-300 shadow-sm dark:bg-gray-800 dark:border-gray-700">' +
             '<h4 class="text-base font-bold text-gray-900 dark:text-white mb-4">الردود من فريق الدعم</h4>' +
             repliesHtml +
             '</div>' +
 
-            '<div class="p-5 bg-white rounded-2xl border border-gray-100 shadow-sm dark:bg-gray-800 dark:border-gray-700">' +
+            '<div class="p-5 bg-white rounded-2xl border border-gray-300 shadow-sm dark:bg-gray-800 dark:border-gray-700">' +
             '<h4 class="text-base font-bold text-gray-900 dark:text-white mb-3">معلومات التذكرة</h4>' +
             '<dl class="space-y-3 text-base">' +
             '<div class="flex justify-between py-1"><dt class="text-gray-500 dark:text-gray-400">التصنيف</dt><dd class="font-semibold text-gray-900 dark:text-white">' + t.category_name + '</dd></div>' +
@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', function () {
             '</dl>' +
             '</div>' +
 
-            '<div class="p-5 bg-white rounded-2xl border border-gray-100 shadow-sm dark:bg-gray-800 dark:border-gray-700">' +
+            '<div class="p-5 bg-white rounded-2xl border border-gray-300 shadow-sm dark:bg-gray-800 dark:border-gray-700">' +
             '<h4 class="text-base font-bold text-gray-900 dark:text-white mb-3">بيانات الطالب</h4>' +
             '<dl class="space-y-3 text-base">' +
             '<div class="flex justify-between py-1"><dt class="text-gray-500 dark:text-gray-400">الاسم</dt><dd class="font-semibold text-gray-900 dark:text-white text-sm">' + t.student_name + '</dd></div>' +

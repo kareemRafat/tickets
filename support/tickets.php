@@ -49,7 +49,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
             <input type="hidden" name="type" value="<?php echo $type; ?>">
             <div class="sm:col-span-2 lg:col-span-1">
                 <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">بحث</label>
-                <input type="text" name="search" value="<?php echo htmlspecialchars($search); ?>" placeholder="رقم التذكرة أو الموضوع..." class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                <input type="text" name="search" value="<?php echo htmlspecialchars($search); ?>" placeholder="رقم التذكرة أو الموضوع..." class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 placeholder-gray-400 dark:placeholder-gray-500 dark:text-white">
             </div>
             <div>
                 <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">الحالة</label>
