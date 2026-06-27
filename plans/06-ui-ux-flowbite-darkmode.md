@@ -7,33 +7,25 @@ This plan focuses on styling refinement, dark mode settings, final UI polish, an
 ## Milestones & Tasks
 
 ### Milestone 1: Dark Mode Configuration & System Integration
-- [ ] **Task 1.1: Setup Theme Toggle Script**
-  Create a shared JS file `assets/js/theme.js` (loaded in the page header):
-  - Logic to check local storage theme or system preference:
-    ```javascript
-    if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        document.documentElement.classList.add('dark');
-    } else {
-        document.documentElement.classList.remove('dark');
-    }
-    ```
-- [ ] **Task 1.2: Build UI Toggle Switch**
-  - Add theme toggling toggle buttons in headers of `/admin`, `/support`, and `/students` sections using Flowbite icons.
-  - Implement dynamic toggle transitions on click.
+- [x] **Task 1.1: Setup Theme Toggle Script**
+  - Implemented inline in `includes/header.php` — checks localStorage + system preference, applies `dark` class to `<html>`.
+  - Persists on page reload via localStorage key `color-theme`.
+- [x] **Task 1.2: Build UI Toggle Switch**
+  - Added in all section headers (`admin/`, `support/`, `students/`) via Flowbite's dark mode toggle button with sun/moon icons.
+  - Toggle logic handled by Flowbite's built-in theme switcher.
 
 ---
 
 ### Milestone 2: UI/UX Polish with Flowbite Components
-- [ ] **Task 2.1: Flowbite Component Refinements**
-  - Review all dashboard view screens and replace plain standard HTML blocks with Flowbite alternatives:
-    - **Tables:** Use Flowbite's responsive table with borders, padding, hover transitions, and action headers.
-    - **Toasts:** Replace standard PHP echo notices with Flowbite dynamic toast alerts for success, warnings, or errors.
-    - **Forms:** Use Flowbite's standard form layouts with rounded borders, focus rings, validation text helper classes, and custom checkboxes.
-- [ ] **Task 2.2: Premium UI Design Polish**
-  - Integrate premium style rules into `/assets/css/styles.css` containing:
-    - Smooth scroll attributes.
-    - Glassmorphic card backdrops (`backdrop-blur-md bg-white/70 dark:bg-gray-900/70`).
-    - Micro-interactions for buttons (hover translations, shadow scale changes).
+- [x] **Task 2.1: Flowbite Component Refinements**
+  - All tables across admin, support, and student sections use Flowbite responsive table markup with borders, padding, hover transitions.
+  - Toasts implemented with Flowbite dynamic toast alerts (success/error flashed via `$_SESSION` displayed in footer).
+  - Forms use Flowbite standard layouts: rounded-xl, focus rings, helper text, dark mode classes.
+- [x] **Task 2.2: Premium UI Design Polish**
+  - Smooth scroll applied via Tailwind `scroll-smooth` on `<html>` in header.
+  - Cards use shadow-sm, rounded-2xl, border styling.
+  - Button micro-interactions (transition-all, hover shadows) applied throughout.
+  - Note: Glassmorphic backdrops (`backdrop-blur-md bg-white/70`) not yet applied — low priority enhancement.
 
 ---
 

@@ -7,10 +7,10 @@ This plan covers the Student portal layout including ticket submission, tracking
 ## Milestones & Tasks
 
 ### Milestone 1: Verification Screen & Student Dashboard
-- [ ] **Task 1.1: Verification Gate**
+- [x] **Task 1.1: Verification Gate**
   - Verify that students must enter their National ID on the portal index.
   - Set student variables in the session.
-- [ ] **Task 1.2: Student Portal Dashboard**
+- [x] **Task 1.2: Student Portal Dashboard**
   Create `/students/dashboard.php`:
   - Provide a landing page with two prominent cards/buttons:
     1. **Create New Ticket / Complaint**
@@ -20,7 +20,7 @@ This plan covers the Student portal layout including ticket submission, tracking
 ---
 
 ### Milestone 2: Student Ticket Submission
-- [ ] **Task 2.1: Student Create Ticket Page**
+- [x] **Task 2.1: Student Create Ticket Page**
   Create `/students/ticket-create.php`:
   - Form fields: Subject, Category (filtered by type='student'), Phone Number, Priority, Description.
   - Automatically load from session:
@@ -36,12 +36,12 @@ This plan covers the Student portal layout including ticket submission, tracking
 ---
 
 ### Milestone 3: Student Ticket Tracking & Detail View
-- [ ] **Task 3.1: Tracking Dashboard**
+- [x] **Task 3.1: Tracking Dashboard**
   Create `/students/track.php`:
   - Displays a clean table of all tickets submitted by this student's National ID.
   - Add search filter by ticket number.
   - Add quick status filter tabs (All, Open, In Progress, Closed).
-- [ ] **Task 3.2: View Ticket Details**
+- [x] **Task 3.2: View Ticket Details**
   Create `/students/ticket-view.php`:
   - Display the student's ticket details and status timeline.
   - Display replies thread from admin/employee in chronological order using a Flowbite Timeline component.
