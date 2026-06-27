@@ -7,7 +7,7 @@ This plan covers administrative features including branches, employee management
 ## Milestones & Tasks
 
 ### Milestone 1: Admin Layout & Dashboard Landing Page
-- [ ] **Task 1.1: Build Admin Dashboard Template**
+- [x] **Task 1.1: Build Admin Dashboard Template**
   Create `/admin/dashboard.php`:
   - Utilize Flowbite Sidebar layout with toggles for collapsible menus.
   - Integrate stat cards for:
@@ -19,12 +19,12 @@ This plan covers administrative features including branches, employee management
 ---
 
 ### Milestone 2: Branch & Employee CRUD Management
-- [ ] **Task 2.1: Branch CRUD Panels**
+- [x] **Task 2.1: Branch CRUD Panels**
   Create `/admin/branches.php`:
   - Table displaying all branches.
   - "Add Branch" form inside a Flowbite Modal block.
   - Edit/Delete functionality with modal warning overlays.
-- [ ] **Task 2.2: Employee CRUD Panels**
+- [x] **Task 2.2: Employee CRUD Panels**
   Create `/admin/employees.php`:
   - Interactive table displaying Employee Name, Email, assigned Branch (joined from `branches` table), status, and action controls.
   - Create `/admin/employee-add.php` and `/admin/employee-edit.php` forms using Flowbite dropdown selectors for branch selection.
@@ -33,12 +33,12 @@ This plan covers administrative features including branches, employee management
 ---
 
 ### Milestone 3: Category Management & Audit Logs
-- [ ] **Task 3.1: Categories CRUD (Support vs Student)**
+- [x] **Task 3.1: Categories CRUD (Support vs Student)**
   Create `/admin/categories.php`:
   - Admin controls categories.
   - Table displaying categories along with badges specifying type: `support` (Employee) vs `student` (Student).
   - Add/Edit modals for creating category designations.
-- [ ] **Task 3.2: Audit Log Viewer**
+- [x] **Task 3.2: Audit Log Viewer**
   Create `/admin/logs.php`:
   - Read actions from `audit_logs`.
   - Display log date, user context, action performed, old values vs new values, and remote IP address.
