@@ -113,23 +113,23 @@ $role = $_SESSION['user_role'] ?? '';
                </a>
             </li>
             <!-- Student Create Ticket -->
-            <li>
-               <a href="<?php echo BASE_URL; ?>students/ticket-create.php" class="flex items-center p-2.5 text-gray-900 rounded-xl dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group transition-all <?php echo $current_page === 'ticket-create' ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/50 dark:text-blue-400' : ''; ?>">
-                  <svg class="w-5 h-5 transition duration-75 text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                     <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/>
-                  </svg>
-                  <span class="mr-3">تقديم شكوى / تذكرة</span>
-               </a>
-            </li>
-            <!-- Student Track/View Tickets -->
-            <li>
-               <a href="<?php echo BASE_URL; ?>students/track.php" class="flex items-center p-2.5 text-gray-900 rounded-xl dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group transition-all <?php echo ($current_page === 'track' || $current_page === 'ticket-view') ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/50 dark:text-blue-400' : ''; ?>">
-                  <svg class="w-5 h-5 transition duration-75 text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                     <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/>
-                  </svg>
-                  <span class="mr-3">تتبع تذاكري</span>
-               </a>
-            </li>
+             <li>
+                <a href="<?php echo BASE_URL; ?>students/ticket-create.php" class="flex items-center p-2.5 text-gray-900 rounded-xl dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group transition-all <?php echo $current_page === 'ticket-create' ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/50 dark:text-blue-400' : ''; ?>">
+                   <svg class="w-5 h-5 transition duration-75 text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/>
+                   </svg>
+                   <span class="mr-3">تقديم شكوى / تذكرة</span>
+                </a>
+             </li>
+             <!-- Student Track/View Tickets -->
+             <li>
+                <a href="<?php echo BASE_URL; ?>students/track.php" class="flex items-center p-2.5 text-gray-900 rounded-xl dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group transition-all <?php echo ($current_page === 'track' || $current_page === 'ticket-view') ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/50 dark:text-blue-400' : ''; ?>">
+                   <svg class="w-5 h-5 transition duration-75 text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/>
+                   </svg>
+                   <span class="mr-3">تتبع تذاكري</span>
+                </a>
+             </li>
             <?php endif; ?>
             
          <?php endif; ?>

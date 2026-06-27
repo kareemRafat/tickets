@@ -38,6 +38,7 @@ require_once __DIR__ . '/../config/config.php';
         <div class="px-4 py-3 lg:px-6">
             <div class="flex items-center justify-between">
                 <div class="flex items-center justify-start gap-2">
+                    <?php if (empty($hide_sidebar)): ?>
                     <!-- Toggle sidebar mobile button -->
                     <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar" type="button" class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
                         <span class="sr-only">فتح القائمة الجانبية</span>
@@ -45,6 +46,7 @@ require_once __DIR__ . '/../config/config.php';
                            <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
                         </svg>
                     </button>
+                    <?php endif; ?>
                     
                     <a href="<?php echo BASE_URL; ?>" class="flex">
                         <!-- Premium Gradient Text logo -->
@@ -60,6 +62,10 @@ require_once __DIR__ . '/../config/config.php';
                         <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
                         <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.46 5.05L5.75 4.343a1 1 0 10-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2h1a1 1 0 100 2H4z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
                     </button>
+
+                    <?php if (isset($_SESSION['student_national_id']) && !isset($_SESSION['user_id'])): ?>
+                    <a href="<?php echo BASE_URL; ?>students/logout.php" class="px-3 py-1.5 text-sm text-red-600 border border-red-200 hover:bg-red-50 dark:text-red-400 dark:border-red-900/50 dark:hover:bg-red-900/20 rounded-xl transition-all">تسجيل الخروج</a>
+                    <?php endif; ?>
 
                     <?php if (isset($_SESSION['user_id'])): ?>
                     <!-- User Profile Dropdown -->

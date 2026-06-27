@@ -39,16 +39,15 @@ try {
     error_log("Student track error: " . $e->getMessage());
 }
 
+$hide_sidebar = true;
 $pageTitle = 'تتبع تذاكري';
 require_once __DIR__ . '/../includes/header.php';
-require_once __DIR__ . '/../includes/sidebar.php';
 ?>
+<div class="sm:mr-0 pt-20 flex-1 flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900">
 <main class="p-6 space-y-6 flex-1">
     <div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
         <div>
-            <h1 class="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
-                تتبع تذاكري
-            </h1>
+            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">تتبع تذاكري</h1>
             <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">متابعة حالة جميع التذاكر والشكاوى التي قمت بتقديمها.</p>
         </div>
         <a href="<?php echo BASE_URL; ?>students/ticket-create.php" class="inline-flex items-center px-4 py-2.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-sm transition-all">
@@ -57,7 +56,6 @@ require_once __DIR__ . '/../includes/sidebar.php';
         </a>
     </div>
 
-    <!-- Filters -->
     <div class="p-4 bg-white border border-gray-100 rounded-2xl shadow-sm dark:bg-gray-800 dark:border-gray-700">
         <form class="flex flex-wrap items-end gap-4" method="GET" action="">
             <div>
@@ -80,7 +78,6 @@ require_once __DIR__ . '/../includes/sidebar.php';
         </form>
     </div>
 
-    <!-- Tickets Table -->
     <div class="bg-white border border-gray-100 rounded-2xl shadow-sm dark:bg-gray-800 dark:border-gray-700 overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full text-sm text-right text-gray-500 dark:text-gray-400">
@@ -136,3 +133,4 @@ require_once __DIR__ . '/../includes/sidebar.php';
 <?php
 require_once __DIR__ . '/../includes/footer.php';
 ?>
+</div>

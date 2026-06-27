@@ -83,21 +83,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+$hide_sidebar = true;
 $pageTitle = 'تقديم شكوى أو تذكرة';
 require_once __DIR__ . '/../includes/header.php';
-require_once __DIR__ . '/../includes/sidebar.php';
 ?>
+<div class="sm:mr-0 pt-20 flex-1 flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900">
 <main class="p-6 space-y-6 flex-1">
     <div class="flex items-center justify-between">
         <div>
-            <h1 class="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
-                تقديم شكوى / تذكرة
-            </h1>
+            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">تقديم شكوى / تذكرة</h1>
             <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">يرجى تعبئة النموذج أدناه لتقديم شكواك أو استفسارك لفريق الدعم.</p>
         </div>
-        <a href="<?php echo BASE_URL; ?>students/dashboard.php" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 rounded-xl transition-all">
-            عودة للوحة
-        </a>
+        <a href="<?php echo BASE_URL; ?>students/dashboard.php" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 rounded-xl transition-all">عودة للرئيسية</a>
     </div>
 
     <?php if (!empty($error_message)): ?>
@@ -110,7 +107,6 @@ require_once __DIR__ . '/../includes/sidebar.php';
     <?php endif; ?>
 
     <div class="p-6 bg-white border border-gray-100 rounded-2xl shadow-sm dark:bg-gray-800 dark:border-gray-700 max-w-2xl">
-        <!-- Student Info -->
         <div class="mb-6 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl border border-gray-100 dark:border-gray-700">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                 <div>
@@ -169,3 +165,4 @@ require_once __DIR__ . '/../includes/sidebar.php';
 <?php
 require_once __DIR__ . '/../includes/footer.php';
 ?>
+</div>

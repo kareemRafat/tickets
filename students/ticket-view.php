@@ -47,10 +47,11 @@ try {
 $status_labels = ['open' => 'مفتوحة', 'in_progress' => 'قيد التنفيذ', 'closed' => 'مغلقة'];
 $priority_labels = ['low' => 'منخفضة', 'medium' => 'متوسطة', 'high' => 'عالية'];
 
+$hide_sidebar = true;
 $pageTitle = "التذكرة {$ticket['ticket_number']}";
 require_once __DIR__ . '/../includes/header.php';
-require_once __DIR__ . '/../includes/sidebar.php';
 ?>
+<div class="sm:mr-0 pt-20 flex-1 flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900">
 <main class="p-6 space-y-6 flex-1">
     <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
         <div>
@@ -164,3 +165,4 @@ require_once __DIR__ . '/../includes/sidebar.php';
 <?php
 require_once __DIR__ . '/../includes/footer.php';
 ?>
+</div>
