@@ -130,7 +130,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
     <!-- Form Container -->
     <div class="p-6 bg-white border border-gray-100 rounded-2xl shadow-sm dark:bg-gray-800 dark:border-gray-700 max-w-2xl">
         <form class="space-y-6" action="" method="POST">
-            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+            <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Name -->

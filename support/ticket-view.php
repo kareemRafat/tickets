@@ -24,7 +24,7 @@ if ($type === 'student') {
         SELECT st.*, c.name as category_name
         FROM student_tickets st
         JOIN categories c ON st.category_id = c.id
-        WHERE st.id = :id
+        WHERE st.id = :id AND st.branch_id = :branch_id
     ");
 } else {
     $stmt = $db->prepare("
@@ -32,10 +32,10 @@ if ($type === 'student') {
         FROM support_tickets st
         JOIN categories c ON st.category_id = c.id
         JOIN employees e ON st.employee_id = e.id
-        WHERE st.id = :id
+        WHERE st.id = :id AND st.branch_id = :branch_id
     ");
 }
-$stmt->execute(['id' => $ticket_id]);
+$stmt->execute(['id' => $ticket_id, 'branch_id' => $branch_id]);
 $ticket = $stmt->fetch();
 
 if (!$ticket) {
@@ -233,7 +233,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
             </a>
             <?php if ($ticket['status'] === 'closed'): ?>
                 <form method="POST" class="inline">
-                    <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                    <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
                     <input type="hidden" name="action" value="reopen">
                     <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-xl transition-all">
                         إعادة فتح التذكرة
@@ -295,7 +295,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
                 <div class="p-6 bg-white rounded-2xl border border-gray-100 shadow-sm dark:bg-gray-800 dark:border-gray-700">
                     <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">إضافة رد</h3>
                     <form method="POST" action="">
-                        <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                        <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
                         <input type="hidden" name="action" value="reply">
 
                         <div class="mb-4">
@@ -389,7 +389,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
                 <div class="p-5 bg-white rounded-2xl border border-gray-100 shadow-sm dark:bg-gray-800 dark:border-gray-700">
                     <h3 class="text-sm font-bold text-gray-900 dark:text-white mb-3">تغيير التصنيف</h3>
                     <form method="POST" action="">
-                        <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                        <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
                         <input type="hidden" name="action" value="change_category">
                         <select name="category_id" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 p-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white mb-3">
                             <?php foreach ($categories as $cat): ?>

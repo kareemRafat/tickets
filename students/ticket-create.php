@@ -125,7 +125,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
         </div>
 
         <form class="space-y-6" action="" method="POST">
-            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+            <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
 
             <div>
                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">الموضوع</label>

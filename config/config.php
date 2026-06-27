@@ -9,8 +9,10 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1); // Set to 0 in production
 
 // Session security configuration
-ini_set('session.cookie_httponly', 1);
-ini_set('session.use_only_cookies', 1);
+if (session_status() === PHP_SESSION_NONE) {
+    ini_set('session.cookie_httponly', 1);
+    ini_set('session.use_only_cookies', 1);
+}
 
 // Enable secure cookies if HTTPS is active
 $isSecure = false;
@@ -20,10 +22,12 @@ if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
     $isSecure = true;
 }
 
-if ($isSecure) {
-    ini_set('session.cookie_secure', 1);
+if (session_status() === PHP_SESSION_NONE) {
+    if ($isSecure) {
+        ini_set('session.cookie_secure', 1);
+    }
+    ini_set('session.cookie_samesite', 'Strict');
 }
-ini_set('session.cookie_samesite', 'Strict');
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();

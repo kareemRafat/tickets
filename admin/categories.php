@@ -215,7 +215,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
                 <div class="px-6 py-6 lg:px-8 text-right">
                     <h3 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">إضافة تصنيف جديد</h3>
                     <form class="space-y-4" action="" method="POST">
-                        <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                        <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
                         <input type="hidden" name="action" value="add">
 
                         <div>
@@ -256,7 +256,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
                     <div class="px-6 py-6 lg:px-8 text-right">
                         <h3 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">تعديل التصنيف: <?php echo htmlspecialchars($cat['name']); ?></h3>
                         <form class="space-y-4" action="" method="POST">
-                            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                            <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
                             <input type="hidden" name="action" value="edit">
                             <input type="hidden" name="id" value="<?php echo $cat['id']; ?>">
 
@@ -302,7 +302,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
                         <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">هل أنت متأكد من رغبتك في حذف التصنيف <strong><?php echo htmlspecialchars($cat['name']); ?></strong>؟</h3>
                         <p class="text-xs text-red-600 dark:text-red-400 mb-6">تنبيه: لا يمكن التراجع عن هذه الخطوة، وقد يؤثر حذف التصنيف على التذاكر المرتبطة به.</p>
                         <form action="" method="POST" class="inline-flex gap-2">
-                            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                            <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
                             <input type="hidden" name="action" value="delete">
                             <input type="hidden" name="id" value="<?php echo $cat['id']; ?>">
                             <button type="submit" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm inline-flex items-center px-5 py-2.5 text-center transition-all">

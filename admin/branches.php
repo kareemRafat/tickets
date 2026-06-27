@@ -242,7 +242,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
                 <div class="px-6 py-6 lg:px-8 text-right">
                     <h3 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">إضافة فرع جديد</h3>
                     <form class="space-y-4" action="" method="POST">
-                        <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                        <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
                         <input type="hidden" name="action" value="add">
                         
                         <div>
@@ -281,7 +281,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
                     <div class="px-6 py-6 lg:px-8 text-right">
                         <h3 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">تعديل الفرع: <?php echo htmlspecialchars($branch['name']); ?></h3>
                         <form class="space-y-4" action="" method="POST">
-                            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                            <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
                             <input type="hidden" name="action" value="edit">
                             <input type="hidden" name="id" value="<?php echo $branch['id']; ?>">
                             
@@ -325,7 +325,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
                         <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">هل أنت متأكد من رغبتك في حذف فرع <strong><?php echo htmlspecialchars($branch['name']); ?></strong>؟</h3>
                         <p class="text-xs text-red-600 dark:text-red-400 mb-6">تنبيه: سيؤدي حذف هذا الفرع إلى حذف كافة السجلات التابعة للطلاب وإلغاء ارتباط الموظفين به تلقائياً.</p>
                         <form action="" method="POST" class="inline-flex gap-2">
-                            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                            <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
                             <input type="hidden" name="action" value="delete">
                             <input type="hidden" name="id" value="<?php echo $branch['id']; ?>">
                             <button type="submit" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm inline-flex items-center px-5 py-2.5 text-center transition-all">

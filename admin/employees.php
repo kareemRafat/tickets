@@ -192,7 +192,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
                             <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">هل أنت متأكد من رغبتك في حذف حساب الموظف <strong><?php echo htmlspecialchars($employee['name']); ?></strong>؟</h3>
                             <p class="text-xs text-red-600 dark:text-red-400 mb-6">تنبيه: لا يمكن التراجع عن هذه الخطوة، وسيتم مسح كافة سجلات الموظف وصلاحياته.</p>
                             <form action="" method="POST" class="inline-flex gap-2">
-                                <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                                <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
                                 <input type="hidden" name="action" value="delete">
                                 <input type="hidden" name="id" value="<?php echo $employee['id']; ?>">
                                 <button type="submit" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-xl text-sm inline-flex items-center px-5 py-2.5 text-center transition-all">
