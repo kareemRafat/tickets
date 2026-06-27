@@ -92,13 +92,13 @@ require_once __DIR__ . '/../includes/header.php';
     <div class="flex items-center justify-between">
         <div>
             <h1 class="text-2xl font-bold text-gray-900 dark:text-white">تقديم شكوى / تذكرة</h1>
-            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">يرجى تعبئة النموذج أدناه لتقديم شكواك أو استفسارك لفريق الدعم.</p>
+            <p class="mt-1 text-base text-gray-500 dark:text-gray-400">يرجى تعبئة النموذج أدناه لتقديم شكواك أو استفسارك لفريق الدعم.</p>
         </div>
-        <a href="<?php echo BASE_URL; ?>students/dashboard.php" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 rounded-xl transition-all">عودة للرئيسية</a>
+        <a href="<?php echo BASE_URL; ?>students/dashboard.php" class="px-4 py-2 text-base font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 rounded-xl transition-all">عودة للرئيسية</a>
     </div>
 
     <?php if (!empty($error_message)): ?>
-        <div class="p-4 text-sm text-red-800 rounded-xl bg-red-50 dark:bg-gray-800 dark:text-red-400 border border-red-100 dark:border-red-900/50 flex items-center gap-2" role="alert">
+        <div class="p-4 text-base text-red-800 rounded-xl bg-red-50 dark:bg-gray-800 dark:text-red-400 border border-red-100 dark:border-red-900/50 flex items-center gap-2" role="alert">
             <svg class="flex-shrink-0 inline w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
             </svg>
@@ -108,7 +108,7 @@ require_once __DIR__ . '/../includes/header.php';
 
     <div class="p-6 bg-white border border-gray-100 rounded-2xl shadow-sm dark:bg-gray-800 dark:border-gray-700 max-w-2xl">
         <div class="mb-6 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl border border-gray-100 dark:border-gray-700">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-base">
                 <div>
                     <span class="text-gray-500 dark:text-gray-400">الاسم:</span>
                     <span class="font-semibold text-gray-900 dark:text-white mr-1"><?php echo htmlspecialchars($student_name); ?></span>
@@ -124,14 +124,14 @@ require_once __DIR__ . '/../includes/header.php';
             <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
 
             <div>
-                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">الموضوع</label>
-                <input type="text" name="subject" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="ملخص مختصر للشكوى" required value="<?php echo isset($_POST['subject']) ? htmlspecialchars($_POST['subject']) : ''; ?>">
+                <label class="block mb-2 text-base font-medium text-gray-900 dark:text-white">الموضوع</label>
+                <input type="text" name="subject" class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="ملخص مختصر للشكوى" required value="<?php echo isset($_POST['subject']) ? htmlspecialchars($_POST['subject']) : ''; ?>">
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">التصنيف</label>
-                    <select name="category_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white" required>
+                    <label class="block mb-2 text-base font-medium text-gray-900 dark:text-white">التصنيف</label>
+                    <select name="category_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white" required>
                         <option value="">اختر التصنيف</option>
                         <?php foreach ($categories as $cat): ?>
                             <option value="<?php echo $cat['id']; ?>" <?php echo (isset($_POST['category_id']) && $_POST['category_id'] == $cat['id']) ? 'selected' : ''; ?>><?php echo htmlspecialchars($cat['name']); ?></option>
@@ -139,8 +139,8 @@ require_once __DIR__ . '/../includes/header.php';
                     </select>
                 </div>
                 <div>
-                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">الأولوية</label>
-                    <select name="priority" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white" required>
+                    <label class="block mb-2 text-base font-medium text-gray-900 dark:text-white">الأولوية</label>
+                    <select name="priority" class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white" required>
                         <option value="low" <?php echo (isset($_POST['priority']) && $_POST['priority'] === 'low') ? 'selected' : ''; ?>>منخفضة</option>
                         <option value="medium" <?php echo (isset($_POST['priority']) && $_POST['priority'] === 'medium') ? 'selected' : ''; ?>>متوسطة</option>
                         <option value="high" <?php echo (isset($_POST['priority']) && $_POST['priority'] === 'high') ? 'selected' : ''; ?>>عالية</option>
@@ -149,16 +149,16 @@ require_once __DIR__ . '/../includes/header.php';
             </div>
 
             <div>
-                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">رقم الهاتف للتواصل</label>
-                <input type="text" name="phone" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="01XXXXXXXXX" value="<?php echo isset($_POST['phone']) ? htmlspecialchars($_POST['phone']) : htmlspecialchars($student_phone); ?>">
+                <label class="block mb-2 text-base font-medium text-gray-900 dark:text-white">رقم الهاتف للتواصل</label>
+                <input type="text" name="phone" class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="01XXXXXXXXX" value="<?php echo isset($_POST['phone']) ? htmlspecialchars($_POST['phone']) : htmlspecialchars($student_phone); ?>">
             </div>
 
             <div>
-                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">الوصف</label>
-                <textarea name="description" rows="6" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="اكتب وصفاً تفصيلياً للشكوى" required><?php echo isset($_POST['description']) ? htmlspecialchars($_POST['description']) : ''; ?></textarea>
+                <label class="block mb-2 text-base font-medium text-gray-900 dark:text-white">الوصف</label>
+                <textarea name="description" rows="6" class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="اكتب وصفاً تفصيلياً للشكوى" required><?php echo isset($_POST['description']) ? htmlspecialchars($_POST['description']) : ''; ?></textarea>
             </div>
 
-            <button type="submit" class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-3 text-center dark:bg-blue-600 dark:hover:bg-blue-700">تقديم الشكوى</button>
+            <button type="submit" class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-base px-5 py-3 text-center dark:bg-blue-600 dark:hover:bg-blue-700">تقديم الشكوى</button>
         </form>
     </div>
 </main>

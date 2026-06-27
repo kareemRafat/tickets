@@ -78,11 +78,20 @@ $role = $_SESSION['user_role'] ?? '';
             </li>
             <!-- Support Tickets -->
             <li>
-               <a href="<?php echo BASE_URL; ?>support/tickets.php" class="flex items-center p-2.5 text-gray-900 rounded-xl dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group transition-all <?php echo ($current_page === 'tickets' || $current_page === 'ticket-view' || $current_page === 'ticket-create') ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/50 dark:text-blue-400' : ''; ?>">
+               <a href="<?php echo BASE_URL; ?>support/tickets.php?type=support" class="flex items-center p-2.5 text-gray-900 rounded-xl dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group transition-all <?php echo (($current_page === 'tickets' || $current_page === 'ticket-view' || $current_page === 'ticket-create') && (!isset($_GET['type']) || $_GET['type'] === 'support')) ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/50 dark:text-blue-400' : ''; ?>">
                   <svg class="w-5 h-5 transition duration-75 text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                      <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
                   </svg>
                   <span class="mr-3">تذاكر الدعم الفني</span>
+               </a>
+            </li>
+            <!-- Student Complaints -->
+            <li>
+               <a href="<?php echo BASE_URL; ?>support/tickets.php?type=student" class="flex items-center p-2.5 text-gray-900 rounded-xl dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group transition-all <?php echo (($current_page === 'tickets' || $current_page === 'ticket-view' || $current_page === 'ticket-create') && isset($_GET['type']) && $_GET['type'] === 'student') ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/50 dark:text-blue-400' : ''; ?>">
+                  <svg class="w-5 h-5 transition duration-75 text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                  </svg>
+                  <span class="mr-3">شكاوى الطلاب</span>
                </a>
             </li>
 

@@ -80,11 +80,11 @@ require_once __DIR__ . '/../includes/header.php';
                 </svg>
             </div>
             <h2 class="text-2xl font-bold text-gray-900 dark:text-white">بوابة الخدمات الطلابية</h2>
-            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">يرجى إدخال رقمك القومي المكون من 14 رقماً للتحقق والدخول للبوابة</p>
+            <p class="mt-1 text-base text-gray-500 dark:text-gray-400">يرجى إدخال رقمك القومي المكون من 14 رقماً للتحقق والدخول للبوابة</p>
         </div>
 
         <?php if (!empty($error_message)): ?>
-            <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-700 dark:text-red-400 flex items-center gap-2" role="alert">
+            <div class="p-4 mb-4 text-base text-red-800 rounded-lg bg-red-50 dark:bg-gray-700 dark:text-red-400 flex items-center gap-2" role="alert">
                 <svg class="flex-shrink-0 inline w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
                 </svg>
@@ -98,12 +98,12 @@ require_once __DIR__ . '/../includes/header.php';
 
             <!-- National ID Field -->
             <div>
-                <label for="national_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">الرقم القومي للطالب</label>
+                <label for="national_id" class="block mb-2 text-base font-medium text-gray-900 dark:text-white">الرقم القومي للطالب</label>
                 <input type="text" pattern="[0-9]{14}" maxlength="14" name="national_id" id="national_id" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-center tracking-widest font-semibold" placeholder="29000000000000" required value="<?php echo isset($_POST['national_id']) ? htmlspecialchars($_POST['national_id']) : ''; ?>">
             </div>
 
             <!-- Submit Button -->
-            <button type="submit" class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-3 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 transition-all shadow-md">تحقق من الهوية والدخول</button>
+            <button type="submit" class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-base px-5 py-3 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 transition-all shadow-md">تحقق من الهوية والدخول</button>
         </form>
     </div>
 </div>

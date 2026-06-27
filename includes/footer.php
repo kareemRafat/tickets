@@ -46,38 +46,46 @@
 
     <!-- Toast Notification System in Arabic -->
     <?php if (isset($_SESSION['success']) || isset($_SESSION['error'])): ?>
-        <div id="toast-notification" class="fixed bottom-5 left-5 z-50 flex items-center w-full max-w-xs p-4 space-x-4 space-x-reverse text-gray-500 bg-white divide-x divide-x-reverse divide-gray-200 rounded-lg shadow-xl dark:text-gray-400 dark:divide-gray-700 dark:bg-gray-800 border border-gray-200 dark:border-gray-700" role="alert">
+        <div id="toast-notification" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 w-full max-w-md p-4 text-gray-500 bg-white rounded-lg shadow-xl dark:text-gray-400 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 animate-slide-down" role="alert">
             <?php if (isset($_SESSION['success'])): ?>
-                <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg dark:bg-green-800 dark:text-green-200">
+                <div class="flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg dark:bg-green-800 dark:text-green-200">
                     <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
                     </svg>
-                    <span class="sr-only">أيقونة النجاح</span>
                 </div>
-                <div class="pr-3 text-sm font-normal"><?php echo htmlspecialchars($_SESSION['success']); unset($_SESSION['success']); ?></div>
+                <div class="flex-1 text-sm font-normal"><?php echo htmlspecialchars($_SESSION['success']); unset($_SESSION['success']); ?></div>
             <?php else: ?>
-                <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-red-500 bg-red-100 rounded-lg dark:bg-red-800 dark:text-red-200">
+                <div class="flex items-center justify-center flex-shrink-0 w-8 h-8 text-red-500 bg-red-100 rounded-lg dark:bg-red-800 dark:text-red-200">
                     <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z"/>
                     </svg>
-                    <span class="sr-only">أيقونة الخطأ</span>
                 </div>
-                <div class="pr-3 text-sm font-normal"><?php echo htmlspecialchars($_SESSION['error']); unset($_SESSION['error']); ?></div>
+                <div class="flex-1 text-sm font-normal"><?php echo htmlspecialchars($_SESSION['error']); unset($_SESSION['error']); ?></div>
             <?php endif; ?>
-            <button type="button" class="mr-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700" data-dismiss-target="#toast-notification" aria-label="إغلاق">
-                <span class="sr-only">إغلاق</span>
+            <button type="button" class="flex items-center justify-center flex-shrink-0 w-8 h-8 text-gray-400 hover:text-gray-900 rounded-lg hover:bg-gray-100 dark:text-gray-500 dark:hover:text-white dark:hover:bg-gray-700" data-dismiss-target="#toast-notification" aria-label="إغلاق">
                 <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                 </svg>
             </button>
         </div>
+        <style>
+            @keyframes slideDown {
+                0% { transform: translate(-50%, -100%); opacity: 0; }
+                100% { transform: translate(-50%, 0); opacity: 1; }
+            }
+            .animate-slide-down {
+                animation: slideDown 0.4s ease-out forwards;
+            }
+        </style>
         <script>
             // Automatically dismiss toast after 5 seconds
             setTimeout(function() {
                 const toast = document.getElementById('toast-notification');
                 if (toast) {
-                    toast.classList.add('transition-opacity', 'duration-500', 'opacity-0');
-                    setTimeout(function() { toast.remove(); }, 500);
+                    toast.style.transition = 'all 0.4s ease-in';
+                    toast.style.opacity = '0';
+                    toast.style.transform = 'translate(-50%, -20px)';
+                    setTimeout(function() { toast.remove(); }, 400);
                 }
             }, 5000);
         </script>

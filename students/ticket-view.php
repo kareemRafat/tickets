@@ -57,16 +57,16 @@ require_once __DIR__ . '/../includes/header.php';
         <div>
             <div class="flex items-center gap-2 mb-1">
                 <h1 class="text-2xl font-bold text-gray-900 dark:text-white"><?php echo htmlspecialchars($ticket['ticket_number']); ?></h1>
-                <span class="px-2.5 py-0.5 text-xs font-medium rounded-full <?php echo $ticket['status'] === 'open' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' : ($ticket['status'] === 'in_progress' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'); ?>">
+                <span class="px-2.5 py-0.5 text-sm font-medium rounded-full <?php echo $ticket['status'] === 'open' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' : ($ticket['status'] === 'in_progress' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'); ?>">
                     <?php echo $status_labels[$ticket['status']]; ?>
                 </span>
-                <span class="px-2.5 py-0.5 text-xs font-medium rounded-full <?php echo $ticket['priority'] === 'high' ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' : ($ticket['priority'] === 'medium' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'); ?>">
+                <span class="px-2.5 py-0.5 text-sm font-medium rounded-full <?php echo $ticket['priority'] === 'high' ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' : ($ticket['priority'] === 'medium' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'); ?>">
                     <?php echo $priority_labels[$ticket['priority']]; ?>
                 </span>
             </div>
             <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200"><?php echo htmlspecialchars($ticket['subject']); ?></h2>
         </div>
-        <a href="<?php echo BASE_URL; ?>students/track.php" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 rounded-xl transition-all shrink-0">
+        <a href="<?php echo BASE_URL; ?>students/track.php" class="px-4 py-2 text-base font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 rounded-xl transition-all shrink-0">
             عودة للتذاكر
         </a>
     </div>
@@ -76,8 +76,8 @@ require_once __DIR__ . '/../includes/header.php';
             <!-- Description -->
             <div class="p-6 bg-white rounded-2xl border border-gray-100 shadow-sm dark:bg-gray-800 dark:border-gray-700">
                 <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-3">الوصف</h3>
-                <p class="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap leading-relaxed"><?php echo htmlspecialchars($ticket['description']); ?></p>
-                <div class="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700 text-xs text-gray-500 dark:text-gray-400">
+                <p class="text-base text-gray-700 dark:text-gray-300 whitespace-pre-wrap leading-relaxed"><?php echo htmlspecialchars($ticket['description']); ?></p>
+                <div class="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700 text-sm text-gray-500 dark:text-gray-400">
                     تم الإنشاء: <?php echo date('Y-m-d H:i', strtotime($ticket['created_at'])); ?>
                 </div>
             </div>
@@ -88,7 +88,7 @@ require_once __DIR__ . '/../includes/header.php';
                 <?php if (empty($replies)): ?>
                     <div class="text-center py-8 text-gray-500 dark:text-gray-400">
                         <svg class="w-12 h-12 mx-auto mb-3 text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
-                        <p class="text-sm">لا توجد ردود حتى الآن. سيتم الرد عليك في أقرب وقت ممكن.</p>
+                        <p class="text-base">لا توجد ردود حتى الآن. سيتم الرد عليك في أقرب وقت ممكن.</p>
                     </div>
                 <?php else: ?>
                     <ol class="relative border-r border-gray-200 dark:border-gray-700 pr-6">
@@ -99,15 +99,15 @@ require_once __DIR__ . '/../includes/header.php';
                                 </span>
                                 <div class="p-4 bg-gray-50 rounded-xl border border-gray-100 dark:bg-gray-700/30 dark:border-gray-700/50">
                                     <div class="flex items-center justify-between mb-2">
-                                        <span class="text-sm font-semibold text-gray-900 dark:text-white"><?php echo htmlspecialchars($reply['employee_name']); ?></span>
-                                        <time class="text-xs text-gray-500 dark:text-gray-400"><?php echo date('Y-m-d H:i', strtotime($reply['created_at'])); ?></time>
+                                        <span class="text-base font-semibold text-gray-900 dark:text-white"><?php echo htmlspecialchars($reply['employee_name']); ?></span>
+                                        <time class="text-sm text-gray-500 dark:text-gray-400"><?php echo date('Y-m-d H:i', strtotime($reply['created_at'])); ?></time>
                                     </div>
                                     <?php if ($reply['old_status'] && $reply['new_status']): ?>
-                                        <div class="mb-2 text-xs text-gray-500 dark:text-gray-400">
+                                        <div class="mb-2 text-sm text-gray-500 dark:text-gray-400">
                                             تم تغيير الحالة من <span class="font-medium"><?php echo $status_labels[$reply['old_status']]; ?></span> إلى <span class="font-medium"><?php echo $status_labels[$reply['new_status']]; ?></span>
                                         </div>
                                     <?php endif; ?>
-                                    <p class="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap"><?php echo htmlspecialchars($reply['reply']); ?></p>
+                                    <p class="text-base text-gray-700 dark:text-gray-300 whitespace-pre-wrap"><?php echo htmlspecialchars($reply['reply']); ?></p>
                                 </div>
                             </li>
                         <?php endforeach; ?>
@@ -119,43 +119,43 @@ require_once __DIR__ . '/../includes/header.php';
         <!-- Sidebar Info -->
         <div class="space-y-6">
             <div class="p-5 bg-white rounded-2xl border border-gray-100 shadow-sm dark:bg-gray-800 dark:border-gray-700">
-                <h3 class="text-sm font-bold text-gray-900 dark:text-white mb-3">معلومات التذكرة</h3>
-                <dl class="space-y-3 text-sm">
+                <h3 class="text-base font-bold text-gray-900 dark:text-white mb-3">معلومات التذكرة</h3>
+                <dl class="space-y-3 text-base">
                     <div class="flex justify-between">
                         <dt class="text-gray-500 dark:text-gray-400">التصنيف</dt>
                         <dd class="font-semibold text-gray-900 dark:text-white"><?php echo htmlspecialchars($ticket['category_name']); ?></dd>
                     </div>
                     <div class="flex justify-between">
                         <dt class="text-gray-500 dark:text-gray-400">الأولوية</dt>
-                        <dd><span class="px-2 py-0.5 text-xs font-medium rounded-full <?php echo $ticket['priority'] === 'high' ? 'bg-red-100 text-red-800' : ($ticket['priority'] === 'medium' ? 'bg-yellow-100 text-yellow-800' : 'bg-gray-100 text-gray-800'); ?>"><?php echo $priority_labels[$ticket['priority']]; ?></span></dd>
+                        <dd><span class="px-2 py-0.5 text-sm font-medium rounded-full <?php echo $ticket['priority'] === 'high' ? 'bg-red-100 text-red-800' : ($ticket['priority'] === 'medium' ? 'bg-yellow-100 text-yellow-800' : 'bg-gray-100 text-gray-800'); ?>"><?php echo $priority_labels[$ticket['priority']]; ?></span></dd>
                     </div>
                     <div class="flex justify-between">
                         <dt class="text-gray-500 dark:text-gray-400">الحالة</dt>
-                        <dd><span class="px-2 py-0.5 text-xs font-medium rounded-full <?php echo $ticket['status'] === 'open' ? 'bg-blue-100 text-blue-800' : ($ticket['status'] === 'in_progress' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'); ?>"><?php echo $status_labels[$ticket['status']]; ?></span></dd>
+                        <dd><span class="px-2 py-0.5 text-sm font-medium rounded-full <?php echo $ticket['status'] === 'open' ? 'bg-blue-100 text-blue-800' : ($ticket['status'] === 'in_progress' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'); ?>"><?php echo $status_labels[$ticket['status']]; ?></span></dd>
                     </div>
                     <div class="flex justify-between">
                         <dt class="text-gray-500 dark:text-gray-400">تاريخ الإنشاء</dt>
-                        <dd class="text-gray-900 dark:text-white font-mono text-xs"><?php echo date('Y-m-d H:i', strtotime($ticket['created_at'])); ?></dd>
+                        <dd class="text-gray-900 dark:text-white font-mono text-sm"><?php echo date('Y-m-d H:i', strtotime($ticket['created_at'])); ?></dd>
                     </div>
                     <?php if ($ticket['closed_at']): ?>
                         <div class="flex justify-between">
                             <dt class="text-gray-500 dark:text-gray-400">تاريخ الإغلاق</dt>
-                            <dd class="text-gray-900 dark:text-white font-mono text-xs"><?php echo date('Y-m-d H:i', strtotime($ticket['closed_at'])); ?></dd>
+                            <dd class="text-gray-900 dark:text-white font-mono text-sm"><?php echo date('Y-m-d H:i', strtotime($ticket['closed_at'])); ?></dd>
                         </div>
                     <?php endif; ?>
                 </dl>
             </div>
 
             <div class="p-5 bg-white rounded-2xl border border-gray-100 shadow-sm dark:bg-gray-800 dark:border-gray-700">
-                <h3 class="text-sm font-bold text-gray-900 dark:text-white mb-3">بيانات الطالب</h3>
-                <dl class="space-y-3 text-sm">
+                <h3 class="text-base font-bold text-gray-900 dark:text-white mb-3">بيانات الطالب</h3>
+                <dl class="space-y-3 text-base">
                     <div class="flex justify-between">
                         <dt class="text-gray-500 dark:text-gray-400">الاسم</dt>
-                        <dd class="font-semibold text-gray-900 dark:text-white text-xs"><?php echo htmlspecialchars($ticket['student_name']); ?></dd>
+                        <dd class="font-semibold text-gray-900 dark:text-white text-sm"><?php echo htmlspecialchars($ticket['student_name']); ?></dd>
                     </div>
                     <div class="flex justify-between">
                         <dt class="text-gray-500 dark:text-gray-400">رقم الهاتف</dt>
-                        <dd class="text-xs text-gray-900 dark:text-white"><?php echo htmlspecialchars($ticket['contact_phone']); ?></dd>
+                        <dd class="text-sm text-gray-900 dark:text-white"><?php echo htmlspecialchars($ticket['contact_phone']); ?></dd>
                     </div>
                 </dl>
             </div>
