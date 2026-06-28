@@ -6,7 +6,7 @@ set_security_headers();
 
 // If already logged in as employee, redirect to support dashboard
 if (isset($_SESSION['user_id']) && ($_SESSION['user_role'] ?? '') === 'employee') {
-    header('Location: ' . BASE_URL . 'support/dashboard.php');
+    header('Location: ' . BASE_URL . 'support/index.php');
     exit();
 }
 
@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $update->execute(['id' => $user['id']]);
                 
                 $_SESSION['success'] = 'مرحباً بك! تم تسجيل الدخول بنجاح كموظف دعم فني.';
-                header('Location: ' . BASE_URL . 'support/dashboard.php');
+                header('Location: ' . BASE_URL . 'support/index.php');
                 exit();
             } else {
                 // Failed

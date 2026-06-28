@@ -94,7 +94,7 @@ require_once __DIR__ . '/../includes/header.php';
             <h1 class="text-2xl font-bold text-gray-900 dark:text-white">تقديم شكوى / تذكرة</h1>
             <p class="mt-1 text-base text-gray-500 dark:text-gray-400">يرجى تعبئة النموذج أدناه لتقديم شكواك أو استفسارك لفريق الدعم.</p>
         </div>
-        <a href="<?php echo BASE_URL; ?>students/dashboard.php" class="px-4 py-2 text-base font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 rounded-xl transition-all">عودة للرئيسية</a>
+        <a href="<?php echo BASE_URL; ?>students/index.php" class="px-4 py-2 text-base font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 rounded-xl transition-all">عودة للرئيسية</a>
     </div>
 
     <?php if (!empty($error_message)): ?>

@@ -2,10 +2,11 @@
 require_once __DIR__ . '/../bootstrap.php';
 
 set_security_headers();
-require_employee();
+require_employee_or_admin();
 
 $db = getDBConnection();
-$branch_id = (int)$_SESSION['user_branch_id'];
+$is_admin = ($_SESSION['user_role'] ?? '') === 'admin';
+$branch_id = $is_admin ? 0 : (int)$_SESSION['user_branch_id'];
 
 $type = xss_clean($_GET['type'] ?? 'support');
 $status_filter = xss_clean($_GET['status'] ?? '');
@@ -44,16 +45,16 @@ require_once __DIR__ . '/../includes/sidebar.php';
     </div>
 
     <!-- Filters -->
-    <div class="p-4 bg-white border border-gray-100 rounded-2xl shadow-sm dark:bg-gray-800 dark:border-gray-700">
-        <form class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-3 items-end" method="GET" action="">
+    <div class="p-3 bg-white border border-gray-100 rounded-xl shadow-sm dark:bg-gray-800 dark:border-gray-700">
+        <form class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 items-end" method="GET" action="">
             <input type="hidden" name="type" value="<?php echo $type; ?>">
-            <div class="sm:col-span-2 lg:col-span-1">
-                <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">بحث</label>
-                <input type="text" name="search" value="<?php echo htmlspecialchars($search); ?>" placeholder="رقم التذكرة أو الموضوع..." class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 placeholder-gray-400 dark:placeholder-gray-500 dark:text-white">
+            <div class="col-span-2 sm:col-span-1">
+                <label class="block mb-1 text-xs font-medium text-gray-900 dark:text-white">بحث</label>
+                <input type="text" name="search" value="<?php echo htmlspecialchars($search); ?>" placeholder="رقم التذكرة أو الموضوع..." class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 placeholder-gray-400 dark:placeholder-gray-500 dark:text-white">
             </div>
             <div>
-                <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">الحالة</label>
-                <select name="status" class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                <label class="block mb-1 text-xs font-medium text-gray-900 dark:text-white">الحالة</label>
+                <select name="status" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                     <option value="">الكل</option>
                     <option value="open" <?php echo $status_filter === 'open' ? 'selected' : ''; ?>>مفتوحة</option>
                     <option value="in_progress" <?php echo $status_filter === 'in_progress' ? 'selected' : ''; ?>>قيد التنفيذ</option>
@@ -61,8 +62,8 @@ require_once __DIR__ . '/../includes/sidebar.php';
                 </select>
             </div>
             <div>
-                <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">التصنيف</label>
-                <select name="category" class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                <label class="block mb-1 text-xs font-medium text-gray-900 dark:text-white">التصنيف</label>
+                <select name="category" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                     <option value="">الكل</option>
                     <?php foreach ($categories as $cat): ?>
                         <option value="<?php echo $cat['id']; ?>" <?php echo $category_filter === $cat['id'] ? 'selected' : ''; ?>><?php echo htmlspecialchars($cat['name']); ?></option>
@@ -70,8 +71,8 @@ require_once __DIR__ . '/../includes/sidebar.php';
                 </select>
             </div>
             <div>
-                <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">الأولوية</label>
-                <select name="priority" class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                <label class="block mb-1 text-xs font-medium text-gray-900 dark:text-white">الأولوية</label>
+                <select name="priority" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                     <option value="">الكل</option>
                     <option value="low" <?php echo $priority_filter === 'low' ? 'selected' : ''; ?>>منخفضة</option>
                     <option value="medium" <?php echo $priority_filter === 'medium' ? 'selected' : ''; ?>>متوسطة</option>
@@ -79,24 +80,28 @@ require_once __DIR__ . '/../includes/sidebar.php';
                 </select>
             </div>
             <div>
-                <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">من تاريخ</label>
-                <input type="date" name="from_date" value="<?php echo htmlspecialchars($from_date); ?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                <label class="block mb-1 text-xs font-medium text-gray-900 dark:text-white">من تاريخ</label>
+                <input type="date" name="from_date" value="<?php echo htmlspecialchars($from_date); ?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
             </div>
             <div>
-                <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">إلى تاريخ</label>
-                <input type="date" name="to_date" value="<?php echo htmlspecialchars($to_date); ?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                <label class="block mb-1 text-xs font-medium text-gray-900 dark:text-white">إلى تاريخ</label>
+                <input type="date" name="to_date" value="<?php echo htmlspecialchars($to_date); ?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
             </div>
-            <div class="flex justify-between items-center sm:col-span-2 lg:col-span-4 xl:col-span-6">
-                <button type="submit" class="px-6 py-2 text-base font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-all">بحث</button>
-                <a href="<?php echo BASE_URL; ?>support/tickets.php?type=<?php echo $type; ?>" class="px-3 py-1 text-sm font-medium text-red-600 hover:text-red-800 underline dark:text-red-400 dark:hover:text-red-300 transition-all">إعادة تعيين</a>
+            <div class="flex justify-between items-center col-span-2 sm:col-span-3 lg:col-span-6">
+                <button type="submit" class="w-28 px-4 py-1.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-all">بحث</button>
+                <a href="<?php echo BASE_URL; ?>support/tickets.php?type=<?php echo $type; ?>" class="px-2 py-1 text-xs text-red-600 hover:text-red-800 underline dark:text-red-400 dark:hover:text-red-300 transition-all font-bold">إعادة تعيين</a>
             </div>
         </form>
     </div>
 
     <?php if ($type === 'support'): ?>
         <?php
-        $where = ["st.branch_id = :branch_id"];
-        $params = ['branch_id' => $branch_id];
+        $where = [];
+        $params = [];
+        if (!$is_admin) {
+            $where[] = "st.branch_id = :branch_id";
+            $params['branch_id'] = $branch_id;
+        }
 
         if (!empty($status_filter)) {
             $where[] = "st.status = :status";
@@ -124,7 +129,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
             $params['to_date'] = $to_date . ' 23:59:59';
         }
 
-        $where_clause = implode(' AND ', $where);
+        $where_clause = $where ? implode(' AND ', $where) : '1=1';
         $tickets = [];
         try {
             $stmt = $db->prepare("
@@ -212,8 +217,12 @@ require_once __DIR__ . '/../includes/sidebar.php';
 
     <?php else: ?>
         <?php
-        $where = ["st.branch_id = :branch_id"];
-        $params = ['branch_id' => $branch_id];
+        $where = [];
+        $params = [];
+        if (!$is_admin) {
+            $where[] = "st.branch_id = :branch_id";
+            $params['branch_id'] = $branch_id;
+        }
 
         if (!empty($status_filter)) {
             $where[] = "st.status = :status";
@@ -244,11 +253,11 @@ require_once __DIR__ . '/../includes/sidebar.php';
             $params['to_date'] = $to_date . ' 23:59:59';
         }
 
-        $where_clause = implode(' AND ', $where);
+        $where_clause = $where ? implode(' AND ', $where) : '1=1';
         $tickets = [];
         try {
             $stmt = $db->prepare("
-                SELECT st.*, c.name as category_name,
+                SELECT st.*, c.name as category_name, st.student_name, st.national_id, st.student_code, st.contact_phone,
                     (SELECT name FROM employees WHERE id = st.last_reply_by) as last_reply_name
                 FROM student_tickets st
                 JOIN categories c ON st.category_id = c.id

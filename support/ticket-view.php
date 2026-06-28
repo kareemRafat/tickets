@@ -3,11 +3,12 @@ require_once __DIR__ . '/../bootstrap.php';
 require_once __DIR__ . '/../helpers/audit.php';
 
 set_security_headers();
-require_employee();
+require_employee_or_admin();
 
 $db = getDBConnection();
 $employee_id = (int)$_SESSION['user_id'];
-$branch_id = (int)$_SESSION['user_branch_id'];
+$is_admin = ($_SESSION['user_role'] ?? '') === 'admin';
+$branch_id = $is_admin ? 0 : (int)$_SESSION['user_branch_id'];
 
 $ticket_id = (int)($_GET['id'] ?? 0);
 $type = xss_clean($_GET['type'] ?? 'support');
@@ -24,18 +25,22 @@ if ($type === 'student') {
         SELECT st.*, c.name as category_name
         FROM student_tickets st
         JOIN categories c ON st.category_id = c.id
-        WHERE st.id = :id AND st.branch_id = :branch_id
-    ");
+        WHERE st.id = :id" . ($is_admin ? "" : " AND st.branch_id = :branch_id")
+    );
 } else {
     $stmt = $db->prepare("
         SELECT st.*, c.name as category_name, e.name as employee_name
         FROM support_tickets st
         JOIN categories c ON st.category_id = c.id
         JOIN employees e ON st.employee_id = e.id
-        WHERE st.id = :id AND st.branch_id = :branch_id
-    ");
+        WHERE st.id = :id" . ($is_admin ? "" : " AND st.branch_id = :branch_id")
+    );
 }
-$stmt->execute(['id' => $ticket_id, 'branch_id' => $branch_id]);
+$queryParams = ['id' => $ticket_id];
+if (!$is_admin) {
+    $queryParams['branch_id'] = $branch_id;
+}
+$stmt->execute($queryParams);
 $ticket = $stmt->fetch();
 
 if (!$ticket) {
@@ -44,7 +49,7 @@ if (!$ticket) {
     exit();
 }
 
-if ((int)$ticket['branch_id'] !== $branch_id) {
+if (!$is_admin && (int)$ticket['branch_id'] !== $branch_id) {
     $_SESSION['error'] = 'لا يمكنك الوصول إلى هذه التذكرة فهي تابعة لفرع آخر.';
     header('Location: ' . BASE_URL . 'support/tickets.php');
     exit();

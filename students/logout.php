@@ -25,5 +25,5 @@ session_destroy();
 // Start a new session for the guest status message
 session_start();
 $_SESSION['success'] = 'تم تسجيل الخروج بنجاح من بوابة الطلاب.';
-header('Location: ' . BASE_URL . 'students/index.php');
+header('Location: ' . BASE_URL . 'students/login.php');
 exit();

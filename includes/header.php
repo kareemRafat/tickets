@@ -72,18 +72,25 @@ require_once __DIR__ . '/../config/config.php';
                     <div class="flex items-center">
                         <button type="button" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="dropdown-user">
                             <span class="sr-only">فتح قائمة المستخدم</span>
-                            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-semibold text-sm">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold text-base shadow-md ring-2 ring-white dark:ring-gray-800">
                                 <?php echo strtoupper(substr($_SESSION['user_name'] ?? 'م', 0, 1)); ?>
                             </div>
                         </button>
-                        <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600" id="dropdown-user">
-                            <div class="px-4 py-3" role="none">
-                                <p class="text-sm text-gray-900 dark:text-white font-semibold" role="none">
-                                    <?php echo htmlspecialchars($_SESSION['user_name'] ?? 'مستخدم'); ?>
-                                </p>
-                                <p class="text-xs font-medium text-gray-500 truncate dark:text-gray-400" role="none">
-                                    <?php echo htmlspecialchars($_SESSION['user_email'] ?? ''); ?>
-                                </p>
+                        <div class="z-50 hidden my-3 text-base list-none bg-white divide-y divide-gray-100 rounded-2xl shadow-xl dark:bg-gray-700 dark:divide-gray-600 min-w-[250px]" id="dropdown-user">
+                            <div class="px-6 py-5 bg-gradient-to-l from-blue-50 to-transparent dark:from-blue-900/20 rounded-t-2xl" role="none">
+                                <div class="flex items-center gap-4 mb-3">
+                                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold text-lg shadow-md flex-shrink-0">
+                                        <?php echo strtoupper(substr($_SESSION['user_name'] ?? 'م', 0, 1)); ?>
+                                    </div>
+                                    <div class="min-w-0">
+                                        <p class="text-base text-gray-900 dark:text-white font-bold truncate" role="none">
+                                            <?php echo htmlspecialchars($_SESSION['user_name'] ?? 'مستخدم'); ?>
+                                        </p>
+                                        <p class="text-sm text-gray-500 truncate dark:text-gray-400 mt-0.5" role="none">
+                                            <?php echo htmlspecialchars($_SESSION['user_email'] ?? ''); ?>
+                                        </p>
+                                    </div>
+                                </div>
                                 <?php 
                                 $role_ar = 'زائر';
                                 if (($_SESSION['user_role'] ?? '') === 'admin') {
@@ -94,11 +101,12 @@ require_once __DIR__ . '/../config/config.php';
                                     $role_ar = 'طالب';
                                 }
                                 ?>
-                                <span class="inline-flex items-center px-2 py-0.5 mt-2 text-xs font-medium rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                                <span class="inline-flex items-center px-3.5 py-1 text-sm font-medium rounded-full bg-blue-600/10 text-blue-700 dark:bg-blue-400/10 dark:text-blue-300">
+                                    <span class="w-1.5 h-1.5 bg-blue-600 dark:bg-blue-400 rounded-full ml-2"></span>
                                     <?php echo htmlspecialchars($role_ar); ?>
                                 </span>
                             </div>
-                            <div class="py-1" role="none">
+                            <div class="py-2 pl-6" role="none">
                                 <?php 
                                 $logout_url = BASE_URL;
                                 if (($_SESSION['user_role'] ?? '') === 'admin') {
@@ -109,7 +117,12 @@ require_once __DIR__ . '/../config/config.php';
                                     $logout_url .= 'students/logout.php';
                                 }
                                 ?>
-                                <a href="<?php echo $logout_url; ?>" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:text-red-400 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">تسجيل الخروج</a>
+                                <a href="<?php echo $logout_url; ?>" class="flex items-center gap-3 px-5 py-3 text-sm font-semibold text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20 rounded-xl transition-all mx-2" role="menuitem">
+                                    <svg class="w-4 h-4 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                                    </svg>
+                                    تسجيل الخروج
+                                </a>
                             </div>
                         </div>
                     </div>

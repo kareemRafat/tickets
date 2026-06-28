@@ -6,7 +6,7 @@ set_security_headers();
 
 // If already logged in as admin, redirect to admin dashboard
 if (isset($_SESSION['user_id']) && ($_SESSION['user_role'] ?? '') === 'admin') {
-    header('Location: ' . BASE_URL . 'admin/dashboard.php');
+    header('Location: ' . BASE_URL . 'admin/index.php');
     exit();
 }
 
@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $update->execute(['id' => $user['id']]);
                 
                 $_SESSION['success'] = 'مرحباً بك! تم تسجيل الدخول بنجاح كمدير للنظام.';
-                header('Location: ' . BASE_URL . 'admin/dashboard.php');
+                header('Location: ' . BASE_URL . 'admin/index.php');
                 exit();
             } else {
                 // Failed
