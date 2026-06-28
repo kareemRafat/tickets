@@ -16,9 +16,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error_message = 'انتهت صلاحية الجلسة، يرجى إعادة المحاولة.';
     } else {
         if ($action === 'add') {
-            $name = xss_clean($_POST['name'] ?? '');
-            $type = xss_clean($_POST['type'] ?? 'support');
-            $status = xss_clean($_POST['status'] ?? 'active');
+            $name = trim($_POST['name'] ?? '');
+            $type = trim($_POST['type'] ?? 'support');
+            $status = trim($_POST['status'] ?? 'active');
 
             if (empty($name)) {
                 $error_message = 'يرجى إدخال اسم التصنيف.';
@@ -40,9 +40,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         } elseif ($action === 'edit') {
             $id = (int)($_POST['id'] ?? 0);
-            $name = xss_clean($_POST['name'] ?? '');
-            $type = xss_clean($_POST['type'] ?? 'support');
-            $status = xss_clean($_POST['status'] ?? 'active');
+            $name = trim($_POST['name'] ?? '');
+            $type = trim($_POST['type'] ?? 'support');
+            $status = trim($_POST['status'] ?? 'active');
 
             if (empty($name) || $id <= 0) {
                 $error_message = 'يرجى تعبئة الحقول المطلوبة لتعديل التصنيف.';
@@ -92,7 +92,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $error_message = 'التصنيف الذي تحاول حذفه غير موجود.';
                     }
                 } catch (PDOException $e) {
-                    $error_message = 'لا يمكن حذف هذا التصنيف لوجود تذاكر مرتبطة به.';
+                    $_SESSION['error'] = 'لا يمكن حذف هذا التصنيف لوجود تذاكر مرتبطة به.';
+                    header('Location: ' . BASE_URL . 'admin/categories.php');
+                    exit();
                 }
             }
         }
@@ -142,8 +144,8 @@ require_once __DIR__ . '/../includes/sidebar.php';
 
     <div class="bg-white border border-gray-100 rounded-2xl shadow-sm dark:bg-gray-800 dark:border-gray-700 overflow-hidden">
         <div class="overflow-x-auto">
-            <table class="w-full text-sm text-right text-gray-500 dark:text-gray-400">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b border-gray-100 dark:border-gray-700">
+            <table class="w-full text-base text-right text-gray-500 dark:text-gray-400">
+                <thead class="text-sm text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b border-gray-100 dark:border-gray-700">
                     <tr>
                         <th scope="col" class="px-6 py-4">الاسم</th>
                         <th scope="col" class="px-6 py-4">النوع</th>
@@ -185,8 +187,8 @@ require_once __DIR__ . '/../includes/sidebar.php';
                                         </span>
                                     <?php endif; ?>
                                 </td>
-                                <td class="px-6 py-4 text-xs">
-                                    <?php echo date('Y-m-d H:i', strtotime($cat['created_at'])); ?>
+                                <td class="px-6 py-4 text-base">
+                                    <?php echo date('Y-m-d', strtotime($cat['created_at'])); ?>
                                 </td>
                                 <td class="px-6 py-4 text-left flex items-center justify-end gap-2">
                                     <button data-modal-target="edit-cat-modal-<?php echo $cat['id']; ?>" data-modal-toggle="edit-cat-modal-<?php echo $cat['id']; ?>" class="font-medium text-blue-600 dark:text-blue-500 hover:underline px-3 py-1.5 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors">
@@ -299,8 +301,8 @@ require_once __DIR__ . '/../includes/sidebar.php';
                         <svg class="mx-auto mb-4 text-red-500 w-12 h-12" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                         </svg>
-                        <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">هل أنت متأكد من رغبتك في حذف التصنيف <strong><?php echo htmlspecialchars($cat['name']); ?></strong>؟</h3>
-                        <p class="text-xs text-red-600 dark:text-red-400 mb-6">تنبيه: لا يمكن التراجع عن هذه الخطوة، وقد يؤثر حذف التصنيف على التذاكر المرتبطة به.</p>
+                        <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">هل أنت متأكد من رغبتك في حذف التصنيف <strong>,<br><?php echo htmlspecialchars($cat['name']); ?></strong>؟</h3>
+                        <p class="text-sm text-red-600 dark:text-red-400 mb-6 font-semibold">تنبيه: لا يمكن التراجع عن هذه الخطوة، وقد يؤثر حذف التصنيف على التذاكر المرتبطة به.</p>
                         <form action="" method="POST" class="inline-flex gap-2">
                             <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
                             <input type="hidden" name="action" value="delete">
