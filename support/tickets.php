@@ -177,7 +177,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
                             <?php foreach ($tickets as $t): ?>
                                 <tr class="hover:bg-gray-50/50 dark:hover:bg-gray-700/30 transition-colors">
                                     <td class="px-3 py-3 text-sm text-gray-400 dark:text-gray-500 text-center"><?php echo $i++; ?></td>
-                                    <td class="px-4 py-3 font-mono text-sm font-semibold"><?php echo htmlspecialchars($t['ticket_number']); ?></td>
+                                    <td class="px-4 py-3 font-mono text-base font-semibold"><a href="<?php echo BASE_URL; ?>support/ticket-view.php?id=<?php echo $t['id']; ?>&type=support" class="text-blue-600 dark:text-blue-400 hover:underline"><?php echo htmlspecialchars($t['ticket_number']); ?></a></td>
                                     <td class="px-4 py-3 text-sm font-semibold text-gray-900 dark:text-white max-w-xs truncate"><?php echo htmlspecialchars($t['subject']); ?></td>
                                     <td class="px-4 py-3 text-sm"><?php echo htmlspecialchars($t['category_name']); ?></td>
                                     <td class="px-4 py-3">
@@ -300,7 +300,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
                             <?php foreach ($tickets as $t): ?>
                                 <tr class="hover:bg-gray-50/50 dark:hover:bg-gray-700/30 transition-colors">
                                     <td class="px-3 py-3 text-sm text-gray-400 dark:text-gray-500 text-center"><?php echo $i++; ?></td>
-                                    <td class="px-4 py-3 font-mono text-sm font-semibold"><?php echo htmlspecialchars($t['ticket_number']); ?></td>
+                                    <td class="px-4 py-3 font-mono text-base font-semibold"><a href="<?php echo BASE_URL; ?>support/ticket-view.php?id=<?php echo $t['id']; ?>&type=student" class="text-blue-600 dark:text-blue-400 hover:underline"><?php echo htmlspecialchars($t['ticket_number']); ?></a></td>
                                     <td class="px-4 py-3 text-sm font-semibold text-gray-900 dark:text-white max-w-xs truncate"><?php echo htmlspecialchars($t['subject']); ?></td>
                                     <td class="px-4 py-3 text-sm"><?php echo htmlspecialchars($t['student_name']); ?></td>
                                     <td class="px-4 py-3 text-sm"><?php echo htmlspecialchars($t['category_name']); ?></td>

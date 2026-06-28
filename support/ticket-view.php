@@ -365,34 +365,32 @@ require_once __DIR__ . '/../includes/sidebar.php';
                     </form>
                 </div>
 
-                <!-- Quick Status Actions (only if there are replies) -->
-                <?php if (!empty($replies)): ?>
-                    <div class="p-4 bg-white rounded-2xl border border-gray-100 shadow-sm dark:bg-gray-800 dark:border-gray-700">
-                        <div class="flex flex-wrap items-center gap-3">
-                            <span class="text-base font-medium text-gray-900 dark:text-white">إجراء سريع:</span>
-                            <?php if ($ticket['status'] === 'open'): ?>
-                                <form method="POST" class="inline">
-                                    <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
-                                    <input type="hidden" name="action" value="change_status">
-                                    <input type="hidden" name="new_status" value="in_progress">
-                                    <button type="submit" class="px-4 py-2 text-base font-medium text-white bg-yellow-500 hover:bg-yellow-600 rounded-xl transition-all">
-                                        قيد التنفيذ
-                                    </button>
-                                </form>
-                            <?php endif; ?>
-                            <?php if ($ticket['status'] !== 'closed'): ?>
-                                <form method="POST" class="inline">
-                                    <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
-                                    <input type="hidden" name="action" value="change_status">
-                                    <input type="hidden" name="new_status" value="closed">
-                                    <button type="submit" class="px-4 py-2 text-base font-medium text-white bg-red-600 hover:bg-red-700 rounded-xl transition-all">
-                                        إغلاق التذكرة
-                                    </button>
-                                </form>
-                            <?php endif; ?>
-                        </div>
+                <!-- Quick Status Actions -->
+                <div class="p-4 bg-white rounded-2xl border border-gray-100 shadow-sm dark:bg-gray-800 dark:border-gray-700">
+                    <div class="flex flex-wrap items-center gap-3">
+                        <span class="text-base font-medium text-gray-900 dark:text-white">إجراء سريع:</span>
+                        <?php if ($ticket['status'] === 'open'): ?>
+                            <form method="POST" class="inline">
+                                <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
+                                <input type="hidden" name="action" value="change_status">
+                                <input type="hidden" name="new_status" value="in_progress">
+                                <button type="submit" class="px-4 py-2 text-base font-medium text-white bg-yellow-500 hover:bg-yellow-600 rounded-xl transition-all">
+                                    قيد التنفيذ
+                                </button>
+                            </form>
+                        <?php endif; ?>
+                        <?php if ($ticket['status'] !== 'closed'): ?>
+                            <form method="POST" class="inline">
+                                <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
+                                <input type="hidden" name="action" value="change_status">
+                                <input type="hidden" name="new_status" value="closed">
+                                <button type="submit" class="px-4 py-2 text-base font-medium text-white bg-red-600 hover:bg-red-700 rounded-xl transition-all">
+                                    إغلاق التذكرة
+                                </button>
+                            </form>
+                        <?php endif; ?>
                     </div>
-                <?php endif; ?>
+                </div>
             <?php endif; ?>
         </div>
 
