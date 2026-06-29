@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../bootstrap.php';
+require_once __DIR__ . '/functions/remember_me.php';
 
 // Apply security headers
 set_security_headers();
@@ -10,20 +11,25 @@ if (isset($_SESSION['student_national_id'])) {
     exit();
 }
 
-$error_message = '';
+// Check for remember-me auto-login
+if (process_student_remember_login()) {
+    $_SESSION['success'] = 'مرحباً بعودتك! تم التحقق من الهوية تلقائياً.';
+    header('Location: ' . BASE_URL . 'students/index.php');
+    exit();
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $national_id = xss_clean($_POST['national_id'] ?? '');
     $csrf_token = $_POST['csrf_token'] ?? '';
     
     if (!verify_csrf_token($csrf_token)) {
-        $error_message = 'انتهت صلاحية الجلسة، يرجى إعادة تحميل الصفحة والمحاولة.';
+        $_SESSION['error'] = 'انتهت صلاحية الجلسة، يرجى إعادة تحميل الصفحة والمحاولة.';
     } elseif (empty($national_id)) {
-        $error_message = 'يرجى إدخال الرقم القومي الخاص بك.';
+        $_SESSION['error'] = 'يرجى إدخال الرقم القومي الخاص بك.';
     } elseif (!preg_match('/^[0-9]{14}$/', $national_id)) {
-        $error_message = 'الرقم القومي غير صحيح، يجب أن يتكون من 14 رقماً فقط.';
+        $_SESSION['error'] = 'الرقم القومي غير صحيح، يجب أن يتكون من 14 رقماً فقط.';
     } elseif (!is_login_allowed($national_id)) {
-        $error_message = 'تم حظر محاولات التحقق مؤقتاً لكثرة المحاولات الخاطئة. يرجى المحاولة بعد 15 دقيقة.';
+        $_SESSION['error'] = 'تم حظر محاولات التحقق مؤقتاً لكثرة المحاولات الخاطئة. يرجى المحاولة بعد 15 دقيقة.';
     } else {
         try {
             $db = getDBConnection();
@@ -51,15 +57,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['user_role'] = 'student';
                 $_SESSION['csrf_token'] = bin2hex(random_bytes(32)); // Secure session CSRF token
                 
+                // Create remember-me token if requested
+                if (!empty($_POST['remember_me'])) {
+                    handle_student_remember_login($student['id']);
+                }
+
                 $_SESSION['success'] = 'تم التحقق من الهوية بنجاح، مرحباً بك في لوحة الخدمات الطلابية.';
                 header('Location: ' . BASE_URL . 'students/index.php');
                 exit();
             } else {
                 log_login_attempt($national_id, false);
-                $error_message = 'الرقم القومي غير مسجل لدينا بالنظام. يرجى مراجعة إدارة شؤون الطلاب بالفروع.';
+                $_SESSION['error'] = 'الرقم القومي غير مسجل لدينا بالنظام. يرجى مراجعة إدارة شؤون الطلاب بالفروع.';
             }
         } catch (PDOException $e) {
-            $error_message = 'حدث خطأ غير متوقع بالخادم. يرجى المحاولة لاحقاً.';
+            $_SESSION['error'] = 'حدث خطأ غير متوقع بالخادم. يرجى المحاولة لاحقاً.';
             error_log("Student verification db error: " . $e->getMessage());
         }
     }
@@ -83,15 +94,6 @@ require_once __DIR__ . '/../includes/header.php';
             <p class="mt-1 text-base text-gray-500 dark:text-gray-400">يرجى إدخال رقمك القومي المكون من 14 رقماً للتحقق والدخول للبوابة</p>
         </div>
 
-        <?php if (!empty($error_message)): ?>
-            <div class="p-4 mb-4 text-base text-red-800 rounded-lg bg-red-50 dark:bg-gray-700 dark:text-red-400 flex items-center gap-2" role="alert">
-                <svg class="flex-shrink-0 inline w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
-                </svg>
-                <span><?php echo $error_message; ?></span>
-            </div>
-        <?php endif; ?>
-
         <form class="space-y-4" action="" method="POST">
             <!-- CSRF Token -->
             <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
@@ -100,6 +102,12 @@ require_once __DIR__ . '/../includes/header.php';
             <div>
                 <label for="national_id" class="block mb-2 text-base font-medium text-gray-900 dark:text-white">الرقم القومي للطالب</label>
                 <input type="text" pattern="[0-9]{14}" maxlength="14" name="national_id" id="national_id" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 placeholder-gray-400 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-center tracking-widest font-semibold" placeholder="29000000000000" required value="<?php echo isset($_POST['national_id']) ? htmlspecialchars($_POST['national_id']) : ''; ?>">
+            </div>
+
+            <!-- Remember Me Checkbox -->
+            <div class="flex items-center">
+                <input type="checkbox" name="remember_me" id="remember_me" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600">
+                <label for="remember_me" class="mr-2 text-base font-medium text-gray-900 dark:text-gray-300">تذكرني</label>
             </div>
 
             <!-- Submit Button -->

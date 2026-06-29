@@ -3,9 +3,16 @@
  * Student Logout controller
  */
 require_once __DIR__ . '/../bootstrap.php';
+require_once __DIR__ . '/functions/remember_me.php';
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
+}
+
+// Clear remember-me token before destroying session
+$studentId = $_SESSION['student_id'] ?? null;
+if ($studentId) {
+    clear_remember_token($studentId, 'student');
 }
 
 // Clear student session variables

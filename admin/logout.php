@@ -3,9 +3,16 @@
  * Administrator Logout controller
  */
 require_once __DIR__ . '/../bootstrap.php';
+require_once __DIR__ . '/functions/remember_me.php';
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
+}
+
+// Clear remember-me token before destroying session
+$userId = $_SESSION['user_id'] ?? null;
+if ($userId) {
+    clear_remember_token($userId, 'admin');
 }
 
 // Clear admin session variables

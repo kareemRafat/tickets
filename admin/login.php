@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../bootstrap.php';
+require_once __DIR__ . '/functions/remember_me.php';
 
 // Apply security headers
 set_security_headers();
@@ -10,7 +11,12 @@ if (isset($_SESSION['user_id']) && ($_SESSION['user_role'] ?? '') === 'admin') {
     exit();
 }
 
-$error_message = '';
+// Check for remember-me auto-login
+if (process_admin_remember_login()) {
+    $_SESSION['success'] = 'مرحباً بعودتك! تم تسجيل الدخول تلقائياً.';
+    header('Location: ' . BASE_URL . 'admin/index.php');
+    exit();
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = xss_clean($_POST['username'] ?? '');
@@ -18,11 +24,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $csrf_token = $_POST['csrf_token'] ?? '';
     
     if (!verify_csrf_token($csrf_token)) {
-        $error_message = 'انتهت صلاحية الجلسة، يرجى إعادة تحميل الصفحة والمحاولة.';
+        $_SESSION['error'] = 'انتهت صلاحية الجلسة، يرجى إعادة تحميل الصفحة والمحاولة.';
     } elseif (empty($username) || empty($password)) {
-        $error_message = 'يرجى إدخال اسم المستخدم وكلمة المرور.';
+        $_SESSION['error'] = 'يرجى إدخال اسم المستخدم وكلمة المرور.';
     } elseif (!is_login_allowed($username)) {
-        $error_message = 'تم حظر محاولات تسجيل الدخول مؤقتاً لكثرة المحاولات الخاطئة. يرجى المحاولة بعد 15 دقيقة.';
+        $_SESSION['error'] = 'تم حظر محاولات تسجيل الدخول مؤقتاً لكثرة المحاولات الخاطئة. يرجى المحاولة بعد 15 دقيقة.';
     } else {
         try {
             $db = getDBConnection();
@@ -60,16 +66,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $update = $db->prepare("UPDATE employees SET last_login_at = NOW() WHERE id = :id");
                 $update->execute(['id' => $user['id']]);
                 
+                // Create remember-me token if requested
+                if (!empty($_POST['remember_me'])) {
+                    handle_admin_remember_login($user['id']);
+                }
+
                 $_SESSION['success'] = 'مرحباً بك! تم تسجيل الدخول بنجاح كمدير للنظام.';
                 header('Location: ' . BASE_URL . 'admin/index.php');
                 exit();
             } else {
                 // Failed
                 log_login_attempt($username, false);
-                $error_message = 'اسم المستخدم أو كلمة المرور غير صحيحة.';
+                $_SESSION['error'] = 'اسم المستخدم أو كلمة المرور غير صحيحة.';
             }
         } catch (PDOException $e) {
-            $error_message = 'حدث خطأ غير متوقع بالخادم. يرجى المحاولة لاحقاً.';
+            $_SESSION['error'] = 'حدث خطأ غير متوقع بالخادم. يرجى المحاولة لاحقاً.';
             error_log("Admin login database error: " . $e->getMessage());
         }
     }
@@ -87,15 +98,6 @@ require_once __DIR__ . '/../includes/header.php';
             <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">سجل الدخول لإدارة الفروع والموظفين والتذاكر</p>
         </div>
 
-        <?php if (!empty($error_message)): ?>
-            <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-700 dark:text-red-400 flex items-center gap-2" role="alert">
-                <svg class="flex-shrink-0 inline w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
-                </svg>
-                <span><?php echo $error_message; ?></span>
-            </div>
-        <?php endif; ?>
-
         <form class="space-y-4" action="" method="POST">
             <!-- CSRF Token -->
             <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
@@ -110,6 +112,12 @@ require_once __DIR__ . '/../includes/header.php';
             <div>
                 <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">كلمة المرور</label>
                 <input type="password" name="password" id="password" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 placeholder-gray-400 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="••••••••" required>
+            </div>
+
+            <!-- Remember Me Checkbox -->
+            <div class="flex items-center">
+                <input type="checkbox" name="remember_me" id="remember_me" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600">
+                <label for="remember_me" class="mr-2 text-sm font-medium text-gray-900 dark:text-gray-300">تذكرني</label>
             </div>
 
             <!-- Submit Button -->

@@ -169,7 +169,22 @@ CREATE TABLE IF NOT EXISTS `login_attempts` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- -------------------------------------------------------------
--- 11. Table: system_settings
+-- 11. Table: remember_tokens (for "Remember Me" persistent login)
+-- -------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `remember_tokens` (
+    `id` BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    `user_id` INT UNSIGNED NOT NULL,
+    `role` ENUM('admin','employee','student') NOT NULL,
+    `token_hash` VARCHAR(64) NOT NULL,
+    `expires_at` DATETIME NOT NULL,
+    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+    INDEX `idx_remember_role_user` (`role`, `user_id`),
+    INDEX `idx_remember_token_hash` (`token_hash`),
+    INDEX `idx_remember_expires` (`expires_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- -------------------------------------------------------------
+-- 12. Table: system_settings
 -- -------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `system_settings` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
