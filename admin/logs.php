@@ -111,28 +111,28 @@ require_once __DIR__ . '/../includes/sidebar.php';
                     <?php else: ?>
                         <?php foreach ($logs as $log): ?>
                             <tr class="hover:bg-gray-50/50 dark:hover:bg-gray-700/30 transition-colors">
-                                <td class="px-5 py-4 whitespace-nowrap font-mono text-sm">
+                                <td class="px-5 py-4 whitespace-nowrap font-mono text-base">
                                     <?php echo date('Y-m-d H:i', strtotime($log['created_at'])); ?>
                                 </td>
                                 <td class="px-5 py-4 whitespace-nowrap">
-                                    <span class="font-semibold text-gray-900 dark:text-white text-sm"><?php echo htmlspecialchars($log['employee_name']); ?></span>
-                                    <span class="text-sm text-gray-400 dark:text-gray-500 block">
+                                    <span class="font-semibold text-gray-900 dark:text-white text-base"><?php echo htmlspecialchars($log['employee_name']); ?></span>
+                                    <span class="text-base text-gray-400 dark:text-gray-500 block">
                                         <?php echo $log['employee_role'] === 'admin' ? 'مدير' : 'موظف'; ?>
                                     </span>
                                 </td>
-                                <td class="px-5 py-4 text-sm max-w-xs truncate">
+                                <td class="px-5 py-4 text-base max-w-xs truncate">
                                     <?php echo htmlspecialchars($log['action']); ?>
                                 </td>
                                 <td class="px-5 py-4">
                                     <?php if ($log['table_name']): ?>
-                                        <span class="px-2.5 py-0.5 text-sm font-mono rounded bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">
+                                        <span class="px-2.5 py-0.5 text-base font-mono rounded bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">
                                             <?php echo htmlspecialchars($log['table_name']); ?>
                                         </span>
                                     <?php else: ?>
-                                        <span class="text-sm text-gray-400">—</span>
+                                        <span class="text-base text-gray-400">—</span>
                                     <?php endif; ?>
                                 </td>
-                                <td class="px-5 py-4 text-sm max-w-xs">
+                                <td class="px-5 py-4 text-base max-w-xs">
                                     <?php
                                     $old_data = $log['old_values'] ? json_decode($log['old_values'], true) : null;
                                     $new_data = $log['new_values'] ? json_decode($log['new_values'], true) : null;
@@ -200,7 +200,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
                                         <span class="text-sm text-gray-400">—</span>
                                     <?php endif; ?>
                                 </td>
-                                <td class="px-5 py-4 font-mono text-sm">
+                                <td class="px-5 py-4 font-mono text-base">
                                     <?php echo htmlspecialchars($log['ip_address'] ?: '—'); ?>
                                 </td>
                             </tr>
