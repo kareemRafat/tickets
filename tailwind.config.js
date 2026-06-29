@@ -9,7 +9,11 @@ module.exports = {
     "./js/**/*.js"
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'dark-backdrop': '#000000',
+      }
+    },
   },
   plugins: [
     require('flowbite/plugin')

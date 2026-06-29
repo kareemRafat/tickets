@@ -142,7 +142,7 @@ try {
                             <td class="px-4 py-3 text-sm"><?php if ($t['last_reply_at']): ?><span class="font-medium"><?php echo htmlspecialchars($t['last_reply_name']); ?></span><br><span class="text-gray-500"><?php echo date('Y-m-d', strtotime($t['last_reply_at'])); ?></span><?php else: ?><span class="text-gray-400">—</span><?php endif; ?></td>
                             <td class="px-4 py-3 text-sm font-bold"><?php echo date('Y-m-d', strtotime($t['created_at'])); ?></td>
                             <td class="px-4 py-3 text-left">
-                                <a href="<?php echo BASE_URL; ?>support/ticket-view.php?id=<?php echo $t['id']; ?>&type=support" class="font-medium text-blue-600 dark:text-blue-400 hover:underline text-sm">عرض</a>
+                                <a href="<?php echo BASE_URL; ?>support/ticket-view.php?id=<?php echo $t['id']; ?>&type=support" class="font-bold text-blue-600 dark:text-blue-400 hover:underline text-sm">عرض</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>
