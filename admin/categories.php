@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../bootstrap.php';
 require_once __DIR__ . '/../helpers/audit.php';
+require_once __DIR__ . '/../functions/pagination.php';
 
 set_security_headers();
 require_admin();
@@ -101,9 +102,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+$pageParams = get_pagination_params(10);
 $categories = [];
 try {
-    $stmt = $db->query("SELECT * FROM categories ORDER BY type ASC, id ASC");
+    $countStmt = $db->query("SELECT COUNT(*) FROM categories");
+    $totalCategories = (int)$countStmt->fetchColumn();
+
+    $stmt = $db->prepare("SELECT * FROM categories ORDER BY type ASC, id ASC LIMIT :limit OFFSET :offset");
+    $stmt->bindValue(':limit', $pageParams['perPage'], PDO::PARAM_INT);
+    $stmt->bindValue(':offset', $pageParams['offset'], PDO::PARAM_INT);
+    $stmt->execute();
     $categories = $stmt->fetchAll();
 } catch (PDOException $e) {
     error_log("Categories list fetch error: " . $e->getMessage());
@@ -204,6 +212,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
                 </tbody>
             </table>
         </div>
+        <?php render_pagination($totalCategories, 10); ?>
     </div>
 
     <!-- Add Category Modal -->

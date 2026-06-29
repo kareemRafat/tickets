@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../bootstrap.php';
 require_once __DIR__ . '/../helpers/audit.php';
+require_once __DIR__ . '/../functions/pagination.php';
 
 // Apply security headers
 set_security_headers();
@@ -47,15 +48,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     }
 }
 
-// Fetch all employees and their branch details
+// Pagination and fetch
+$pageParams = get_pagination_params(10);
 $employees = [];
 try {
-    $stmt = $db->query("
+    $countStmt = $db->query("SELECT COUNT(*) FROM employees");
+    $totalEmployees = (int)$countStmt->fetchColumn();
+
+    $stmt = $db->prepare("
         SELECT e.*, b.name as branch_name 
         FROM employees e 
         LEFT JOIN branches b ON e.branch_id = b.id 
         ORDER BY e.id ASC
+        LIMIT :limit OFFSET :offset
     ");
+    $stmt->bindValue(':limit', $pageParams['perPage'], PDO::PARAM_INT);
+    $stmt->bindValue(':offset', $pageParams['offset'], PDO::PARAM_INT);
+    $stmt->execute();
     $employees = $stmt->fetchAll();
 } catch (PDOException $e) {
     error_log("Failed to fetch employees: " . $e->getMessage());
@@ -171,6 +180,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
                 </tbody>
             </table>
         </div>
+        <?php render_pagination($totalEmployees, 10); ?>
     </div>
 
     <!-- Delete Warning Modals -->

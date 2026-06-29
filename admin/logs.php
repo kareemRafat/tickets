@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../bootstrap.php';
+require_once __DIR__ . '/../functions/pagination.php';
 
 set_security_headers();
 require_admin();
@@ -31,17 +32,27 @@ if (!empty($where)) {
     $where_clause = 'WHERE ' . implode(' AND ', $where);
 }
 
+$pageParams = get_pagination_params(10);
 $logs = [];
 try {
+    $countStmt = $db->prepare("SELECT COUNT(*) FROM audit_logs a JOIN employees e ON a.employee_id = e.id {$where_clause}");
+    $countStmt->execute($params);
+    $totalLogs = (int)$countStmt->fetchColumn();
+
     $stmt = $db->prepare("
         SELECT a.*, e.name as employee_name, e.role as employee_role
         FROM audit_logs a
         JOIN employees e ON a.employee_id = e.id
         {$where_clause}
         ORDER BY a.created_at DESC
-        LIMIT 200
+        LIMIT :limit OFFSET :offset
     ");
-    $stmt->execute($params);
+    $stmt->bindValue(':limit', $pageParams['perPage'], PDO::PARAM_INT);
+    $stmt->bindValue(':offset', $pageParams['offset'], PDO::PARAM_INT);
+    foreach ($params as $key => $val) {
+        $stmt->bindValue(":$key", $val);
+    }
+    $stmt->execute();
     $logs = $stmt->fetchAll();
 } catch (PDOException $e) {
     error_log("Failed to fetch audit logs: " . $e->getMessage());
@@ -209,9 +220,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
                 </tbody>
             </table>
         </div>
-        <div class="px-5 py-3 border-t border-gray-100 dark:border-gray-700 text-sm text-gray-500 dark:text-gray-400">
-            عرض آخر <?php echo count($logs); ?> سجل من إجمالي العمليات (الحد الأقصى 200)
-        </div>
+        <?php render_pagination($totalLogs, 10); ?>
     </div>
 </main>
 <?php

@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../bootstrap.php';
 require_once __DIR__ . '/../helpers/audit.php';
+require_once __DIR__ . '/../functions/pagination.php';
 
 // Apply security headers
 set_security_headers();
@@ -119,10 +120,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Fetch all branches
+// Pagination and fetch
+$pageParams = get_pagination_params(10);
 $branches = [];
 try {
-    $stmt = $db->query("SELECT * FROM branches ORDER BY id ASC");
+    $countStmt = $db->query("SELECT COUNT(*) FROM branches");
+    $totalBranches = (int)$countStmt->fetchColumn();
+
+    $stmt = $db->prepare("SELECT * FROM branches ORDER BY id ASC LIMIT :limit OFFSET :offset");
+    $stmt->bindValue(':limit', $pageParams['perPage'], PDO::PARAM_INT);
+    $stmt->bindValue(':offset', $pageParams['offset'], PDO::PARAM_INT);
+    $stmt->execute();
     $branches = $stmt->fetchAll();
 } catch (PDOException $e) {
     error_log("Branches list fetch error: " . $e->getMessage());
@@ -227,6 +235,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
                 </tbody>
             </table>
         </div>
+        <?php render_pagination($totalBranches, 10); ?>
     </div>
 
     <!-- Modals Section -->
