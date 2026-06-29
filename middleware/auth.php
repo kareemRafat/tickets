@@ -15,6 +15,10 @@ function require_admin() {
     }
     
     if (!isset($_SESSION['user_id']) || ($_SESSION['user_role'] ?? '') !== 'admin') {
+        if (isset($_SESSION['user_id']) && ($_SESSION['user_role'] ?? '') === 'employee') {
+            header('Location: ' . BASE_URL . 'support/index.php');
+            exit();
+        }
         $_SESSION['error'] = 'عذراً، يجب تسجيل الدخول كمدير نظام للوصول إلى هذه الصفحة.';
         header('Location: ' . BASE_URL . 'admin/login.php');
         exit();
@@ -31,6 +35,10 @@ function require_employee() {
     }
     
     if (!isset($_SESSION['user_id']) || ($_SESSION['user_role'] ?? '') !== 'employee') {
+        if (isset($_SESSION['user_id']) && ($_SESSION['user_role'] ?? '') === 'admin') {
+            header('Location: ' . BASE_URL . 'admin/index.php');
+            exit();
+        }
         $_SESSION['error'] = 'عذراً، يجب تسجيل الدخول كموظف دعم للوصول إلى هذه الصفحة.';
         header('Location: ' . BASE_URL . 'support/login.php');
         exit();
@@ -62,6 +70,16 @@ function require_student() {
     }
     
     if (!isset($_SESSION['student_national_id'])) {
+        if (isset($_SESSION['user_id'])) {
+            $role = $_SESSION['user_role'] ?? '';
+            if ($role === 'admin') {
+                header('Location: ' . BASE_URL . 'admin/index.php');
+                exit();
+            } elseif ($role === 'employee') {
+                header('Location: ' . BASE_URL . 'support/index.php');
+                exit();
+            }
+        }
         $_SESSION['error'] = 'يرجى إدخال الرقم القومي للتحقق والوصول إلى بوابة الطلاب.';
         header('Location: ' . BASE_URL . 'students/login.php');
         exit();
