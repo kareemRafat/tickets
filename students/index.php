@@ -5,36 +5,192 @@ set_security_headers();
 require_student();
 
 $student_name = $_SESSION['student_name'];
+$national_id = $_SESSION['student_national_id'];
+$student_code = $_SESSION['student_code'] ?? '';
+$student_email = $_SESSION['student_email'] ?? '';
+
+$db = getDBConnection();
+$openCount = 0;
+$inProgressCount = 0;
+$closedCount = 0;
+try {
+    $stmt = $db->prepare("SELECT COUNT(*) FROM student_tickets WHERE national_id = :nid AND status = 'open'");
+    $stmt->execute(['nid' => $national_id]);
+    $openCount = (int)$stmt->fetchColumn();
+    $stmt = $db->prepare("SELECT COUNT(*) FROM student_tickets WHERE national_id = :nid AND status = 'in_progress'");
+    $stmt->execute(['nid' => $national_id]);
+    $inProgressCount = (int)$stmt->fetchColumn();
+    $stmt = $db->prepare("SELECT COUNT(*) FROM student_tickets WHERE national_id = :nid AND status = 'closed'");
+    $stmt->execute(['nid' => $national_id]);
+    $closedCount = (int)$stmt->fetchColumn();
+} catch (PDOException $e) {
+    error_log("Failed to fetch student ticket stats: " . $e->getMessage());
+}
+
+$totalTickets = $openCount + $inProgressCount + $closedCount;
 
 $hide_sidebar = true;
+$hide_navbar = true;
 $pageTitle = 'بوابة الطلاب';
 require_once __DIR__ . '/../includes/header.php';
 ?>
-<div class="sm:mr-0 pt-20 flex-1 flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900">
-<main class="p-6 space-y-6 flex-1">
-    <div>
-        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">مرحباً بك، <?php echo htmlspecialchars($student_name); ?></h1>
-        <p class="mt-1 text-base text-gray-500 dark:text-gray-400">اختر إحدى الخدمات المتاحة من الأسفل.</p>
+<div class="min-h-screen bg-gray-50 dark:bg-gray-900 px-4 md:px-8 pb-4 md:pb-8 pt-6">
+    <!-- Welcome Bar -->
+    <div class="max-w-5xl mx-auto mb-6">
+        <div class="bg-gradient-to-l from-blue-600/10 to-transparent dark:from-blue-400/5 dark:to-transparent rounded-3xl p-6 border border-blue-100 dark:border-blue-900/30">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white shadow-lg shrink-0">
+                        <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/></svg>
+                    </div>
+                    <div>
+                        <h1 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">مرحباً بك، <?php echo htmlspecialchars($student_name); ?></h1>
+                        <div class="flex items-center gap-2 mt-1 font-bold">
+                            <span class="text-sm text-gray-500 dark:text-gray-400">بوابة الطلاب .. تذاكر خدمة العملاء</span>
+                            <span class="w-1 h-1 rounded-full bg-gray-300 dark:bg-gray-600"></span>
+                            <span class="text-sm text-gray-500 dark:text-gray-400"><?php echo $totalTickets; ?> تذاكر</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button id="theme-toggle" type="button" class="text-gray-500 dark:text-gray-400 hover:bg-white/60 dark:hover:bg-gray-800/60 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-xl text-sm p-2.5 transition-all">
+                        <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                        <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.46 5.05L5.75 4.343a1 1 0 10-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2h1a1 1 0 100 2H4z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+                    </button>
+                    <div class="flex items-center">
+                        <button type="button" class="flex text-sm rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600 transition-all hover:ring-2 hover:ring-blue-300" id="student-menu-button" aria-expanded="false" data-dropdown-toggle="student-dropdown">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold shadow-md">
+                                <?php echo mb_substr($student_name, 0, 1); ?>
+                            </div>
+                        </button>
+                        <div class="z-50 hidden my-3 text-base list-none bg-white divide-y divide-gray-100 rounded-2xl shadow-xl dark:bg-gray-700 dark:divide-gray-600 min-w-[220px]" id="student-dropdown">
+                            <div class="px-5 py-4" role="none">
+                                <p class="text-base font-bold text-gray-900 dark:text-white truncate" role="none"><?php echo htmlspecialchars($student_name); ?></p>
+                                <p class="text-sm text-gray-500 dark:text-gray-400 mt-0.5 truncate" role="none"><?php echo htmlspecialchars($student_code ?: '—'); ?></p>
+                                <?php if ($student_email): ?>
+                                <p class="text-sm text-gray-500 dark:text-gray-400 truncate" role="none"><?php echo htmlspecialchars($student_email); ?></p>
+                                <?php endif; ?>
+                            </div>
+                            <div class="py-2" role="none">
+                                <a href="<?php echo BASE_URL; ?>students/logout.php" class="flex items-center gap-3 px-5 py-3 text-sm font-semibold text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20 rounded-xl transition-all mx-2" role="menuitem">
+                                    <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                                    </svg>
+                                    تسجيل الخروج
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="flex flex-col md:flex-row gap-6">
-        <a href="<?php echo BASE_URL; ?>students/ticket-create.php" class="flex-1 p-10 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all dark:bg-gray-800 dark:border-gray-700 group flex flex-col items-center text-center">
-            <div class="w-16 h-16 bg-blue-100 dark:bg-blue-900/50 rounded-2xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
-                <svg class="w-8 h-8 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+    <!-- Two Cards -->
+    <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- New Ticket Card -->
+        <a href="<?php echo BASE_URL; ?>students/ticket-create.php" class="group bg-white dark:bg-gray-800 rounded-3xl border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+            <div class="h-48 bg-cover bg-center relative" style="background-image: url('https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=800');">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                <div class="absolute bottom-4 right-4">
+                    <span class="bg-white/20 backdrop-blur-md text-white text-xs px-3 py-1 rounded-full border border-white/20">شكوى جديدة</span>
+                </div>
             </div>
-            <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-2">تقديم شكوى / تذكرة</h2>
-            <p class="text-base text-gray-500 dark:text-gray-400">إنشاء شكوى أو تذكرة جديدة للتواصل مع فريق الدعم الفني.</p>
+            <div class="p-6">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/40 rounded-2xl flex items-center justify-center shrink-0">
+                        <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+                    </div>
+                    <div>
+                        <h2 class="font-bold text-gray-900 dark:text-white">تقديم شكوى / تذكرة</h2>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">إنشاء شكوى أو تذكرة جديدة</p>
+                    </div>
+                </div>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mb-4 leading-relaxed">للتواصل مع فريق الدعم الفني حول مشكلة أو استفسار، يمكنك تقديم شكوى جديدة وسيتم الرد عليها في أقرب وقت.</p>
+                <div class="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-700">
+                    <span class="text-sm font-medium text-blue-600 dark:text-blue-400">تقديم الآن</span>
+                    <svg class="w-5 h-5 text-blue-600 dark:text-blue-400 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+                </div>
+            </div>
         </a>
-        <a href="<?php echo BASE_URL; ?>students/track.php" class="flex-1 p-10 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all dark:bg-gray-800 dark:border-gray-700 group flex flex-col items-center text-center">
-            <div class="w-16 h-16 bg-indigo-100 dark:bg-indigo-900/50 rounded-2xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
-                <svg class="w-8 h-8 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+
+        <!-- Track Tickets Card -->
+        <a href="<?php echo BASE_URL; ?>students/track.php" class="group bg-white dark:bg-gray-800 rounded-3xl border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+            <div class="h-48 bg-cover bg-center relative" style="background-image: url('https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800');">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                <?php if ($totalTickets > 0): ?>
+                    <div class="absolute top-4 left-4">
+                        <span class="bg-white/20 backdrop-blur-md text-white text-xs px-3 py-1 rounded-full border border-white/20"><?php echo $totalTickets; ?> تذاكر</span>
+                    </div>
+                <?php endif; ?>
+                <div class="absolute bottom-4 right-4 flex gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-blue-400"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+                </div>
             </div>
-            <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-2">تتبع تذاكري</h2>
-            <p class="text-base text-gray-500 dark:text-gray-400">متابعة حالة التذاكر السابقة والاطلاع على الردود والتحديثات.</p>
+            <div class="p-6">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/40 rounded-2xl flex items-center justify-center shrink-0">
+                        <svg class="w-6 h-6 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                    </div>
+                    <div>
+                        <h2 class="font-bold text-gray-900 dark:text-white">تتبع تذاكري</h2>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">متابعة حالة تذاكرك</p>
+                    </div>
+                </div>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mb-4 leading-relaxed">متابعة حالة التذاكر السابقة، الاطلاع على الردود والتحديثات من فريق الدعم الفني، والتأكد من سير العمل.</p>
+                <div class="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-700">
+                    <span class="text-sm font-medium text-indigo-600 dark:text-indigo-400">عرض التذاكر</span>
+                    <svg class="w-5 h-5 text-indigo-600 dark:text-indigo-400 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+                </div>
+            </div>
         </a>
     </div>
-</main>
+
+    <!-- Stats Bar -->
+    <div class="max-w-5xl mx-auto mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl border border-blue-200 dark:border-blue-900/50 overflow-hidden hover:shadow-lg transition-shadow duration-300">
+            <div class="h-1.5 bg-gradient-to-r from-blue-400 to-blue-600"></div>
+            <div class="p-5">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-11 h-11 bg-blue-100 dark:bg-blue-900/40 rounded-xl flex items-center justify-center">
+                        <svg class="w-5 h-5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </div>
+                    <span class="text-xs font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 px-2.5 py-1 rounded-full">مفتوحة</span>
+                </div>
+                <p class="text-3xl font-bold text-gray-900 dark:text-white"><?php echo $openCount; ?></p>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">تذاكر مفتوحة تنتظر الرد</p>
+            </div>
+        </div>
+        <div class="bg-white dark:bg-gray-800 rounded-2xl border border-amber-200 dark:border-amber-900/50 overflow-hidden hover:shadow-lg transition-shadow duration-300">
+            <div class="h-1.5 bg-gradient-to-r from-amber-400 to-amber-600"></div>
+            <div class="p-5">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-11 h-11 bg-amber-100 dark:bg-amber-900/40 rounded-xl flex items-center justify-center">
+                        <svg class="w-5 h-5 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                    </div>
+                    <span class="text-xs font-medium text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/30 px-2.5 py-1 rounded-full">قيد التنفيذ</span>
+                </div>
+                <p class="text-3xl font-bold text-gray-900 dark:text-white"><?php echo $inProgressCount; ?></p>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">تذاكر قيد المعالجة حالياً</p>
+            </div>
+        </div>
+        <div class="bg-white dark:bg-gray-800 rounded-2xl border border-emerald-200 dark:border-emerald-900/50 overflow-hidden hover:shadow-lg transition-shadow duration-300">
+            <div class="h-1.5 bg-gradient-to-r from-emerald-400 to-emerald-600"></div>
+            <div class="p-5">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-11 h-11 bg-emerald-100 dark:bg-emerald-900/40 rounded-xl flex items-center justify-center">
+                        <svg class="w-5 h-5 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </div>
+                    <span class="text-xs font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/30 px-2.5 py-1 rounded-full">مغلقة</span>
+                </div>
+                <p class="text-3xl font-bold text-gray-900 dark:text-white"><?php echo $closedCount; ?></p>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">تذاكر تم حلها وإغلاقها</p>
+            </div>
+        </div>
+    </div>
+</div>
 <?php
 require_once __DIR__ . '/../includes/footer.php';
 ?>
-</div>

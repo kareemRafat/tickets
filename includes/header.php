@@ -34,6 +34,7 @@ require_once __DIR__ . '/../config/config.php';
 </head>
 <body class="h-full bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 antialiased flex flex-col">
     <!-- Top Navbar -->
+    <?php if (empty($hide_navbar)): ?>
     <nav class="fixed top-0 z-40 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700 backdrop-blur-md bg-opacity-80 dark:bg-opacity-80">
         <div class="px-4 py-3 lg:px-6">
             <div class="flex items-center justify-between">
@@ -131,3 +132,4 @@ require_once __DIR__ . '/../config/config.php';
             </div>
         </div>
     </nav>
+    <?php endif; ?>
