@@ -128,7 +128,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
         </div>
     <?php endif; ?>
 
-    <div class="p-6 bg-white border border-gray-100 rounded-2xl shadow-sm dark:bg-gray-800 dark:border-gray-700 max-w-2xl">
+    <div class="p-6 bg-white border border-gray-100 rounded-2xl shadow-sm dark:bg-gray-800 dark:border-gray-700 w-full">
         <form class="space-y-6" action="" method="POST">
             <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
 

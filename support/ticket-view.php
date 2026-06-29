@@ -173,7 +173,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $reply_count = $stmt->fetchColumn();
 
                 if ($new_status === 'closed' && $reply_count == 0) {
-                    $error_message = 'يجب إضافة رد أولاً قبل إغلاق التذكرة.';
+                    $_SESSION['error'] = 'يجب إضافة رد أولاً قبل إغلاق التذكرة.';
+                    header('Location: ' . BASE_URL . "support/ticket-view.php?id={$ticket_id}&type={$type}");
+                    exit();
                 } else {
                     try {
                         $old_status = $ticket['status'];

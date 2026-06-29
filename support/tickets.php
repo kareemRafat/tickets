@@ -24,6 +24,7 @@ try {
     error_log("Failed to fetch categories for filter: " . $e->getMessage());
 }
 
+$status_labels = ['open' => 'مفتوحة', 'in_progress' => 'قيد التنفيذ', 'closed' => 'مغلقة'];
 $pageTitle = 'قائمة التذاكر';
 require_once __DIR__ . '/../includes/header.php';
 require_once __DIR__ . '/../includes/sidebar.php';
@@ -139,7 +140,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
                 JOIN categories c ON st.category_id = c.id
                 JOIN employees e ON st.employee_id = e.id
                 WHERE {$where_clause}
-                ORDER BY COALESCE(st.last_reply_at, st.created_at) DESC
+                ORDER BY FIELD(st.status, 'open', 'in_progress', 'closed'), COALESCE(st.last_reply_at, st.created_at) DESC
             ");
             $stmt->execute($params);
             $tickets = $stmt->fetchAll();
@@ -175,7 +176,21 @@ require_once __DIR__ . '/../includes/sidebar.php';
                         <?php else: ?>
                             <?php $i = 1; ?>
                             <?php foreach ($tickets as $t): ?>
-                                <tr class="hover:bg-gray-50/50 dark:hover:bg-gray-700/30 transition-colors">
+                                <?php
+                                $row_bg = match($t['status']) {
+                                    'open' => 'bg-blue-200/50 hover:bg-blue-300/60 dark:bg-blue-900/25 dark:hover:bg-blue-900/40',
+                                    'in_progress' => 'bg-yellow-200/50 hover:bg-yellow-300/60 dark:bg-yellow-900/25 dark:hover:bg-yellow-900/40',
+                                    'closed' => 'bg-green-200/50 hover:bg-green-300/60 dark:bg-green-900/25 dark:hover:bg-green-900/40',
+                                    default => 'hover:bg-gray-50/50 dark:hover:bg-gray-700/30'
+                                };
+                                $badge_bg = match($t['status']) {
+                                    'open' => 'bg-blue-700 text-white dark:bg-blue-500 dark:text-white',
+                                    'in_progress' => 'bg-yellow-600 text-white dark:bg-yellow-500 dark:text-white',
+                                    'closed' => 'bg-green-700 text-white dark:bg-green-500 dark:text-white',
+                                    default => ''
+                                };
+                                ?>
+                                <tr class="<?php echo $row_bg; ?> transition-colors">
                                     <td class="px-3 py-3 text-sm text-gray-400 dark:text-gray-500 text-center"><?php echo $i++; ?></td>
                                     <td class="px-4 py-3 font-mono text-base font-semibold"><a href="<?php echo BASE_URL; ?>support/ticket-view.php?id=<?php echo $t['id']; ?>&type=support" class="text-blue-600 dark:text-blue-400 hover:underline"><?php echo htmlspecialchars($t['ticket_number']); ?></a></td>
                                     <td class="px-4 py-3 text-sm font-semibold text-gray-900 dark:text-white max-w-xs truncate"><?php echo htmlspecialchars($t['subject']); ?></td>
@@ -190,13 +205,16 @@ require_once __DIR__ . '/../includes/sidebar.php';
                                         <?php endif; ?>
                                     </td>
                                     <td class="px-4 py-3">
-                                        <?php if ($t['status'] === 'open'): ?>
-                                            <span class="px-2 py-0.5 text-sm font-medium rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">مفتوحة</span>
-                                        <?php elseif ($t['status'] === 'in_progress'): ?>
-                                            <span class="px-2 py-0.5 text-sm font-medium rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">قيد التنفيذ</span>
-                                        <?php else: ?>
-                                            <span class="px-2 py-0.5 text-sm font-medium rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">مغلقة</span>
-                                        <?php endif; ?>
+                                        <span class="px-1.5 py-0.5 text-xs font-bold rounded-full inline-flex items-center gap-1 <?php echo $badge_bg; ?>">
+                                            <?php if ($t['status'] === 'closed'): ?>
+                                                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z" clip-rule="evenodd"/></svg>
+                                            <?php elseif ($t['status'] === 'in_progress'): ?>
+                                                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg>
+                                            <?php else: ?>
+                                                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M14.5 1A4.5 4.5 0 0010 5.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5a3 3 0 016 0V7a1 1 0 102 0V5.5A4.5 4.5 0 0014.5 1z" clip-rule="evenodd"/></svg>
+                                            <?php endif; ?>
+                                            <?php echo $status_labels[$t['status']]; ?>
+                                        </span>
                                     </td>
                                     <td class="px-4 py-3 text-sm"><?php echo htmlspecialchars($t['employee_name']); ?></td>
                                     <td class="px-4 py-3 text-sm"><?php if ($t['last_reply_at']): ?><span class="font-medium"><?php echo htmlspecialchars($t['last_reply_name']); ?></span><br><span class="font-mono text-gray-500"><?php echo date('Y-m-d H:i', strtotime($t['last_reply_at'])); ?></span><?php else: ?><span class="text-gray-400">—</span><?php endif; ?></td>
@@ -262,7 +280,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
                 FROM student_tickets st
                 JOIN categories c ON st.category_id = c.id
                 WHERE {$where_clause}
-                ORDER BY COALESCE(st.last_reply_at, st.created_at) DESC
+                ORDER BY FIELD(st.status, 'open', 'in_progress', 'closed'), COALESCE(st.last_reply_at, st.created_at) DESC
             ");
             $stmt->execute($params);
             $tickets = $stmt->fetchAll();
@@ -298,7 +316,21 @@ require_once __DIR__ . '/../includes/sidebar.php';
                         <?php else: ?>
                             <?php $i = 1; ?>
                             <?php foreach ($tickets as $t): ?>
-                                <tr class="hover:bg-gray-50/50 dark:hover:bg-gray-700/30 transition-colors">
+                                <?php
+                                $row_bg = match($t['status']) {
+                                    'open' => 'bg-blue-200/50 hover:bg-blue-300/60 dark:bg-blue-900/25 dark:hover:bg-blue-900/40',
+                                    'in_progress' => 'bg-yellow-200/50 hover:bg-yellow-300/60 dark:bg-yellow-900/25 dark:hover:bg-yellow-900/40',
+                                    'closed' => 'bg-green-200/50 hover:bg-green-300/60 dark:bg-green-900/25 dark:hover:bg-green-900/40',
+                                    default => 'hover:bg-gray-50/50 dark:hover:bg-gray-700/30'
+                                };
+                                $badge_bg = match($t['status']) {
+                                    'open' => 'bg-blue-700 text-white dark:bg-blue-500 dark:text-white',
+                                    'in_progress' => 'bg-yellow-600 text-white dark:bg-yellow-500 dark:text-white',
+                                    'closed' => 'bg-green-700 text-white dark:bg-green-500 dark:text-white',
+                                    default => ''
+                                };
+                                ?>
+                                <tr class="<?php echo $row_bg; ?> transition-colors">
                                     <td class="px-3 py-3 text-sm text-gray-400 dark:text-gray-500 text-center"><?php echo $i++; ?></td>
                                     <td class="px-4 py-3 font-mono text-base font-semibold"><a href="<?php echo BASE_URL; ?>support/ticket-view.php?id=<?php echo $t['id']; ?>&type=student" class="text-blue-600 dark:text-blue-400 hover:underline"><?php echo htmlspecialchars($t['ticket_number']); ?></a></td>
                                     <td class="px-4 py-3 text-sm font-semibold text-gray-900 dark:text-white max-w-xs truncate"><?php echo htmlspecialchars($t['subject']); ?></td>
@@ -314,13 +346,16 @@ require_once __DIR__ . '/../includes/sidebar.php';
                                         <?php endif; ?>
                                     </td>
                                     <td class="px-4 py-3">
-                                        <?php if ($t['status'] === 'open'): ?>
-                                            <span class="px-2 py-0.5 text-sm font-medium rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">مفتوحة</span>
-                                        <?php elseif ($t['status'] === 'in_progress'): ?>
-                                            <span class="px-2 py-0.5 text-sm font-medium rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">قيد التنفيذ</span>
-                                        <?php else: ?>
-                                            <span class="px-2 py-0.5 text-sm font-medium rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">مغلقة</span>
-                                        <?php endif; ?>
+                                        <span class="px-1.5 py-0.5 text-xs font-bold rounded-full inline-flex items-center gap-1 <?php echo $badge_bg; ?>">
+                                            <?php if ($t['status'] === 'closed'): ?>
+                                                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z" clip-rule="evenodd"/></svg>
+                                            <?php elseif ($t['status'] === 'in_progress'): ?>
+                                                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg>
+                                            <?php else: ?>
+                                                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M14.5 1A4.5 4.5 0 0010 5.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5a3 3 0 016 0V7a1 1 0 102 0V5.5A4.5 4.5 0 0014.5 1z" clip-rule="evenodd"/></svg>
+                                            <?php endif; ?>
+                                            <?php echo $status_labels[$t['status']]; ?>
+                                        </span>
                                     </td>
                                     <td class="px-4 py-3 text-sm"><?php if ($t['last_reply_at']): ?><span class="font-medium"><?php echo htmlspecialchars($t['last_reply_name']); ?></span><br><span class="font-mono text-gray-500"><?php echo date('Y-m-d H:i', strtotime($t['last_reply_at'])); ?></span><?php else: ?><span class="text-gray-400">—</span><?php endif; ?></td>
                                     <td class="px-4 py-3 text-sm font-mono"><?php echo date('Y-m-d H:i', strtotime($t['created_at'])); ?></td>

@@ -100,8 +100,8 @@ require_once __DIR__ . '/../includes/sidebar.php';
     <!-- Table Section -->
     <div class="bg-white border border-gray-100 rounded-2xl shadow-sm dark:bg-gray-800 dark:border-gray-700 overflow-hidden">
         <div class="overflow-x-auto">
-            <table class="w-full text-sm text-right text-gray-500 dark:text-gray-400">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b border-gray-100 dark:border-gray-700">
+            <table class="w-full text-base text-right text-gray-500 dark:text-gray-400">
+                <thead class="text-sm text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b border-gray-100 dark:border-gray-700">
                     <tr>
                         <th scope="col" class="px-6 py-4">الاسم الكامل</th>
                         <th scope="col" class="px-6 py-4">اسم المستخدم</th>
@@ -123,8 +123,8 @@ require_once __DIR__ . '/../includes/sidebar.php';
                         <?php foreach ($employees as $employee): ?>
                             <tr class="hover:bg-gray-50/50 dark:hover:bg-gray-700/30 transition-colors">
                                 <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white"><?php echo htmlspecialchars($employee['name']); ?></td>
-                                <td class="px-6 py-4 font-mono text-xs"><?php echo htmlspecialchars($employee['username']); ?></td>
-                                <td class="px-6 py-4 text-xs"><?php echo htmlspecialchars($employee['email'] ?? '—'); ?></td>
+                                <td class="px-6 py-4 font-mono text-sm"><?php echo htmlspecialchars($employee['username']); ?></td>
+                                <td class="px-6 py-4 text-sm"><?php echo htmlspecialchars($employee['email'] ?? '—'); ?></td>
                                 <td class="px-6 py-4">
                                     <?php echo htmlspecialchars($employee['branch_name'] ?? 'إدارة النظام (بدون فرع)'); ?>
                                 </td>
@@ -190,7 +190,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                             </svg>
                             <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">هل أنت متأكد من رغبتك في حذف حساب الموظف <strong><?php echo htmlspecialchars($employee['name']); ?></strong>؟</h3>
-                            <p class="text-xs text-red-600 dark:text-red-400 mb-6">تنبيه: لا يمكن التراجع عن هذه الخطوة، وسيتم مسح كافة سجلات الموظف وصلاحياته.</p>
+                            <p class="text-sm text-red-600 dark:text-red-400 mb-6">تنبيه: لا يمكن التراجع عن هذه الخطوة، وسيتم مسح كافة سجلات الموظف وصلاحياته.</p>
                             <form action="" method="POST" class="inline-flex gap-2">
                                 <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
                                 <input type="hidden" name="action" value="delete">
