@@ -72,6 +72,7 @@ $priority_labels = ['low' => 'منخفضة', 'medium' => 'متوسطة', 'high' 
 
 // Handle POST actions
 $error_message = '';
+unset($_SESSION['error']);
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
     $csrf_token = $_POST['csrf_token'] ?? '';
@@ -247,15 +248,6 @@ require_once __DIR__ . '/../includes/header.php';
 require_once __DIR__ . '/../includes/sidebar.php';
 ?>
 <main class="p-6 space-y-6 flex-1">
-    <?php if (!empty($error_message)): ?>
-        <div class="p-4 text-base text-red-800 rounded-xl bg-red-50 dark:bg-gray-800 dark:text-red-400 border border-red-100 dark:border-red-900/50 flex items-center gap-2" role="alert">
-            <svg class="flex-shrink-0 inline w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
-            </svg>
-            <span><?php echo $error_message; ?></span>
-        </div>
-    <?php endif; ?>
-
     <!-- Ticket Header -->
     <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
         <div>
@@ -479,5 +471,8 @@ require_once __DIR__ . '/../includes/sidebar.php';
     </div>
 </main>
 <?php
+if (!empty($error_message)) {
+    $_SESSION['error'] = $error_message;
+}
 require_once __DIR__ . '/../includes/footer.php';
 ?>

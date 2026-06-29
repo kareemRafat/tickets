@@ -120,11 +120,11 @@ try {
                                 <div class="text-sm font-medium text-gray-900 dark:text-white"><?php echo htmlspecialchars($t['category_name']); ?></div>
                                 <div class="mt-1">
                                     <?php if ($t['priority'] === 'high'): ?>
-                                        <span class="px-2 py-0.5 text-xs font-medium rounded bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">عالية</span>
+                                        <span class="px-2 text-xs font-bold rounded bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">عالية</span>
                                     <?php elseif ($t['priority'] === 'medium'): ?>
-                                        <span class="px-2 py-0.5 text-xs font-medium rounded bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">متوسطة</span>
+                                        <span class="px-2 text-xs font-bold rounded bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">متوسطة</span>
                                     <?php else: ?>
-                                        <span class="px-2 py-0.5 text-xs font-medium rounded bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">منخفضة</span>
+                                        <span class="px-2 text-xs font-bold rounded bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">منخفضة</span>
                                     <?php endif; ?>
                                 </div>
                             </td>
