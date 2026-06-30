@@ -12,14 +12,14 @@ require_once __DIR__ . '/../config/config.php';
     <!-- Tailwind compiled output -->
     <link href="<?php echo BASE_URL; ?>assets/css/styles.css" rel="stylesheet">
     
-    <!-- Google Fonts: Cairo for a modern, clean, premium Arabic look -->
+    <!-- Google Fonts: Tajawal for a modern, clean, premium Arabic look -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
         body {
-            font-family: 'Cairo', sans-serif;
+            font-family: 'Noto Kufi Arabic', sans-serif;
         }
     </style>
     

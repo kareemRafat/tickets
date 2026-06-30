@@ -204,11 +204,12 @@ document.addEventListener('DOMContentLoaded', function () {
             '</div>';
     }
 
-    function loadTodos() {
+    function loadTodos(showSpinner) {
+        if (showSpinner === undefined) showSpinner = true;
         var dateVal = dateFilterEl ? dateFilterEl.value : '';
         var url = listUrl + '&date=' + (dateVal || todayEgypt());
         var start = Date.now();
-        showLoading();
+        if (showSpinner) showLoading();
         fetch(url)
             .then(function (r) { return r.json(); })
             .then(function (data) {
@@ -227,11 +228,37 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     }
 
+    function toggleBtnState(btn, toDone) {
+        if (toDone) {
+            btn.classList.remove('border-gray-400', 'dark:border-gray-500', 'hover:border-blue-500', 'dark:hover:border-blue-400', 'bg-gray-50', 'dark:bg-gray-700');
+            btn.classList.add('bg-green-500', 'border-green-500', 'text-white', 'hover:bg-green-600');
+            btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>';
+            btn.title = 'إعادة فتح';
+        } else {
+            btn.classList.remove('bg-green-500', 'border-green-500', 'text-white', 'hover:bg-green-600');
+            btn.classList.add('border-gray-400', 'dark:border-gray-500', 'hover:border-blue-500', 'dark:hover:border-blue-400', 'bg-gray-50', 'dark:bg-gray-700');
+            btn.innerHTML = '';
+            btn.title = 'إتمام';
+        }
+    }
+
     // Toggle handler (event delegation)
     listEl.addEventListener('click', function (e) {
         var btn = e.target.closest('.todo-toggle');
         if (btn) {
             e.preventDefault();
+            var card = btn.closest('.todo-card');
+            var wasDone = card.classList.contains('opacity-75');
+
+            // Optimistic UI: immediately toggle visual state
+            var toDone = !wasDone;
+            card.classList.toggle('opacity-75');
+            var titleEl = card.querySelector('p');
+            titleEl.classList.toggle('line-through');
+            titleEl.classList.toggle('text-gray-400');
+            titleEl.classList.toggle('dark:text-gray-500');
+            toggleBtnState(btn, toDone);
+
             var id = btn.dataset.id;
             var formData = new FormData();
             formData.append('action', 'toggle');
@@ -243,13 +270,23 @@ document.addEventListener('DOMContentLoaded', function () {
                 .then(function (data) {
                     if (!data.success) {
                         showError(data.message || 'حدث خطأ');
+                        card.classList.toggle('opacity-75');
+                        titleEl.classList.toggle('line-through');
+                        titleEl.classList.toggle('text-gray-400');
+                        titleEl.classList.toggle('dark:text-gray-500');
+                        toggleBtnState(btn, wasDone);
                         return;
                     }
                     showSuccess(data.message);
-                    loadTodos();
+                    loadTodos(false);
                 })
                 .catch(function () {
                     showError('فشل الاتصال بالخادم');
+                    card.classList.toggle('opacity-75');
+                    titleEl.classList.toggle('line-through');
+                    titleEl.classList.toggle('text-gray-400');
+                    titleEl.classList.toggle('dark:text-gray-500');
+                    toggleBtnState(btn, wasDone);
                 });
         }
 
