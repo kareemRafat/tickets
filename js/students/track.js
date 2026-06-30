@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
         var replies = data.replies || [];
         var sl = data.status_labels || {};
 
-        var statusClass = t.status === 'open' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : t.status === 'in_progress' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
+        var statusClass = t.status === 'open' ? 'bg-green-100 text-green-800 dark:bg-green-800/50 dark:text-green-300' : t.status === 'in_progress' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-800/50 dark:text-yellow-300' : 'bg-red-100 text-red-800 dark:bg-red-800/50 dark:text-red-300';
 
         var priorityClass = t.priority === 'high' ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' : t.priority === 'medium' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300';
 
@@ -74,15 +74,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
                 var initial = r.employee_name.charAt(0);
                 items += '<div class="flex gap-3 p-4 bg-gray-50 rounded-lg border border-gray-200 dark:bg-gray-700/30 dark:border-gray-700">' +
-                    '<div class="w-9 h-9 rounded-full bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center text-blue-700 dark:text-blue-300 text-sm font-bold shrink-0 mt-0.5">' + initial + '</div>' +
+                    '<div class="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center text-blue-700 dark:text-blue-300 text-base font-bold shrink-0 mt-0.5">' + initial + '</div>' +
                     '<div class="flex-1 min-w-0">' +
                     '<div class="flex items-center justify-between gap-2">' +
-                    '<span class="text-sm font-semibold text-gray-900 dark:text-white">' + r.employee_name + '</span>' +
-                    '<time class="text-xs text-gray-400 dark:text-gray-500 shrink-0">' + formatDate(r.created_at) + '</time>' +
+                    '<span class="text-base font-semibold text-gray-900 dark:text-white">Createivo</span>' +
+                    '<time class="text-sm text-gray-400 dark:text-gray-500 shrink-0">' + formatDate(r.created_at) + '</time>' +
                     '</div>' +
                     '<hr class="my-2.5 border-gray-200 dark:border-gray-600">' +
                     statusChange +
-                    '<p class="text-base font-semibold text-gray-700 dark:text-gray-300 whitespace-pre-wrap">' + r.reply + '</p>' +
+                    '<p class="text-base text-gray-700 dark:text-gray-300 whitespace-pre-wrap">' + r.reply + '</p>' +
                     '</div>' +
                     '</div>';
             });
@@ -90,38 +90,32 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         detailsPanel.innerHTML =
-            '<div class="space-y-6">' +
+            '<div class="space-y-8">' +
 
-            '<div class="flex items-start justify-between flex-wrap gap-3">' +
-            '<div class="flex items-center gap-3 flex-wrap">' +
-            '<h2 class="text-xl font-bold text-gray-900 dark:text-white">' + t.ticket_number + '</h2>' +
-            '<span class="px-3 py-0.5 text-sm font-medium rounded-full ' + statusClass + '">' + t.status_label + '</span>' +
-            '<span class="px-3 py-0.5 text-sm font-medium rounded-full ' + priorityClass + '">' + t.priority_label + '</span>' +
+            '<div>' +
+            '<div class="flex items-center gap-3 mb-3">' +
+            '<h2 class="text-xl font-bold text-white bg-sky-600 px-2 rounded dark:text-white">' + t.ticket_number + '</h2>' +
+            '<span class="px-2.5 py-0.5 text-sm font-medium rounded ' + statusClass + '">' + t.status_label + '</span>' +
+            '<span class="px-2.5 py-0.5 text-sm font-medium rounded ' + priorityClass + '">' + t.priority_label + '</span>' +
             '</div>' +
-            '<time class="text-sm text-gray-400 dark:text-gray-500">' + formatDate(t.created_at) + '</time>' +
-            '</div>' +
-
-            '<h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">' + t.subject + '</h3>' +
-
-            '<div class="bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-gray-800 dark:border-gray-700 overflow-hidden">' +
-            '<div class="px-5 py-3 border-b border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/80">' +
-            '<h4 class="text-sm font-bold text-gray-700 dark:text-gray-300">الوصف</h4>' +
-            '</div>' +
-            '<div class="p-5">' +
-            '<p class="text-gray-700 dark:text-gray-300 whitespace-pre-wrap leading-relaxed">' + t.description + '</p>' +
+            '<h3 class="text-2xl font-bold text-gray-900 dark:text-white leading-snug">' + t.subject + '</h3>' +
+            '<div class="inline-flex items-center gap-2 mt-3 px-4 py-2 bg-gray-100 dark:bg-gray-700/50 rounded-xl text-[15px] text-gray-600 dark:text-gray-300 font-semibold">' +
+            '<span>' + t.category_name + '</span>' +
+            '<span class="w-1 h-1 rounded-full bg-gray-400 dark:bg-gray-500"></span>' +
+            '<span>' + t.student_name + '</span>' +
+            '<span class="w-1 h-1 rounded-full bg-gray-400 dark:bg-gray-500"></span>' +
+            '<time class="text-gray-500 dark:text-gray-400">' + formatDate(t.created_at) + '</time>' +
             '</div>' +
             '</div>' +
 
-            '<div class="bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-gray-800 dark:border-gray-700 overflow-hidden">' +
-            '<div class="px-5 py-3 border-b border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/80">' +
-            '<h4 class="text-sm font-bold text-gray-700 dark:text-gray-300">الردود</h4>' +
-            '</div>' +
-            '<div class="p-5">' +
-            repliesHtml +
-            '</div>' +
+            '<div class="border-t border-gray-200 dark:border-gray-700 pt-6">' +
+            '<p class="text-gray-700 dark:text-gray-300 whitespace-pre-wrap leading-relaxed text-lg">' + t.description + '</p>' +
             '</div>' +
 
-
+            '<div class="border-t border-gray-200 dark:border-gray-700 pt-6">' +
+            '<h4 class="text-base font-bold text-gray-500 dark:text-gray-400 mb-4">الردود</h4>' +
+            (replies.length > 0 ? repliesHtml : '<p class="text-base text-gray-400 dark:text-gray-500">لا توجد ردود حتى الآن سيتم الرد عليكم لاحقاً</p>') +
+            '</div>' +
 
             '</div>';
     }

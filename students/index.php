@@ -160,7 +160,7 @@ require_once __DIR__ . '/../includes/header.php';
                     <span class="text-xs font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 px-2.5 py-1 rounded-full">مفتوحة</span>
                 </div>
                 <p class="text-3xl font-bold text-gray-900 dark:text-white"><?php echo $openCount; ?></p>
-                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">تذاكر مفتوحة تنتظر الرد</p>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1 font-semibold">تذاكر مفتوحة تنتظر الرد</p>
             </div>
         </div>
         <div class="bg-white dark:bg-gray-800 rounded-2xl border border-amber-200 dark:border-amber-900/50 overflow-hidden hover:shadow-lg transition-shadow duration-300">
@@ -173,7 +173,7 @@ require_once __DIR__ . '/../includes/header.php';
                     <span class="text-xs font-medium text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/30 px-2.5 py-1 rounded-full">قيد التنفيذ</span>
                 </div>
                 <p class="text-3xl font-bold text-gray-900 dark:text-white"><?php echo $inProgressCount; ?></p>
-                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">تذاكر قيد المعالجة حالياً</p>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1 font-semibold">تذاكر قيد المعالجة حالياً</p>
             </div>
         </div>
         <div class="bg-white dark:bg-gray-800 rounded-2xl border border-emerald-200 dark:border-emerald-900/50 overflow-hidden hover:shadow-lg transition-shadow duration-300">
@@ -186,7 +186,7 @@ require_once __DIR__ . '/../includes/header.php';
                     <span class="text-xs font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/30 px-2.5 py-1 rounded-full">مغلقة</span>
                 </div>
                 <p class="text-3xl font-bold text-gray-900 dark:text-white"><?php echo $closedCount; ?></p>
-                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">تذاكر تم حلها وإغلاقها</p>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1 font-semibold">تذاكر تم حلها وإغلاقها</p>
             </div>
         </div>
     </div>

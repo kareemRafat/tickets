@@ -86,6 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+$hide_navbar = true;
 $pageTitle = 'تسجيل دخول الإدارة';
 require_once __DIR__ . '/../includes/header.php';
 ?>
