@@ -72,9 +72,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (r.old_status && r.new_status) {
                     statusChange = '<div class="mb-2 text-sm text-gray-500 dark:text-gray-400 font-semibold">تم تغيير الحالة من <span class="font-medium">' + (sl[r.old_status] || r.old_status) + '</span> إلى <span class="font-medium">' + (sl[r.new_status] || r.new_status) + '</span></div>';
                 }
-                var initial = r.employee_name.charAt(0);
+            
                 items += '<div class="flex gap-3 p-4 bg-gray-50 rounded-lg border border-gray-200 dark:bg-gray-700/30 dark:border-gray-700">' +
-                    '<div class="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center text-blue-700 dark:text-blue-300 text-base font-bold shrink-0 mt-0.5">' + initial + '</div>' +
+                    '<div class="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center text-blue-700 dark:text-blue-300 text-base font-bold shrink-0 mt-0.5">C</div>' +
                     '<div class="flex-1 min-w-0">' +
                     '<div class="flex items-center justify-between gap-2">' +
                     '<span class="text-base font-semibold text-gray-900 dark:text-white">Createivo</span>' +
@@ -127,8 +127,6 @@ document.addEventListener('DOMContentLoaded', function () {
         var year = d.getFullYear();
         var month = String(d.getMonth() + 1).padStart(2, '0');
         var day = String(d.getDate()).padStart(2, '0');
-        var hours = String(d.getHours()).padStart(2, '0');
-        var mins = String(d.getMinutes()).padStart(2, '0');
-        return year + '-' + month + '-' + day + ' ' + hours + ':' + mins;
+        return year + '-' + month + '-' + day;
     }
 });

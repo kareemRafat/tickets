@@ -162,5 +162,5 @@ require_once __DIR__ . '/../includes/header.php';
         &copy; <?php echo date('Y'); ?> <?php echo SYSTEM_NAME; ?> — جميع الحقوق محفوظة
     </footer>
 </div>
-<script src="<?php echo BASE_URL; ?>js/students/track.js"></script>
+<script src="<?php echo BASE_URL; ?>students/js/track.js"></script>
 <?php require_once __DIR__ . '/../includes/footer.php'; ?>
