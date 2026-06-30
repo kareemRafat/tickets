@@ -15,6 +15,10 @@ function require_admin() {
     }
     
     if (!isset($_SESSION['user_id']) || ($_SESSION['user_role'] ?? '') !== 'admin') {
+        if (isset($_SESSION['student_national_id'])) {
+            header('Location: ' . BASE_URL . 'students/index.php');
+            exit();
+        }
         if (isset($_SESSION['user_id']) && ($_SESSION['user_role'] ?? '') === 'employee') {
             header('Location: ' . BASE_URL . 'support/index.php');
             exit();
@@ -35,6 +39,10 @@ function require_employee() {
     }
     
     if (!isset($_SESSION['user_id']) || ($_SESSION['user_role'] ?? '') !== 'employee') {
+        if (isset($_SESSION['student_national_id'])) {
+            header('Location: ' . BASE_URL . 'students/index.php');
+            exit();
+        }
         if (isset($_SESSION['user_id']) && ($_SESSION['user_role'] ?? '') === 'admin') {
             header('Location: ' . BASE_URL . 'admin/index.php');
             exit();
@@ -54,6 +62,10 @@ function require_employee_or_admin() {
     }
     
     if (!isset($_SESSION['user_id']) || !in_array($_SESSION['user_role'] ?? '', ['employee', 'admin'])) {
+        if (isset($_SESSION['student_national_id'])) {
+            header('Location: ' . BASE_URL . 'students/index.php');
+            exit();
+        }
         $_SESSION['error'] = 'عذراً، يجب تسجيل الدخول للوصول إلى هذه الصفحة.';
         header('Location: ' . BASE_URL . 'admin/login.php');
         exit();
