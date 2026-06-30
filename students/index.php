@@ -90,7 +90,7 @@ require_once __DIR__ . '/../includes/header.php';
     <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- New Ticket Card -->
         <a href="<?php echo BASE_URL; ?>students/ticket-create.php" class="group bg-white dark:bg-gray-800 rounded-3xl border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-            <div class="h-48 bg-cover bg-center relative" style="background-image: url('https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=800');">
+            <div class="h-48 bg-cover bg-center relative" style="background-image: url('<?php echo BASE_URL; ?>images/add%20ticket.jfif');">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
                 <div class="absolute bottom-4 right-4">
                     <span class="bg-white/20 backdrop-blur-md text-white text-xs px-3 py-1 rounded-full border border-white/20">شكوى جديدة</span>
@@ -116,7 +116,7 @@ require_once __DIR__ . '/../includes/header.php';
 
         <!-- Track Tickets Card -->
         <a href="<?php echo BASE_URL; ?>students/track.php" class="group bg-white dark:bg-gray-800 rounded-3xl border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-            <div class="h-48 bg-cover bg-center relative" style="background-image: url('https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800');">
+            <div class="h-48 bg-cover bg-center relative" style="background-image: url('<?php echo BASE_URL; ?>images/track%20tickets.jfif');">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
                 <?php if ($totalTickets > 0): ?>
                     <div class="absolute top-4 left-4">
