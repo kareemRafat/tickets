@@ -28,7 +28,6 @@ require_once __DIR__ . '/../includes/sidebar.php';
             <div>
                 <h1 class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
                     المهام
-                    <span class="inline-block mr-3 px-2.5 py-1 text-xs font-semibold bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 rounded-lg align-middle">يمكنك تعديل المهام التي قمت بإنشائها فقط</span>
                 </h1>
                 <p class="mt-1 text-base text-gray-500 dark:text-gray-400">إدارة ومتابعة المهام اليومية المسندة إليك</p>
             </div>
