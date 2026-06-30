@@ -2,7 +2,9 @@
 module.exports = {
   content: [
     "./admin/**/*.php",
+    "./admin/**/*.js",
     "./support/**/*.php",
+    "./support/**/*.js",
     "./students/**/*.php",
     "./students/**/*.js",
     "./includes/**/*.php",

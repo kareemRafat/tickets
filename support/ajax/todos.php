@@ -141,6 +141,112 @@ switch ($action) {
         echo json_encode(['success' => true, 'message' => 'تم تحديث حالة المهمة.'], JSON_UNESCAPED_UNICODE);
         break;
 
+    case 'get':
+        $todo_id = (int)($_GET['id'] ?? 0);
+        if ($todo_id <= 0) {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'message' => 'معرّف المهمة غير صالح.']);
+            exit;
+        }
+
+        $stmt = $db->prepare("SELECT t.*, a.name as assigned_by_name FROM employee_todos t JOIN employees a ON t.assigned_by = a.id WHERE t.id = :id");
+        $stmt->execute(['id' => $todo_id]);
+        $todo = $stmt->fetch();
+
+        if (!$todo) {
+            http_response_code(404);
+            echo json_encode(['success' => false, 'message' => 'المهمة غير موجودة.']);
+            exit;
+        }
+
+        echo json_encode([
+            'success' => true,
+            'data' => [
+                'id'             => (int)$todo['id'],
+                'title'          => xss_clean($todo['title']),
+                'assigned_to'    => (int)$todo['assigned_to'],
+                'assigned_by'    => (int)$todo['assigned_by'],
+                'due_date'       => $todo['due_date'],
+                'status'         => $todo['status'],
+            ]
+        ], JSON_UNESCAPED_UNICODE);
+        break;
+
+    case 'edit':
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(405);
+            echo json_encode(['success' => false, 'message' => 'Method not allowed.']);
+            exit;
+        }
+
+        $todo_id = (int)($_POST['id'] ?? 0);
+        if ($todo_id <= 0) {
+            echo json_encode(['success' => false, 'message' => 'معرّف المهمة غير صالح.']);
+            exit;
+        }
+
+        $stmt = $db->prepare("SELECT * FROM employee_todos WHERE id = :id");
+        $stmt->execute(['id' => $todo_id]);
+        $todo = $stmt->fetch();
+
+        if (!$todo) {
+            echo json_encode(['success' => false, 'message' => 'المهمة غير موجودة.']);
+            exit;
+        }
+
+        $is_admin = ($_SESSION['user_role'] ?? '') === 'admin';
+        if ((int)$todo['assigned_by'] !== $user_id && !$is_admin) {
+            echo json_encode(['success' => false, 'message' => 'يمكن فقط لمنشئ المهمة أو المدير تعديلها.']);
+            exit;
+        }
+
+        $title = trim($_POST['title'] ?? '');
+        $assigned_to = (int)($_POST['assigned_to'] ?? 0);
+        $due_date = trim($_POST['due_date'] ?? '');
+
+        if (empty($title)) {
+            echo json_encode(['success' => false, 'message' => 'عنوان المهمة مطلوب.']);
+            exit;
+        }
+
+        if ($assigned_to <= 0) {
+            echo json_encode(['success' => false, 'message' => 'يرجى اختيار الموظف.']);
+            exit;
+        }
+
+        $check = $db->prepare("SELECT id FROM employees WHERE id = :id AND status = 'active'");
+        $check->execute(['id' => $assigned_to]);
+        if (!$check->fetch()) {
+            echo json_encode(['success' => false, 'message' => 'الموظف المحدد غير موجود.']);
+            exit;
+        }
+
+        $due_date_val = !empty($due_date) ? $due_date : null;
+
+        $old_values = [
+            'title'       => $todo['title'],
+            'assigned_to' => $todo['assigned_to'],
+            'due_date'    => $todo['due_date'],
+        ];
+        $new_values = [
+            'title'       => $title,
+            'assigned_to' => $assigned_to,
+            'due_date'    => $due_date_val,
+        ];
+
+        $stmt = $db->prepare("UPDATE employee_todos SET title = :title, assigned_to = :assigned_to, due_date = :due_date WHERE id = :id");
+        $stmt->execute([
+            'title'       => $title,
+            'assigned_to' => $assigned_to,
+            'due_date'    => $due_date_val,
+            'id'          => $todo_id,
+        ]);
+
+        log_audit_action('تعديل مهمة: ' . $todo['title'], 'employee_todos', $todo_id, $old_values, $new_values);
+
+        echo json_encode(['success' => true, 'message' => 'تم تعديل المهمة بنجاح.'], JSON_UNESCAPED_UNICODE);
+        break;
+
     case 'delete':
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             http_response_code(405);

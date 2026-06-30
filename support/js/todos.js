@@ -5,28 +5,35 @@ document.addEventListener('DOMContentLoaded', function () {
     const listUrl = container.dataset.listUrl;
     const createUrl = container.dataset.createUrl;
     const toggleUrl = container.dataset.toggleUrl;
+    const editUrl = container.dataset.editUrl;
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '';
 
     const listEl = document.getElementById('todos-list');
     const createForm = document.getElementById('todo-create-form');
     const pendingCountEl = document.getElementById('pending-count');
     const dateFilterEl = document.getElementById('todo-date-filter');
+    const editModal = document.getElementById('edit-todo-modal');
+    const editForm = document.getElementById('edit-todo-form');
+    const editTitle = document.getElementById('edit-todo-title');
+    const editAssignedTo = document.getElementById('edit-todo-assigned-to');
+    const editDueDate = document.getElementById('edit-todo-due-date');
+    const editIdInput = document.getElementById('edit-todo-id');
 
     function showToast(msg, type) {
         var isSuccess = type === 'success';
         var iconHtml = isSuccess
-            ? '<div class="flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg dark:bg-green-800 dark:text-green-200"><svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"><path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/></svg></div>'
-            : '<div class="flex items-center justify-center flex-shrink-0 w-8 h-8 text-red-500 bg-red-100 rounded-lg dark:bg-red-800 dark:text-red-200"><svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"><path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z"/></svg></div>';
+            ? '<div class="flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg dark:bg-green-800 dark:text-green-200"><svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg></div>'
+            : '<div class="flex items-center justify-center flex-shrink-0 w-8 h-8 text-red-500 bg-red-100 rounded-lg dark:bg-red-800 dark:text-red-200"><svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd"/></svg></div>';
 
         var toast = document.createElement('div');
         toast.id = 'toast-notification';
-        toast.className = 'fixed top-5 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 w-full max-w-md p-4 text-gray-500 bg-white rounded-lg shadow-xl dark:text-gray-400 dark:bg-gray-800 border border-gray-200 dark:border-gray-700';
+        toast.className = 'fixed top-5 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 w-full max-w-md p-4 text-gray-500 bg-white rounded-lg shadow-xl dark:text-gray-400 dark:bg-gray-800 border border-gray-300 dark:border-gray-700';
         toast.style.animation = 'slideDown 0.4s ease-out forwards';
         toast.setAttribute('role', 'alert');
         toast.innerHTML = iconHtml +
             '<div class="flex-1 text-sm font-bold">' + msg + '</div>' +
             '<button type="button" class="flex items-center justify-center flex-shrink-0 w-8 h-8 text-gray-400 hover:text-gray-900 rounded-lg hover:bg-gray-100 dark:text-gray-500 dark:hover:text-white dark:hover:bg-gray-700" data-dismiss-target="#toast-notification" aria-label="إغلاق">' +
-            '<svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/></svg></button>';
+            '<svg class="w-3 h-3" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></button>';
 
         document.body.appendChild(toast);
 
@@ -63,6 +70,17 @@ document.addEventListener('DOMContentLoaded', function () {
         return y + '-' + m + '-' + day;
     }
 
+    function isEditable(t) {
+        if (t.assigned_by_id !== CURRENT_USER_ID) return false;
+        if (t.status === 'done') return false;
+        if (!t.created_at) return false;
+        var created = new Date(t.created_at.replace(' ', 'T'));
+        var now = new Date();
+        var diffMs = now - created;
+        var diffMin = diffMs / 60000;
+        return diffMin < 30;
+    }
+
     function isOverdue(dateStr) {
         if (!dateStr) return false;
         var today = todayEgypt();
@@ -83,11 +101,12 @@ document.addEventListener('DOMContentLoaded', function () {
         html += '<div class="flex items-center gap-2 mb-4">';
         html += '<h3 class="text-lg font-bold text-gray-900 dark:text-white">المهام الحالية</h3>';
         html += '<span class="px-2 py-0.5 text-xs font-medium bg-amber-100 text-amber-800 dark:bg-amber-800/40 dark:text-amber-300 rounded-full">' + pending.length + '</span>';
+        html += '<span class="mr-auto px-2 py-1.5 text-sm font-semibold bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300 rounded inline-flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18"/></svg>يمكنك تعديل المهام التي قمت بإنشائها فقط</span>';
         html += '</div>';
 
         if (pending.length === 0) {
-            html += '<div class="text-center py-10 bg-gray-50 dark:bg-gray-700/20 rounded-xl border border-gray-200 dark:border-gray-700">';
-            html += '<svg class="w-14 h-14 mx-auto mb-3 text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
+            html += '<div class="text-center py-10 bg-gray-50 dark:bg-gray-700/20 rounded-xl border border-gray-300 dark:border-gray-700">';
+            html += '<svg class="w-14 h-14 mx-auto mb-3 text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
             html += '<p class="text-base text-gray-500 dark:text-gray-400">🎉 لا توجد مهام معلقة! كل المهام مُنجزة</p>';
             html += '</div>';
         } else {
@@ -107,7 +126,7 @@ document.addEventListener('DOMContentLoaded', function () {
         html += '</div>';
 
         if (done.length === 0) {
-            html += '<div class="text-center py-8 bg-gray-50/50 dark:bg-gray-700/10 rounded-xl border border-gray-200/50 dark:border-gray-700/50">';
+            html += '<div class="text-center py-8 bg-gray-50/50 dark:bg-gray-700/10 rounded-xl border border-gray-300/50 dark:border-gray-700/50">';
             html += '<p class="text-sm text-gray-400 dark:text-gray-500">لا توجد مهام مُنجزة بعد</p>';
             html += '</div>';
         } else {
@@ -127,24 +146,27 @@ document.addEventListener('DOMContentLoaded', function () {
         var dateLabel = t.due_date ? formatDate(t.due_date) : null;
         var dueHtml = '';
         if (dateLabel) {
-            dueHtml = '<span class="inline-flex items-center gap-1 text-sm ' + (overdue ? 'text-red-500 dark:text-red-400 font-semibold' : 'text-gray-400 dark:text-gray-500') + '">' +
-                '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>' +
+            dueHtml = '<span class="inline-flex items-center gap-1 text-sm ' + (overdue ? 'text-red-500 dark:text-red-400 font-bold' : 'text-gray-400 dark:text-gray-500') + '">' +
+                '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>' +
                 (overdue ? 'متأخرة - ' : '') + dateLabel +
                 '</span>';
         }
 
         var completedHtml = '';
         if (isDone && t.completed_at) {
-            completedHtml = '<span class="text-sm text-green-500 dark:text-green-400 font-medium">أُنجزت في ' + formatDate(t.completed_at) + '</span>';
+            completedHtml = '<span class="text-sm font-bold text-green-600 dark:text-green-400">أُنجزت في ' + formatDate(t.completed_at) + '</span>';
         }
 
-        return '<div class="flex items-start gap-4 p-5 bg-white rounded-xl border border-gray-200 dark:bg-gray-800 dark:border-gray-700 hover:shadow-sm transition-shadow todo-card ' + (isDone ? 'opacity-75' : '') + '" data-id="' + t.id + '">' +
-            '<button class="todo-toggle shrink-0 mt-1 w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all ' +
+        return '<div class="flex items-stretch gap-0 bg-white rounded-xl border border-gray-300 dark:bg-gray-800 dark:border-gray-700 hover:shadow-sm transition-shadow todo-card overflow-hidden ' + (isDone ? 'opacity-75' : '') + '" data-id="' + t.id + '">' +
+            '<div class="flex items-start gap-4 p-5 flex-1 min-w-0">' +
+            '<button class="todo-toggle shrink-0 mt-0.5 w-5 h-5 rounded border-2 flex items-center justify-center transition-all ' +
             (isDone
-                ? 'bg-green-500 border-green-500 text-white hover:bg-green-600 hover:border-green-600'
-                : 'border-gray-300 dark:border-gray-600 text-gray-300 dark:text-gray-600 hover:text-blue-500 hover:border-blue-500 dark:hover:text-blue-400 dark:hover:border-blue-400') +
+                ? 'bg-green-500 border-green-500 text-white hover:bg-green-600'
+                : 'border-gray-400 dark:border-gray-500 hover:border-blue-500 dark:hover:border-blue-400 bg-gray-50 dark:bg-gray-700') +
             '" data-id="' + t.id + '" title="' + (isDone ? 'إعادة فتح' : 'إتمام') + '">' +
-            '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>' +
+            (isDone
+                ? '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>'
+                : '') +
             '</button>' +
 
             '<div class="flex-1 min-w-0">' +
@@ -152,28 +174,53 @@ document.addEventListener('DOMContentLoaded', function () {
             '<p class="text-base font-semibold text-gray-900 dark:text-white ' + (isDone ? 'line-through text-gray-400 dark:text-gray-500' : '') + '">' + t.title + '</p>' +
             '</div>' +
             '<div class="flex items-center gap-3 mt-2 flex-wrap">' +
-            '<span class="inline-flex items-center gap-1 text-sm text-gray-400 dark:text-gray-500">' +
-            '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>' +
-            'من: ' + t.assigned_by_name +
+            '<span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-sm font-semibold bg-pink-700 text-white rounded dark:bg-gray-700 dark:text-gray-300">' +
+            '<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>' +
+            'بواسطة : ' + t.assigned_by_name +
             '</span>' +
             (dueHtml ? dueHtml : '') +
             (completedHtml ? completedHtml : '') +
             '</div>' +
             '</div>' +
+            '</div>' +
+            (t.assigned_by_id === CURRENT_USER_ID
+                ? '<button class="todo-edit flex flex-col items-center justify-center gap-1 px-5 text-xs font-bold transition-all shrink-0 ' +
+                (isEditable(t)
+                    ? 'text-white bg-sky-500 hover:bg-sky-600 dark:bg-sky-600 dark:hover:bg-sky-700 cursor-pointer'
+                    : 'text-gray-400 bg-gray-200 dark:text-gray-500 dark:bg-gray-600 cursor-not-allowed') +
+                '" data-id="' + t.id + '" ' + (isEditable(t) ? '' : 'disabled') + '>' +
+                '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 16.604a1.875 1.875 0 01-1.07.603l-2.685.8.8-2.685a1.875 1.875 0 01.603-1.07L16.863 4.487zm0 0L19.5 7.125"/></svg>' +
+                'تعديل' +
+                '</button>'
+                : '') +
+            '</div>';
+    }
+
+    function showLoading() {
+        listEl.innerHTML =
+            '<div class="flex flex-col items-center justify-center py-16 text-gray-400 dark:text-gray-500">' +
+            '<svg class="animate-spin h-10 w-10 mb-4 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>' +
+            '<span class="text-base font-semibold">جارٍ تحميل المهام...</span>' +
             '</div>';
     }
 
     function loadTodos() {
         var dateVal = dateFilterEl ? dateFilterEl.value : '';
         var url = listUrl + '&date=' + (dateVal || todayEgypt());
+        var start = Date.now();
+        showLoading();
         fetch(url)
             .then(function (r) { return r.json(); })
             .then(function (data) {
-                if (!data.success) {
-                    showError(data.message || 'حدث خطأ في تحميل المهام');
-                    return;
-                }
-                renderTodos(data.data);
+                var elapsed = Date.now() - start;
+                var delay = elapsed < 300 ? 300 - elapsed : 0;
+                setTimeout(function () {
+                    if (!data.success) {
+                        showError(data.message || 'حدث خطأ في تحميل المهام');
+                        return;
+                    }
+                    renderTodos(data.data);
+                }, delay);
             })
             .catch(function () {
                 showError('فشل الاتصال بالخادم');
@@ -206,7 +253,88 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
         }
 
+        var editBtn = e.target.closest('.todo-edit');
+        if (editBtn) {
+            if (editBtn.disabled) {
+                showError('لا يمكن تعديل المهمة بعد مرور 30 دقيقة من إنشائها أو بعد إتمامها');
+                return;
+            }
+            e.preventDefault();
+            var id = editBtn.dataset.id;
+            fetch(editUrl + '?action=get&id=' + id)
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
+                    if (!data.success) {
+                        showError(data.message || 'حدث خطأ');
+                        return;
+                    }
+                    var todo = data.data;
+                    editIdInput.value = todo.id;
+                    editTitle.value = todo.title;
+                    editDueDate.value = todo.due_date || '';
+                    if (editAssignedTo) {
+                        for (var i = 0; i < editAssignedTo.options.length; i++) {
+                            if (parseInt(editAssignedTo.options[i].value) === todo.assigned_to) {
+                                editAssignedTo.selectedIndex = i;
+                                break;
+                            }
+                        }
+                    }
+                    editModal.classList.remove('hidden');
+                    editModal.classList.add('flex');
+                })
+                .catch(function () {
+                    showError('فشل الاتصال بالخادم');
+                });
+        }
+
     });
+
+    // Close edit modal on backdrop click
+    if (editModal) {
+        editModal.addEventListener('click', function (e) {
+            if (e.target === editModal) {
+                editModal.classList.add('hidden');
+                editModal.classList.remove('flex');
+            }
+        });
+    }
+
+    // Edit form submit
+    if (editForm) {
+        editForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            var formData = new FormData(editForm);
+            formData.append('action', 'edit');
+
+            var btn = editForm.querySelector('button[type="submit"]');
+            var originalText = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<svg class="animate-spin h-4 w-4 inline ml-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg> جارٍ الحفظ...';
+
+            fetch(editUrl, { method: 'POST', body: formData })
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
+                    if (!data.success) {
+                        showError(data.message || 'حدث خطأ');
+                        btn.disabled = false;
+                        btn.innerHTML = originalText;
+                        return;
+                    }
+                    showSuccess(data.message);
+                    editModal.classList.add('hidden');
+                    editModal.classList.remove('flex');
+                    btn.disabled = false;
+                    btn.innerHTML = originalText;
+                    loadTodos();
+                })
+                .catch(function () {
+                    showError('فشل الاتصال بالخادم');
+                    btn.disabled = false;
+                    btn.innerHTML = originalText;
+                });
+        });
+    }
 
     // Date filter change
     if (dateFilterEl) {
