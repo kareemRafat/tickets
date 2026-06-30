@@ -51,7 +51,7 @@ $pageTitle = 'تتبع تذاكري';
 require_once __DIR__ . '/../includes/header.php';
 ?>
 <div class="min-h-screen bg-gray-50 dark:bg-gray-900 px-4 md:px-8 pb-4 md:pb-8 pt-6">
-    <div class="max-w-5xl mx-auto mb-6">
+    <div class="max-w-6xl mx-auto mb-6">
         <div class="bg-gradient-to-l from-blue-600/10 to-transparent dark:from-blue-400/5 dark:to-transparent rounded-3xl p-6 border border-blue-100 dark:border-blue-900/30">
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-4">
@@ -63,15 +63,18 @@ require_once __DIR__ . '/../includes/header.php';
                         <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">متابعة حالة جميع التذاكر والشكاوى التي قمت بتقديمها</p>
                     </div>
                 </div>
-                <a href="<?php echo BASE_URL; ?>students/ticket-create.php" class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-sm transition-all shrink-0">
-                    <svg class="w-4 h-4 ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
-                    تقديم شكوى جديدة
-                </a>
+                <div class="flex items-center gap-2">
+                    <a href="<?php echo BASE_URL; ?>students/index.php" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 rounded-xl transition-all shrink-0">عودة للرئيسية</a>
+                    <a href="<?php echo BASE_URL; ?>students/ticket-create.php" class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-sm transition-all shrink-0">
+                        <svg class="w-4 h-4 ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+                        تقديم شكوى جديدة
+                    </a>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="max-w-5xl mx-auto">
+    <div class="max-w-6xl mx-auto">
         <!-- Filter Card -->
         <div class="mb-6 bg-white border border-gray-200 rounded-2xl shadow-sm dark:bg-gray-800 dark:border-gray-700 p-4">
             <form class="flex flex-wrap items-end gap-4" method="GET" action="">

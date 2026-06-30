@@ -36,7 +36,7 @@ require_once __DIR__ . '/../includes/header.php';
 ?>
 <div class="min-h-screen bg-gray-50 dark:bg-gray-900 px-4 md:px-8 pb-4 md:pb-8 pt-6">
     <!-- Welcome Bar -->
-    <div class="max-w-5xl mx-auto mb-6">
+    <div class="max-w-6xl mx-auto mb-6">
         <div class="bg-gradient-to-l from-blue-600/10 to-transparent dark:from-blue-400/5 dark:to-transparent rounded-3xl p-6 border border-blue-100 dark:border-blue-900/30">
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-4">
@@ -87,7 +87,7 @@ require_once __DIR__ . '/../includes/header.php';
     </div>
 
     <!-- Two Cards -->
-    <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- New Ticket Card -->
         <a href="<?php echo BASE_URL; ?>students/ticket-create.php" class="group bg-white dark:bg-gray-800 rounded-3xl border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
             <div class="h-48 bg-cover bg-center relative" style="background-image: url('https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=800');">
@@ -149,7 +149,7 @@ require_once __DIR__ . '/../includes/header.php';
     </div>
 
     <!-- Stats Bar -->
-    <div class="max-w-5xl mx-auto mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <div class="max-w-6xl mx-auto mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div class="bg-white dark:bg-gray-800 rounded-2xl border border-blue-200 dark:border-blue-900/50 overflow-hidden hover:shadow-lg transition-shadow duration-300">
             <div class="h-1.5 bg-gradient-to-r from-blue-400 to-blue-600"></div>
             <div class="p-5">

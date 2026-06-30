@@ -70,72 +70,58 @@ document.addEventListener('DOMContentLoaded', function () {
             replies.forEach(function (r) {
                 var statusChange = '';
                 if (r.old_status && r.new_status) {
-                    statusChange = '<div class="mb-2 text-sm text-gray-500 dark:text-gray-400">تم تغيير الحالة من <span class="font-medium">' + (sl[r.old_status] || r.old_status) + '</span> إلى <span class="font-medium">' + (sl[r.new_status] || r.new_status) + '</span></div>';
+                    statusChange = '<div class="mb-2 text-sm text-gray-500 dark:text-gray-400 font-semibold">تم تغيير الحالة من <span class="font-medium">' + (sl[r.old_status] || r.old_status) + '</span> إلى <span class="font-medium">' + (sl[r.new_status] || r.new_status) + '</span></div>';
                 }
-                items += '<li class="mb-6 last:mb-0">' +
-                    '<span class="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -right-3 ring-8 ring-white dark:ring-gray-800 dark:bg-blue-900">' +
-                    '<svg class="w-3 h-3 text-blue-800 dark:text-blue-200" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a8 8 0 100 16 8 8 0 000-16zm1 11a1 1 0 11-2 0 1 1 0 012 0zm0-3a1 1 0 01-2 0V7a1 1 0 112 0v3z"/></svg>' +
-                    '</span>' +
-                    '<div class="p-4 bg-gray-50 rounded-xl border border-gray-300 dark:bg-gray-700/30 dark:border-gray-700/50">' +
-                    '<div class="flex items-center justify-between mb-2">' +
-                    '<span class="text-base font-semibold text-gray-900 dark:text-white">' + r.employee_name + '</span>' +
-                    '<time class="text-sm text-gray-500 dark:text-gray-400">' + formatDate(r.created_at) + '</time>' +
+                var initial = r.employee_name.charAt(0);
+                items += '<div class="flex gap-3 p-4 bg-gray-50 rounded-lg border border-gray-200 dark:bg-gray-700/30 dark:border-gray-700">' +
+                    '<div class="w-9 h-9 rounded-full bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center text-blue-700 dark:text-blue-300 text-sm font-bold shrink-0 mt-0.5">' + initial + '</div>' +
+                    '<div class="flex-1 min-w-0">' +
+                    '<div class="flex items-center justify-between gap-2">' +
+                    '<span class="text-sm font-semibold text-gray-900 dark:text-white">' + r.employee_name + '</span>' +
+                    '<time class="text-xs text-gray-400 dark:text-gray-500 shrink-0">' + formatDate(r.created_at) + '</time>' +
                     '</div>' +
+                    '<hr class="my-2.5 border-gray-200 dark:border-gray-600">' +
                     statusChange +
-                    '<p class="text-base text-gray-700 dark:text-gray-300 whitespace-pre-wrap">' + r.reply + '</p>' +
+                    '<p class="text-base font-semibold text-gray-700 dark:text-gray-300 whitespace-pre-wrap">' + r.reply + '</p>' +
                     '</div>' +
-                    '</li>';
+                    '</div>';
             });
-            repliesHtml = '<ol class="relative border-r border-gray-200 dark:border-gray-700 pr-6">' + items + '</ol>';
-        }
-
-        var closedAtHtml = '';
-        if (t.closed_at) {
-            closedAtHtml = '<div class="flex justify-between py-2"><dt class="text-gray-500 dark:text-gray-400">تاريخ الإغلاق</dt><dd class="text-gray-900 dark:text-white font-mono text-sm">' + formatDate(t.closed_at) + '</dd></div>';
+            repliesHtml = '<div class="space-y-3">' + items + '</div>';
         }
 
         detailsPanel.innerHTML =
             '<div class="space-y-6">' +
 
-            '<div class="flex items-center gap-2 flex-wrap">' +
+            '<div class="flex items-start justify-between flex-wrap gap-3">' +
+            '<div class="flex items-center gap-3 flex-wrap">' +
             '<h2 class="text-xl font-bold text-gray-900 dark:text-white">' + t.ticket_number + '</h2>' +
-            '<span class="px-2.5 py-0.5 text-sm font-medium rounded-full ' + statusClass + '">' + t.status_label + '</span>' +
-            '<span class="px-2.5 py-0.5 text-sm font-medium rounded-full ' + priorityClass + '">' + t.priority_label + '</span>' +
+            '<span class="px-3 py-0.5 text-sm font-medium rounded-full ' + statusClass + '">' + t.status_label + '</span>' +
+            '<span class="px-3 py-0.5 text-sm font-medium rounded-full ' + priorityClass + '">' + t.priority_label + '</span>' +
+            '</div>' +
+            '<time class="text-sm text-gray-400 dark:text-gray-500">' + formatDate(t.created_at) + '</time>' +
             '</div>' +
 
             '<h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">' + t.subject + '</h3>' +
 
-            '<div class="p-5 bg-white rounded-2xl border border-gray-300 shadow-sm dark:bg-gray-800 dark:border-gray-700">' +
-            '<h4 class="text-base font-bold text-gray-900 dark:text-white mb-3">الوصف</h4>' +
-            '<p class="text-base text-gray-700 dark:text-gray-300 whitespace-pre-wrap leading-relaxed">' + t.description + '</p>' +
-            '<div class="mt-4 pt-4 border-t border-gray-300 dark:border-gray-700 text-sm text-gray-500 dark:text-gray-400">' +
-            'تم الإنشاء: ' + formatDate(t.created_at) +
+            '<div class="bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-gray-800 dark:border-gray-700 overflow-hidden">' +
+            '<div class="px-5 py-3 border-b border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/80">' +
+            '<h4 class="text-sm font-bold text-gray-700 dark:text-gray-300">الوصف</h4>' +
+            '</div>' +
+            '<div class="p-5">' +
+            '<p class="text-gray-700 dark:text-gray-300 whitespace-pre-wrap leading-relaxed">' + t.description + '</p>' +
             '</div>' +
             '</div>' +
 
-            '<div class="p-5 bg-white rounded-2xl border border-gray-300 shadow-sm dark:bg-gray-800 dark:border-gray-700">' +
-            '<h4 class="text-base font-bold text-gray-900 dark:text-white mb-4">الردود من فريق الدعم</h4>' +
+            '<div class="bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-gray-800 dark:border-gray-700 overflow-hidden">' +
+            '<div class="px-5 py-3 border-b border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/80">' +
+            '<h4 class="text-sm font-bold text-gray-700 dark:text-gray-300">الردود</h4>' +
+            '</div>' +
+            '<div class="p-5">' +
             repliesHtml +
             '</div>' +
-
-            '<div class="p-5 bg-white rounded-2xl border border-gray-300 shadow-sm dark:bg-gray-800 dark:border-gray-700">' +
-            '<h4 class="text-base font-bold text-gray-900 dark:text-white mb-3">معلومات التذكرة</h4>' +
-            '<dl class="space-y-3 text-base">' +
-            '<div class="flex justify-between py-1"><dt class="text-gray-500 dark:text-gray-400">التصنيف</dt><dd class="font-semibold text-gray-900 dark:text-white">' + t.category_name + '</dd></div>' +
-            '<div class="flex justify-between py-1"><dt class="text-gray-500 dark:text-gray-400">الأولوية</dt><dd><span class="px-2 py-0.5 text-sm font-medium rounded-full ' + priorityClass + '">' + t.priority_label + '</span></dd></div>' +
-            '<div class="flex justify-between py-1"><dt class="text-gray-500 dark:text-gray-400">الحالة</dt><dd><span class="px-2 py-0.5 text-sm font-medium rounded-full ' + statusClass + '">' + t.status_label + '</span></dd></div>' +
-            '<div class="flex justify-between py-1"><dt class="text-gray-500 dark:text-gray-400">تاريخ الإنشاء</dt><dd class="text-gray-900 dark:text-white font-mono text-sm">' + formatDate(t.created_at) + '</dd></div>' +
-            closedAtHtml +
-            '</dl>' +
             '</div>' +
 
-            '<div class="p-5 bg-white rounded-2xl border border-gray-300 shadow-sm dark:bg-gray-800 dark:border-gray-700">' +
-            '<h4 class="text-base font-bold text-gray-900 dark:text-white mb-3">بيانات الطالب</h4>' +
-            '<dl class="space-y-3 text-base">' +
-            '<div class="flex justify-between py-1"><dt class="text-gray-500 dark:text-gray-400">الاسم</dt><dd class="font-semibold text-gray-900 dark:text-white text-sm">' + t.student_name + '</dd></div>' +
-            '<div class="flex justify-between py-1"><dt class="text-gray-500 dark:text-gray-400">رقم الهاتف</dt><dd class="text-sm text-gray-900 dark:text-white">' + t.contact_phone + '</dd></div>' +
-            '</dl>' +
-            '</div>' +
+
 
             '</div>';
     }
