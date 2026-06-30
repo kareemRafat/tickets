@@ -96,16 +96,24 @@ $icon_default = 'text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark
                   <span class="mr-3">شكاوى الطلاب</span>
                </a>
             </li>
-            <li>
-               <a href="<?php echo BASE_URL; ?>admin/logs.php" class="flex items-center py-2.5 pe-0 ps-2.5 text-gray-900  dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group text-sm transition-all <?php echo $nav === 'logs' ? $active_classes : ''; ?>">
-                  <svg class="w-5 h-5 transition duration-75 <?php echo $nav === 'logs' ? $icon_active : $icon_default; ?>" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                     <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 2h4v2H6V6zm0 4h8v2H6v-2zm0 4h8v2H6v-2z" clip-rule="evenodd"/>
-                  </svg>
-                  <span class="mr-3">سجلات العمليات</span>
-               </a>
-            </li>
-
-         <?php elseif ($role === 'employee'): ?>
+             <li>
+                <a href="<?php echo BASE_URL; ?>support/todos.php" class="flex items-center py-2.5 pe-0 ps-2.5 text-gray-900  dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group text-sm transition-all <?php echo $current_page === 'todos' ? $active_classes : ''; ?>">
+                   <svg class="w-5 h-5 transition duration-75 <?php echo $current_page === 'todos' ? $icon_active : $icon_default; ?>" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+                   </svg>
+                   <span class="mr-3">المهام</span>
+                </a>
+             </li>
+             <li>
+                <a href="<?php echo BASE_URL; ?>support/tickets.php?type=student" class="flex items-center py-2.5 pe-0 ps-2.5 text-gray-900  dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group text-sm transition-all <?php echo $nav === 'student-tickets' ? $active_classes : ''; ?>">
+                   <svg class="w-5 h-5 transition duration-75 <?php echo $nav === 'student-tickets' ? $icon_active : $icon_default; ?>" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                   </svg>
+                   <span class="mr-3">شكاوى الطلاب</span>
+                </a>
+             </li>
+  
+           <?php elseif ($role === 'employee'): ?>
             <div class="pt-2 pb-1 ps-2 pe-0 text-xs font-semibold text-gray-400 uppercase tracking-wider dark:text-gray-500">
                 لوحة الدعم الفني
             </div>
@@ -131,11 +139,19 @@ $icon_default = 'text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark
                   <svg class="w-5 h-5 transition duration-75 <?php echo $nav === 'student-tickets' ? $icon_active : $icon_default; ?>" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
                   </svg>
-                  <span class="mr-3">شكاوى الطلاب</span>
-               </a>
-            </li>
+                   <span class="mr-3">شكاوى الطلاب</span>
+                </a>
+             </li>
+             <li>
+                <a href="<?php echo BASE_URL; ?>support/todos.php" class="flex items-center py-2.5 pe-0 ps-2.5 text-gray-900  dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group text-sm transition-all <?php echo $current_page === 'todos' ? $active_classes : ''; ?>">
+                   <svg class="w-5 h-5 transition duration-75 <?php echo $current_page === 'todos' ? $icon_active : $icon_default; ?>" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+                   </svg>
+                   <span class="mr-3">المهام</span>
+                </a>
+             </li>
 
-         <?php else: ?>
+          <?php else: ?>
             <div class="pt-2 pb-1 ps-2 pe-0 text-xs font-semibold text-gray-400 uppercase tracking-wider dark:text-gray-500">
                 بوابة الطلاب
             </div>

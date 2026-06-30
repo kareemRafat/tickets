@@ -34,7 +34,24 @@ try {
     $total_tickets = $support_total + $student_total;
     $active_tickets = $support_active + $student_active;
     
-    // 4. Fetch Recent Audit Logs
+    // 4. Todos for admin
+    $admin_id = (int)$_SESSION['user_id'];
+    $stmt = $db->prepare("SELECT COUNT(*) FROM employee_todos WHERE assigned_to = :uid AND status = 'pending'");
+    $stmt->execute(['uid' => $admin_id]);
+    $admin_pending_todos = (int)$stmt->fetchColumn();
+
+    $stmt = $db->prepare("
+        SELECT t.id, t.title, t.status, t.due_date, a.name as assigned_by_name
+        FROM employee_todos t
+        JOIN employees a ON t.assigned_by = a.id
+        WHERE t.assigned_to = :uid
+        ORDER BY t.status ASC, t.due_date ASC, t.created_at DESC
+        LIMIT 5
+    ");
+    $stmt->execute(['uid' => $admin_id]);
+    $admin_recent_todos = $stmt->fetchAll();
+
+    // 5. Fetch Recent Audit Logs
     $stmt = $db->query("
         SELECT a.*, e.name as employee_name, e.role as employee_role 
         FROM audit_logs a 
@@ -48,6 +65,8 @@ try {
     error_log("Admin dashboard database error: " . $e->getMessage());
     $employees_count = $branches_count = $total_tickets = $active_tickets = 0;
     $support_total = $support_active = $student_total = $student_active = 0;
+    $admin_pending_todos = 0;
+    $admin_recent_todos = [];
     $recent_activities = [];
 }
 
@@ -80,7 +99,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
     </div>
 
     <!-- Stats Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         <!-- Stat Card 1: Active Tickets -->
         <div class="p-5 bg-white rounded-2xl border border-gray-100 shadow-sm dark:bg-gray-800 dark:border-gray-700 hover:shadow-md transition-shadow">
             <div class="flex items-center justify-between">
@@ -136,11 +155,26 @@ require_once __DIR__ . '/../includes/sidebar.php';
                 <span class="text-xs text-gray-500 dark:text-gray-400">فروع معتمدة</span>
             </div>
         </div>
+        <!-- Stat Card 5: Pending Todos -->
+        <div class="p-5 bg-white rounded-2xl border border-gray-100 shadow-sm dark:bg-gray-800 dark:border-gray-700 hover:shadow-md transition-shadow">
+            <div class="flex items-center justify-between">
+                <span class="text-sm font-medium text-gray-500 dark:text-gray-400">المهام المعلقة</span>
+                <span class="inline-flex items-center px-2.5 py-0.5 text-xs font-medium rounded-full bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200">
+                    مهامي
+                </span>
+            </div>
+            <div class="mt-4 flex items-baseline justify-between">
+                <span class="text-3xl font-extrabold text-gray-900 dark:text-white"><?php echo $admin_pending_todos; ?></span>
+                <a href="<?php echo BASE_URL; ?>support/todos.php" class="text-xs font-medium text-blue-600 dark:text-blue-400 hover:underline">عرض الكل</a>
+            </div>
+        </div>
     </div>
 
     <!-- Middle Dashboard Section -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <!-- Ticket Breakdown (Left/Right depending on LTR/RTL) -->
+        <!-- Left Column: Ticket Breakdown + Todos -->
+        <div class="space-y-6">
+        <!-- Ticket Breakdown -->
         <div class="p-6 bg-white rounded-2xl border border-gray-100 shadow-sm dark:bg-gray-800 dark:border-gray-700 flex flex-col justify-between">
             <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">تفاصيل التذاكر الحالية</h3>
             
@@ -172,6 +206,44 @@ require_once __DIR__ . '/../includes/sidebar.php';
                 <span>تذاكر الدعم المغلقة: <?php echo $support_total - $support_active; ?></span>
                 <span>شكاوى الطلاب المغلقة: <?php echo $student_total - $student_active; ?></span>
             </div>
+        </div>
+
+        <!-- Todos Widget -->
+        <div class="p-6 bg-white rounded-2xl border border-gray-100 shadow-sm dark:bg-gray-800 dark:border-gray-700">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white">المهام</h3>
+                <a href="<?php echo BASE_URL; ?>support/todos.php" class="text-sm font-semibold text-blue-600 dark:text-blue-400 hover:underline">عرض الكل</a>
+            </div>
+            <?php if (empty($admin_recent_todos)): ?>
+                <div class="text-center py-4">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">لا توجد مهام بعد</p>
+                </div>
+            <?php else: ?>
+                <ul class="space-y-2">
+                    <?php foreach ($admin_recent_todos as $todo): ?>
+                        <li class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
+                            <span class="shrink-0 w-2 h-2 rounded-full <?php echo $todo['status'] === 'done' ? 'bg-green-500' : 'bg-amber-400'; ?>"></span>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-semibold text-gray-900 dark:text-white truncate <?php echo $todo['status'] === 'done' ? 'line-through text-gray-400 dark:text-gray-500' : ''; ?>">
+                                    <?php echo htmlspecialchars($todo['title']); ?>
+                                </p>
+                                <p class="text-xs text-gray-400 dark:text-gray-500">
+                                    من: <?php echo htmlspecialchars($todo['assigned_by_name']); ?>
+                                    <?php if ($todo['due_date']): ?>
+                                        · <?php echo date('Y-m-d', strtotime($todo['due_date'])); ?>
+                                    <?php endif; ?>
+                                </p>
+                            </div>
+                            <?php if ($todo['status'] === 'done'): ?>
+                                <span class="inline-flex items-center px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-800 dark:bg-green-800/40 dark:text-green-300">تم</span>
+                            <?php else: ?>
+                                <span class="inline-flex items-center px-2 py-0.5 text-xs font-medium rounded-full bg-amber-100 text-amber-800 dark:bg-amber-800/40 dark:text-amber-300">معلق</span>
+                            <?php endif; ?>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            <?php endif; ?>
+        </div>
         </div>
 
         <!-- Recent System Activity Timeline -->

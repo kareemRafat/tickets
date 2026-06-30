@@ -83,6 +83,11 @@ All guards in `middleware/auth.php`. Student auth: enter 14-digit national ID â†
 - Middleware: `middleware/auth.php`, `middleware/rate_limiter.php`
 - PRD: `prd.md` (detailed product requirements)
 
+## Communication
+- All summaries, explanations, Code comments, and responses to the user **must** be in English.
+-  variables, and user-facing UI text remain in Arabic as specified above.
+- When the user asks "what did we do so far", provide a summary in English.
+
 ## Verification Flow
 1. Run `database/schema.sql` against MySQL
 2. `npm install && npm run dev` for CSS

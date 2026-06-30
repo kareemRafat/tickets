@@ -46,6 +46,21 @@ try {
     $stmt->execute(['branch_id' => $branch_id]);
     $latest_tickets = $stmt->fetchAll();
 
+    $stmt = $db->prepare("SELECT COUNT(*) FROM employee_todos WHERE assigned_to = :uid AND status = 'pending'");
+    $stmt->execute(['uid' => $employee_id]);
+    $pending_todos = (int)$stmt->fetchColumn();
+
+    $stmt = $db->prepare("
+        SELECT t.id, t.title, t.status, t.due_date, a.name as assigned_by_name
+        FROM employee_todos t
+        JOIN employees a ON t.assigned_by = a.id
+        WHERE t.assigned_to = :uid
+        ORDER BY t.status ASC, t.due_date ASC, t.created_at DESC
+        LIMIT 5
+    ");
+    $stmt->execute(['uid' => $employee_id]);
+    $recent_todos = $stmt->fetchAll();
+
     $stmt = $db->prepare("SELECT name FROM branches WHERE id = :branch_id");
     $stmt->execute(['branch_id' => $branch_id]);
     $branch_name = $stmt->fetchColumn() ?: '';
@@ -54,7 +69,9 @@ try {
     error_log("Employee dashboard error: " . $e->getMessage());
     $open_count = $in_progress_count = $closed_count = 0;
     $total_support = $student_active = $student_total = 0;
+    $pending_todos = 0;
     $latest_tickets = [];
+    $recent_todos = [];
     $branch_name = '';
 }
 
@@ -80,7 +97,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
         </div>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         <div class="p-5 bg-white rounded-2xl border border-gray-100 shadow-sm dark:bg-gray-800 dark:border-gray-700">
             <div class="flex items-center justify-between">
                 <span class="text-base font-medium text-gray-500 dark:text-gray-400">مفتوحة</span>
@@ -121,39 +138,88 @@ require_once __DIR__ . '/../includes/sidebar.php';
                 <span class="text-sm text-gray-500 dark:text-gray-400">من أصل <?php echo $student_total; ?></span>
             </div>
         </div>
+        <div class="p-5 bg-white rounded-2xl border border-gray-100 shadow-sm dark:bg-gray-800 dark:border-gray-700">
+            <div class="flex items-center justify-between">
+                <span class="text-base font-medium text-gray-500 dark:text-gray-400">المهام المعلقة</span>
+                <span class="inline-flex items-center px-2.5 py-0.5 text-sm font-medium rounded-full bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200">مهامي</span>
+            </div>
+            <div class="mt-4 flex items-baseline justify-between">
+                <span class="text-3xl font-extrabold text-gray-900 dark:text-white"><?php echo $pending_todos; ?></span>
+                <a href="<?php echo BASE_URL; ?>support/todos.php" class="text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline">عرض الكل</a>
+            </div>
+        </div>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div class="p-6 bg-white rounded-2xl border border-gray-100 shadow-sm dark:bg-gray-800 dark:border-gray-700">
-            <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">إحصائيات التذاكر</h3>
-            <div class="space-y-4">
-                <div>
-                    <div class="flex justify-between mb-1">
-                        <span class="text-base font-medium text-gray-700 dark:text-gray-300">مفتوحة (<?php echo $open_count; ?> / <?php echo $total_support; ?>)</span>
-                        <span class="text-base font-medium text-blue-600 dark:text-blue-400"><?php echo $total_support > 0 ? round(($open_count / $total_support) * 100, 1) : 0; ?>%</span>
+        <div class="space-y-6">
+            <div class="p-6 bg-white rounded-2xl border border-gray-100 shadow-sm dark:bg-gray-800 dark:border-gray-700">
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">إحصائيات التذاكر</h3>
+                <div class="space-y-4">
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <span class="text-base font-medium text-gray-700 dark:text-gray-300">مفتوحة (<?php echo $open_count; ?> / <?php echo $total_support; ?>)</span>
+                            <span class="text-base font-medium text-blue-600 dark:text-blue-400"><?php echo $total_support > 0 ? round(($open_count / $total_support) * 100, 1) : 0; ?>%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                            <div class="bg-blue-600 h-2.5 rounded-full" style="width: <?php echo $total_support > 0 ? ($open_count / $total_support) * 100 : 0; ?>%"></div>
+                        </div>
                     </div>
-                    <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                        <div class="bg-blue-600 h-2.5 rounded-full" style="width: <?php echo $total_support > 0 ? ($open_count / $total_support) * 100 : 0; ?>%"></div>
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <span class="text-base font-medium text-gray-700 dark:text-gray-300">قيد التنفيذ (<?php echo $in_progress_count; ?> / <?php echo $total_support; ?>)</span>
+                            <span class="text-base font-medium text-yellow-600 dark:text-yellow-400"><?php echo $total_support > 0 ? round(($in_progress_count / $total_support) * 100, 1) : 0; ?>%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                            <div class="bg-yellow-400 h-2.5 rounded-full" style="width: <?php echo $total_support > 0 ? ($in_progress_count / $total_support) * 100 : 0; ?>%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <span class="text-base font-medium text-gray-700 dark:text-gray-300">مغلقة (<?php echo $closed_count; ?> / <?php echo $total_support; ?>)</span>
+                            <span class="text-base font-medium text-green-600 dark:text-green-400"><?php echo $total_support > 0 ? round(($closed_count / $total_support) * 100, 1) : 0; ?>%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                            <div class="bg-green-500 h-2.5 rounded-full" style="width: <?php echo $total_support > 0 ? ($closed_count / $total_support) * 100 : 0; ?>%"></div>
+                        </div>
                     </div>
                 </div>
-                <div>
-                    <div class="flex justify-between mb-1">
-                        <span class="text-base font-medium text-gray-700 dark:text-gray-300">قيد التنفيذ (<?php echo $in_progress_count; ?> / <?php echo $total_support; ?>)</span>
-                        <span class="text-base font-medium text-yellow-600 dark:text-yellow-400"><?php echo $total_support > 0 ? round(($in_progress_count / $total_support) * 100, 1) : 0; ?>%</span>
-                    </div>
-                    <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                        <div class="bg-yellow-400 h-2.5 rounded-full" style="width: <?php echo $total_support > 0 ? ($in_progress_count / $total_support) * 100 : 0; ?>%"></div>
-                    </div>
+            </div>
+
+            <!-- Todos Widget -->
+            <div class="p-6 bg-white rounded-2xl border border-gray-100 shadow-sm dark:bg-gray-800 dark:border-gray-700">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-white">المهام</h3>
+                    <a href="<?php echo BASE_URL; ?>support/todos.php" class="text-sm font-semibold text-blue-600 dark:text-blue-400 hover:underline">عرض الكل</a>
                 </div>
-                <div>
-                    <div class="flex justify-between mb-1">
-                        <span class="text-base font-medium text-gray-700 dark:text-gray-300">مغلقة (<?php echo $closed_count; ?> / <?php echo $total_support; ?>)</span>
-                        <span class="text-base font-medium text-green-600 dark:text-green-400"><?php echo $total_support > 0 ? round(($closed_count / $total_support) * 100, 1) : 0; ?>%</span>
+                <?php if (empty($recent_todos)): ?>
+                    <div class="text-center py-4">
+                        <p class="text-sm text-gray-500 dark:text-gray-400">لا توجد مهام بعد</p>
                     </div>
-                    <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                        <div class="bg-green-500 h-2.5 rounded-full" style="width: <?php echo $total_support > 0 ? ($closed_count / $total_support) * 100 : 0; ?>%"></div>
-                    </div>
-                </div>
+                <?php else: ?>
+                    <ul class="space-y-2">
+                        <?php foreach ($recent_todos as $todo): ?>
+                            <li class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
+                                <span class="shrink-0 w-2 h-2 rounded-full <?php echo $todo['status'] === 'done' ? 'bg-green-500' : 'bg-amber-400'; ?>"></span>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-semibold text-gray-900 dark:text-white truncate <?php echo $todo['status'] === 'done' ? 'line-through text-gray-400 dark:text-gray-500' : ''; ?>">
+                                        <?php echo htmlspecialchars($todo['title']); ?>
+                                    </p>
+                                    <p class="text-xs text-gray-400 dark:text-gray-500">
+                                        من: <?php echo htmlspecialchars($todo['assigned_by_name']); ?>
+                                        <?php if ($todo['due_date']): ?>
+                                            · <?php echo date('Y-m-d', strtotime($todo['due_date'])); ?>
+                                        <?php endif; ?>
+                                    </p>
+                                </div>
+                                <?php if ($todo['status'] === 'done'): ?>
+                                    <span class="inline-flex items-center px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-800 dark:bg-green-800/40 dark:text-green-300">تم</span>
+                                <?php else: ?>
+                                    <span class="inline-flex items-center px-2 py-0.5 text-xs font-medium rounded-full bg-amber-100 text-amber-800 dark:bg-amber-800/40 dark:text-amber-300">معلق</span>
+                                <?php endif; ?>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                <?php endif; ?>
             </div>
         </div>
 

@@ -186,6 +186,29 @@ CREATE TABLE IF NOT EXISTS `remember_tokens` (
 -- -------------------------------------------------------------
 -- 12. Table: system_settings
 -- -------------------------------------------------------------
+-- -------------------------------------------------------------
+-- 12. Table: employee_todos (Task/Todo management)
+-- -------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `employee_todos` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `assigned_by` INT NOT NULL,
+    `assigned_to` INT NOT NULL,
+    `title` VARCHAR(500) NOT NULL,
+    `due_date` DATE NULL,
+    `status` ENUM('pending','done') DEFAULT 'pending',
+    `completed_at` DATETIME NULL,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT `fk_todos_assigned_by` FOREIGN KEY (`assigned_by`) REFERENCES `employees` (`id`) ON DELETE CASCADE,
+    CONSTRAINT `fk_todos_assigned_to` FOREIGN KEY (`assigned_to`) REFERENCES `employees` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE INDEX idx_todos_assigned_to ON employee_todos(`assigned_to`);
+CREATE INDEX idx_todos_status ON employee_todos(`status`);
+CREATE INDEX idx_todos_due_date ON employee_todos(`due_date`);
+
+-- -------------------------------------------------------------
+-- 13. Table: system_settings
+-- -------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `system_settings` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `setting_key` VARCHAR(150) UNIQUE NOT NULL,

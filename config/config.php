@@ -4,6 +4,9 @@
  * Sets up error reporting, secure sessions, and global constants.
  */
 
+// Egypt timezone
+date_default_timezone_set('Africa/Cairo');
+
 // Error reporting levels
 error_reporting(E_ALL);
 ini_set('display_errors', 1); // Set to 0 in production
