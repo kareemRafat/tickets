@@ -1,3 +1,6 @@
+    <!-- Password Toggle -->
+    <script src="<?php echo BASE_URL; ?>js/password-toggle.js"></script>
+
     <!-- Flowbite JavaScript -->
     <script src="<?php echo BASE_URL; ?>node_modules/flowbite/dist/flowbite.min.js"></script>
 

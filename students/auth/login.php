@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__ . '/../bootstrap.php';
-require_once __DIR__ . '/functions/remember_me.php';
+require_once __DIR__ . '/../../bootstrap.php';
+require_once __DIR__ . '/../functions/remember_me.php';
 
 // Apply security headers
 set_security_headers();
@@ -78,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $hide_navbar = true;
 $pageTitle = 'بوابة الخدمات الطلابية - تحقق الهوية';
-require_once __DIR__ . '/../includes/header.php';
+require_once __DIR__ . '/../../includes/header.php';
 ?>
 
 <div class="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4">
@@ -121,5 +121,5 @@ require_once __DIR__ . '/../includes/header.php';
 </div>
 
 <?php
-require_once __DIR__ . '/../includes/footer.php';
+require_once __DIR__ . '/../../includes/footer.php';
 ?>

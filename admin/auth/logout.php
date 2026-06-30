@@ -1,9 +1,9 @@
 <?php
 /**
- * Support Employee Logout controller
+ * Administrator Logout controller
  */
-require_once __DIR__ . '/../bootstrap.php';
-require_once __DIR__ . '/functions/remember_me.php';
+require_once __DIR__ . '/../../bootstrap.php';
+require_once __DIR__ . '/../functions/remember_me.php';
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -12,10 +12,10 @@ if (session_status() === PHP_SESSION_NONE) {
 // Clear remember-me token before destroying session
 $userId = $_SESSION['user_id'] ?? null;
 if ($userId) {
-    clear_remember_token($userId, 'employee');
+    clear_remember_token($userId, 'admin');
 }
 
-// Clear employee session variables
+// Clear admin session variables
 $_SESSION = [];
 
 // Destroy session cookie
@@ -31,6 +31,6 @@ session_destroy();
 
 // Start a new session for the guest status message
 session_start();
-$_SESSION['success'] = 'تم تسجيل الخروج بنجاح من نظام الدعم الفني.';
-header('Location: ' . BASE_URL . 'support/login.php');
+$_SESSION['success'] = 'تم تسجيل الخروج بنجاح من نظام الإدارة.';
+header('Location: ' . BASE_URL . 'admin/auth/login.php');
 exit();

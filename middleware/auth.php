@@ -24,7 +24,7 @@ function require_admin() {
             exit();
         }
         $_SESSION['error'] = 'عذراً، يجب تسجيل الدخول كمدير نظام للوصول إلى هذه الصفحة.';
-        header('Location: ' . BASE_URL . 'admin/login.php');
+        header('Location: ' . BASE_URL . 'admin/auth/login.php');
         exit();
     }
 }
@@ -48,7 +48,7 @@ function require_employee() {
             exit();
         }
         $_SESSION['error'] = 'عذراً، يجب تسجيل الدخول كموظف دعم للوصول إلى هذه الصفحة.';
-        header('Location: ' . BASE_URL . 'support/login.php');
+        header('Location: ' . BASE_URL . 'support/auth/login.php');
         exit();
     }
 }
@@ -67,7 +67,7 @@ function require_employee_or_admin() {
             exit();
         }
         $_SESSION['error'] = 'عذراً، يجب تسجيل الدخول للوصول إلى هذه الصفحة.';
-        header('Location: ' . BASE_URL . 'admin/login.php');
+        header('Location: ' . BASE_URL . 'admin/auth/login.php');
         exit();
     }
 }
@@ -93,7 +93,7 @@ function require_student() {
             }
         }
         $_SESSION['error'] = 'يرجى إدخال الرقم القومي للتحقق والوصول إلى بوابة الطلاب.';
-        header('Location: ' . BASE_URL . 'students/login.php');
+        header('Location: ' . BASE_URL . 'students/auth/login.php');
         exit();
     }
 }

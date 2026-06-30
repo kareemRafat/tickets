@@ -71,17 +71,17 @@ require_once __DIR__ . '/../config/config.php';
                     <?php if (isset($_SESSION['user_id'])): ?>
                     <!-- User Profile Dropdown -->
                     <div class="flex items-center">
-                        <button type="button" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="dropdown-user">
+                        <button type="button" class="flex rounded-full focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-600 transition-all hover:opacity-90" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="dropdown-user">
                             <span class="sr-only">فتح قائمة المستخدم</span>
                             <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold text-base shadow-md ring-2 ring-white dark:ring-gray-800">
-                                <?php echo strtoupper(substr($_SESSION['user_name'] ?? 'م', 0, 1)); ?>
+                                <?php echo strtoupper(mb_substr($_SESSION['user_name'] ?? 'م', 0, 1, 'UTF-8')); ?>
                             </div>
                         </button>
                         <div class="z-50 hidden my-3 text-base list-none bg-white divide-y divide-gray-100 rounded-2xl shadow-xl dark:bg-gray-700 dark:divide-gray-600 min-w-[250px]" id="dropdown-user">
                             <div class="px-6 py-5 bg-gradient-to-l from-blue-50 to-transparent dark:from-blue-900/20 rounded-t-2xl" role="none">
                                 <div class="flex items-center gap-4 mb-3">
                                     <div class="w-12 h-12 rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold text-lg shadow-md flex-shrink-0">
-                                        <?php echo strtoupper(substr($_SESSION['user_name'] ?? 'م', 0, 1)); ?>
+                                        <?php echo strtoupper(mb_substr($_SESSION['user_name'] ?? 'م', 0, 1, 'UTF-8')); ?>
                                     </div>
                                     <div class="min-w-0">
                                         <p class="text-base text-gray-900 dark:text-white font-bold truncate" role="none">
@@ -111,11 +111,11 @@ require_once __DIR__ . '/../config/config.php';
                                 <?php 
                                 $logout_url = BASE_URL;
                                 if (($_SESSION['user_role'] ?? '') === 'admin') {
-                                    $logout_url .= 'admin/logout.php';
+                                    $logout_url .= 'admin/auth/logout.php';
                                 } elseif (($_SESSION['user_role'] ?? '') === 'employee') {
-                                    $logout_url .= 'support/logout.php';
+                                    $logout_url .= 'support/auth/logout.php';
                                 } else {
-                                    $logout_url .= 'students/logout.php';
+                                    $logout_url .= 'students/auth/logout.php';
                                 }
                                 ?>
                                 <a href="<?php echo $logout_url; ?>" class="flex items-center gap-3 px-5 py-3 text-sm font-semibold text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20 rounded-xl transition-all mx-2" role="menuitem">

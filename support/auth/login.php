@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__ . '/../bootstrap.php';
-require_once __DIR__ . '/functions/remember_me.php';
+require_once __DIR__ . '/../../bootstrap.php';
+require_once __DIR__ . '/../functions/remember_me.php';
 
 // Apply security headers
 set_security_headers();
@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = xss_clean($_POST['username'] ?? '');
     $password = $_POST['password'] ?? '';
     $csrf_token = $_POST['csrf_token'] ?? '';
-    
+
     if (!verify_csrf_token($csrf_token)) {
         $_SESSION['error'] = 'انتهت صلاحية الجلسة، يرجى إعادة تحميل الصفحة والمحاولة.';
     } elseif (empty($username) || empty($password)) {
@@ -44,28 +44,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'email' => $username
             ]);
             $user = $stmt->fetch();
-            
+
             if ($user && security_verify_password($password, $user['password'])) {
                 // Clear any session leftover
                 session_unset();
-                
+
                 // Succeeded
                 log_login_attempt($username, true);
-                
+
                 // Regenerate session to prevent fixation
                 session_regenerate_id(true);
-                
+
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['user_name'] = $user['name'];
                 $_SESSION['user_email'] = $user['email'];
                 $_SESSION['user_role'] = $user['role'];
                 $_SESSION['user_branch_id'] = $user['branch_id'];
                 $_SESSION['csrf_token'] = bin2hex(random_bytes(32)); // New CSRF token for the authenticated session
-                
+
                 // Update last login
                 $update = $db->prepare("UPDATE employees SET last_login_at = NOW() WHERE id = :id");
                 $update->execute(['id' => $user['id']]);
-                
+
                 // Create remember-me token if requested
                 if (!empty($_POST['remember_me'])) {
                     handle_employee_remember_login($user['id']);
@@ -88,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $hide_navbar = true;
 $pageTitle = 'تسجيل دخول موظفي الدعم الفني';
-require_once __DIR__ . '/../includes/header.php';
+require_once __DIR__ . '/../../includes/header.php';
 ?>
 
 <!-- Wrapper mimicking sidebar wrapper layout but centered for login -->
@@ -111,7 +111,24 @@ require_once __DIR__ . '/../includes/header.php';
 
             <!-- Password Field -->
             <div>
-                <label for="password" class="block mb-2 text-base font-medium text-gray-900 dark:text-white">كلمة المرور</label>
+                <div class="flex items-center justify-between mb-2">
+                    <label for="password" class="text-base font-medium text-gray-900 dark:text-white">كلمة المرور</label>
+                    <button type="button" class="toggle-password-btn flex items-center gap-1 text-xs text-blue-600 hover:text-blue-700 dark:text-blue-400 font-bold" data-target="password">
+                        <span class="pw-show flex items-center gap-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            إظهار كلمة المرور
+                        </span>
+                        <span class="pw-hide hidden flex items-center gap-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
+                            </svg>
+                            إخفاء كلمة المرور
+                        </span>
+                    </button>
+                </div>
                 <input type="password" name="password" id="password" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 placeholder-gray-400 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="••••••••" required>
             </div>
 
@@ -128,5 +145,5 @@ require_once __DIR__ . '/../includes/header.php';
 </div>
 
 <?php
-require_once __DIR__ . '/../includes/footer.php';
+require_once __DIR__ . '/../../includes/footer.php';
 ?>
