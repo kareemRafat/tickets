@@ -4,6 +4,7 @@ module.exports = {
     "./admin/**/*.php",
     "./support/**/*.php",
     "./students/**/*.php",
+    "./students/**/*.js",
     "./includes/**/*.php",
     "./node_modules/flowbite/**/*.js",
     "./js/**/*.js"
