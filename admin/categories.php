@@ -94,9 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $error_message = 'التصنيف الذي تحاول حذفه غير موجود.';
                     }
                 } catch (PDOException $e) {
-                    $_SESSION['error'] = 'لا يمكن حذف هذا التصنيف لوجود تذاكر مرتبطة به.';
-                    header('Location: ' . BASE_URL . 'admin/categories.php');
-                    exit();
+                    $error_message = 'لا يمكن حذف هذا التصنيف لوجود تذاكر مرتبطة به.';
                 }
             }
         }
@@ -302,7 +300,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
                         <svg class="mx-auto mb-4 text-red-500 w-12 h-12" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                         </svg>
-                        <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">هل أنت متأكد من رغبتك في حذف التصنيف <strong>,<br><?php echo htmlspecialchars($cat['name']); ?></strong>؟</h3>
+                        <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">هل أنت متأكد من رغبتك في حذف التصنيف <strong><?php echo htmlspecialchars($cat['name']); ?></strong>؟</h3>
                         <p class="text-sm text-red-600 dark:text-red-400 mb-6 font-semibold">تنبيه: لا يمكن التراجع عن هذه الخطوة، وقد يؤثر حذف التصنيف على التذاكر المرتبطة به.</p>
                         <form action="" method="POST" class="inline-flex gap-2">
                             <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">

@@ -96,7 +96,7 @@ $hide_navbar = true;
 $pageTitle = 'تقديم شكوى أو تذكرة';
 require_once __DIR__ . '/../includes/header.php';
 ?>
-<div class="min-h-screen bg-gray-50 dark:bg-gray-900 px-4 md:px-8 pb-4 md:pb-8 pt-6">
+<div class="min-h-screen bg-gray-50 dark:bg-gray-900 px-4 md:px-8 pb-8 md:pb-12 pt-6">
     <div class="max-w-6xl mx-auto mb-6">
         <div class="bg-gradient-to-l from-blue-600/10 to-transparent dark:from-blue-400/5 dark:to-transparent rounded-3xl p-6 border border-blue-100 dark:border-blue-900/30">
             <div class="flex items-center justify-between">
@@ -173,6 +173,10 @@ require_once __DIR__ . '/../includes/header.php';
             </form>
         </div>
     </div>
+
+    <footer class="text-center py-5 text-xs text-gray-500 dark:text-gray-400 border-t border-gray-200 dark:border-gray-700 mt-8">
+        &copy; <?php echo date('Y'); ?> <?php echo SYSTEM_NAME; ?> — جميع الحقوق محفوظة
+    </footer>
 </div>
 <?php
 if (!empty($error_message)) {

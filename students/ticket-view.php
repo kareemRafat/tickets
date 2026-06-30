@@ -51,7 +51,7 @@ $hide_sidebar = true;
 $pageTitle = "التذكرة {$ticket['ticket_number']}";
 require_once __DIR__ . '/../includes/header.php';
 ?>
-<div class="sm:mr-0 pt-20 flex-1 flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900">
+<div class="sm:mr-0 pt-20 flex-1 flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900 pb-8 md:pb-12">
 <main class="p-6 space-y-6 flex-1">
     <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
         <div>
@@ -162,7 +162,11 @@ require_once __DIR__ . '/../includes/header.php';
         </div>
     </div>
 </main>
+
+    <footer class="text-center py-5 text-xs text-gray-500 dark:text-gray-400 border-t border-gray-200 dark:border-gray-700 mt-8">
+        &copy; <?php echo date('Y'); ?> <?php echo SYSTEM_NAME; ?> — جميع الحقوق محفوظة
+    </footer>
+</div>
 <?php
 require_once __DIR__ . '/../includes/footer.php';
 ?>
-</div>

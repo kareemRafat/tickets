@@ -127,43 +127,54 @@ require_once __DIR__ . '/../includes/sidebar.php';
                                 <td class="px-6 py-4 font-mono text-sm"><?php echo htmlspecialchars($employee['username']); ?></td>
                                 <td class="px-6 py-4 text-sm"><?php echo htmlspecialchars($employee['email'] ?? '—'); ?></td>
                                 <td class="px-6 py-4">
-                                    <?php echo htmlspecialchars($employee['branch_name'] ?? 'إدارة النظام (بدون فرع)'); ?>
+                                    <?php echo htmlspecialchars($employee['branch_name'] ?? 'إدارة النظام '); ?>
                                 </td>
                                 <td class="px-6 py-4">
                                     <?php if ($employee['role'] === 'admin'): ?>
-                                        <span class="inline-flex items-center px-2.5 py-0.5 text-xs font-medium rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 text-xs font-medium rounded bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
                                             مدير نظام
                                         </span>
                                     <?php else: ?>
-                                        <span class="inline-flex items-center px-2.5 py-0.5 text-xs font-medium rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 text-xs font-medium rounded bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
                                             موظف دعم
                                         </span>
                                     <?php endif; ?>
                                 </td>
                                 <td class="px-6 py-4">
                                     <?php if ($employee['status'] === 'active'): ?>
-                                        <span class="inline-flex items-center px-2.5 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                                        <span data-status-badge class="inline-flex items-center px-2.5 py-0.5 text-xs font-medium rounded bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
                                             نشط
                                         </span>
                                     <?php else: ?>
-                                        <span class="inline-flex items-center px-2.5 py-0.5 text-xs font-medium rounded-full bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">
+                                        <span data-status-badge class="inline-flex items-center px-2.5 py-0.5 text-xs font-medium rounded bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">
                                             معطل
                                         </span>
                                     <?php endif; ?>
                                 </td>
-                                <td class="px-6 py-4 text-left flex items-center justify-end gap-2">
-                                    <!-- Edit Trigger Button -->
-                                    <a href="<?php echo BASE_URL; ?>admin/employee-edit.php?id=<?php echo $employee['id']; ?>" class="font-medium text-blue-600 dark:text-blue-500 hover:underline px-3 py-1.5 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors">
-                                        تعديل
-                                    </a>
-                                    
-                                    <!-- Delete Trigger Button (Disabled if deleting self) -->
+                                <td class="px-6 py-4 text-left">
                                     <?php if ($employee['id'] !== (int)$_SESSION['user_id']): ?>
-                                        <button data-modal-target="delete-modal-<?php echo $employee['id']; ?>" data-modal-toggle="delete-modal-<?php echo $employee['id']; ?>" class="font-medium text-red-600 dark:text-red-500 hover:underline px-3 py-1.5 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors">
-                                            حذف
-                                        </button>
+                                        <div class="inline-flex rounded-lg overflow-hidden border border-gray-200 dark:border-gray-600">
+                                            <button data-toggle-status
+                                                    data-employee-id="<?php echo $employee['id']; ?>"
+                                                    data-employee-name="<?php echo htmlspecialchars($employee['name']); ?>"
+                                                    data-current-status="<?php echo $employee['status']; ?>"
+                                                    data-csrf-token="<?php echo generate_csrf_token(); ?>"
+                                                    data-url="<?php echo BASE_URL; ?>admin/functions/toggle-employee-status.php"
+                                                    class="px-3 py-2 text-xs font-medium text-white <?php echo $employee['status'] === 'active' ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'; ?> transition-colors focus:z-10">
+                                                <svg class="inline w-3.5 h-3.5 ml-1 -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                                                <?php echo $employee['status'] === 'active' ? 'تعطيل' : 'تفعيل'; ?>
+                                            </button>
+                                            <a href="<?php echo BASE_URL; ?>admin/employee-edit.php?id=<?php echo $employee['id']; ?>" class="px-3 py-2 text-xs font-medium text-white bg-blue-500 hover:bg-blue-600 transition-colors border-x border-blue-400 focus:z-10">
+                                                <svg class="inline w-3.5 h-3.5 ml-1 -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                                                تعديل
+                                            </a>
+                                            <button data-modal-target="delete-modal-<?php echo $employee['id']; ?>" data-modal-toggle="delete-modal-<?php echo $employee['id']; ?>" class="px-3 py-2 text-xs font-medium text-white bg-red-500 hover:bg-red-600 transition-colors focus:z-10">
+                                                <svg class="inline w-3.5 h-3.5 ml-1 -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                                حذف
+                                            </button>
+                                        </div>
                                     <?php else: ?>
-                                        <span class="text-xs text-gray-400 dark:text-gray-500 px-3 py-1.5 italic cursor-not-allowed">حسابك الحالي</span>
+                                        <span class="text-xs text-gray-400 dark:text-gray-500 italic">حسابك الحالي</span>
                                     <?php endif; ?>
                                 </td>
                             </tr>
@@ -210,8 +221,26 @@ require_once __DIR__ . '/../includes/sidebar.php';
             </div>
         <?php endif; ?>
     <?php endforeach; ?>
+
+    <!-- Toggle Status Confirmation Modal -->
+    <div id="toggle-status-modal" tabindex="-1" class="fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div class="relative w-full max-w-sm max-h-full">
+            <div class="relative bg-white rounded-xl shadow dark:bg-gray-700 p-6 text-center">
+                <button data-modal-close type="button" class="absolute top-3 left-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+                <svg class="mx-auto mb-3 w-10 h-10 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
+                <h3 data-modal-text class="mb-4 text-base font-semibold text-gray-800 dark:text-gray-200"></h3>
+                <div class="flex justify-center gap-3">
+                    <button data-modal-confirm type="button" class="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors"></button>
+                    <button data-modal-cancel type="button" class="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 dark:text-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 rounded-lg transition-colors">إلغاء</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </main>
 
+<script src="<?php echo BASE_URL; ?>admin/ajax/employee-status.js"></script>
 <?php
 if (!empty($error_message)) {
     $_SESSION['error'] = $error_message;
