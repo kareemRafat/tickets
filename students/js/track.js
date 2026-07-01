@@ -17,7 +17,19 @@ document.addEventListener('DOMContentLoaded', function () {
         });
         item.classList.add('active');
 
+        // Mobile: show details panel, hide list
+        if (window.innerWidth < 768) {
+            document.querySelector('.track-container').classList.add('mobile-detail-open');
+        }
+
         loadTicket(ticketId);
+    });
+
+    // Mobile back to list
+    document.addEventListener('click', function (e) {
+        if (e.target.closest('.back-to-list')) {
+            document.querySelector('.track-container').classList.remove('mobile-detail-open');
+        }
     });
 
     function loadTicket(id) {
@@ -92,20 +104,25 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         detailsPanel.innerHTML =
-            '<div class="space-y-8">' +
+            '<div class="space-y-6">' +
 
             '<div>' +
-            '<div class="flex items-center gap-3 mb-4">' +
+            '<div class="flex md:hidden items-center gap-2 mb-4">' +
+            '<button class="back-to-list px-3 py-1.5 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 dark:text-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-lg transition-all">' +
+            '← عودة</button>' +
+            '<span class="text-xs text-gray-400 dark:text-gray-500">القائمة</span>' +
+            '</div>' +
+            '<div class="flex flex-wrap items-center gap-2 mb-4">' +
             '<span class="text-base font-bold text-white bg-sky-600 px-2 py-0.5 rounded dark:text-white">' + t.ticket_number + '</span>' +
             '<span class="px-3 py-1 text-sm font-medium rounded-lg ' + statusClass + '">' + t.status_label + '</span>' +
             '<span class="px-3 py-1 text-sm font-medium rounded-lg ' + priorityClass + '">' + t.priority_label + '</span>' +
             '</div>' +
-            '<h3 class="text-2xl font-bold text-gray-900 dark:text-white leading-snug">' + t.subject + '</h3>' +
-            '<div class="inline-flex items-center gap-2 mt-4 px-4 py-2.5 bg-gray-100 dark:bg-gray-700/50 rounded-xl text-[15px] text-gray-600 dark:text-gray-300 font-semibold">' +
+            '<h3 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white leading-snug">' + t.subject + '</h3>' +
+            '<div class="flex flex-wrap items-center gap-x-2 gap-y-1 mt-4 px-4 py-2.5 bg-gray-100 dark:bg-gray-700/50 rounded-xl text-[15px] text-gray-600 dark:text-gray-300 font-semibold">' +
             '<span>' + t.category_name + '</span>' +
-            '<span class="w-1 h-1 rounded-full bg-gray-400 dark:bg-gray-500"></span>' +
+            '<span class="w-1 h-1 rounded-full bg-gray-400 dark:bg-gray-500 shrink-0"></span>' +
             '<span>' + t.student_name + '</span>' +
-            '<span class="w-1 h-1 rounded-full bg-gray-400 dark:bg-gray-500"></span>' +
+            '<span class="w-1 h-1 rounded-full bg-gray-400 dark:bg-gray-500 shrink-0"></span>' +
             '<time class="text-gray-500 dark:text-gray-400">' + formatDate(t.created_at) + '</time>' +
             '</div>' +
             '</div>' +

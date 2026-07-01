@@ -53,7 +53,7 @@ require_once __DIR__ . '/../includes/header.php';
 <div class="min-h-screen bg-gray-50 dark:bg-gray-900 px-4 md:px-8 pb-8 md:pb-12 pt-6">
     <div class="max-w-6xl mx-auto mb-6">
         <div class="bg-gradient-to-l from-blue-600/10 to-transparent dark:from-blue-400/5 dark:to-transparent rounded-3xl p-6 border border-blue-100 dark:border-blue-900/30">
-            <div class="flex items-center justify-between">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div class="flex items-center gap-4">
                     <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white shadow-lg shrink-0">
                         <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
@@ -63,7 +63,7 @@ require_once __DIR__ . '/../includes/header.php';
                         <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">متابعة حالة جميع التذاكر التي قمت بتقديمها</p>
                     </div>
                 </div>
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-2 self-end sm:self-auto flex-wrap">
                     <a href="<?php echo BASE_URL; ?>students/index.php" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 rounded-xl transition-all shrink-0">عودة للرئيسية</a>
                     <a href="<?php echo BASE_URL; ?>students/ticket-create.php" class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-sm transition-all shrink-0">
                         <svg class="w-4 h-4 ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
@@ -77,14 +77,14 @@ require_once __DIR__ . '/../includes/header.php';
     <div class="max-w-6xl mx-auto">
         <!-- Filter Card -->
         <div class="mb-6 bg-white border border-gray-200 rounded-2xl shadow-sm dark:bg-gray-800 dark:border-gray-700 p-4">
-            <form class="flex flex-wrap items-end gap-4" method="GET" action="">
-                <div>
+            <form class="flex flex-wrap items-end gap-3 md:gap-4" method="GET" action="">
+                <div class="flex-1 min-w-[150px]">
                     <label class="block mb-1 text-xs font-medium text-gray-700 dark:text-gray-300">بحث</label>
-                    <input type="text" name="search" value="<?php echo htmlspecialchars($search); ?>" placeholder="رقم التذكرة أو الموضوع..." class="bg-white border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-52 p-1.5 dark:bg-gray-800 dark:border-gray-600 placeholder-gray-400 dark:placeholder-gray-500 dark:text-white">
+                    <input type="text" name="search" value="<?php echo htmlspecialchars($search); ?>" placeholder="رقم التذكرة أو الموضوع..." class="bg-white border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-800 dark:border-gray-600 placeholder-gray-400 dark:placeholder-gray-500 dark:text-white">
                 </div>
-                <div>
+                <div class="w-full sm:w-auto">
                     <label class="block mb-1 text-xs font-medium text-gray-700 dark:text-gray-300">الحالة</label>
-                    <select name="status" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-32 p-1.5 dark:bg-gray-800 dark:border-gray-600 dark:text-white">
+                    <select name="status" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full sm:w-32 p-1.5 dark:bg-gray-800 dark:border-gray-600 dark:text-white">
                         <option value="">الكل</option>
                         <option value="open" <?php echo $status_filter === 'open' ? 'selected' : ''; ?>>مفتوحة</option>
                         <option value="in_progress" <?php echo $status_filter === 'in_progress' ? 'selected' : ''; ?>>قيد التنفيذ</option>
@@ -92,7 +92,7 @@ require_once __DIR__ . '/../includes/header.php';
                     </select>
                 </div>
                 <button type="submit" class="px-3.5 py-1.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-all">بحث</button>
-                <a href="<?php echo BASE_URL; ?>students/track.php" class="mr-auto font-bold text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 transition-colors text-xs mb-2">إعادة تعيين</a>
+                <a href="<?php echo BASE_URL; ?>students/track.php" class="sm:mr-auto font-bold text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 transition-colors text-xs mb-2">إعادة تعيين</a>
             </form>
         </div>
 
@@ -105,11 +105,15 @@ require_once __DIR__ . '/../includes/header.php';
             background-color: rgba(255, 255, 255, 0.06);
             border-right: 3px solid #60a5fa;
         }
+        @media (max-width: 767px) {
+            .track-container.mobile-detail-open #ticket-list { display: none; }
+            .track-container.mobile-detail-open #ticket-details { display: block; }
+        }
         </style>
 
-        <div class="flex gap-4">
+        <div class="track-container flex flex-col md:flex-row gap-4">
             <!-- Ticket List -->
-            <div id="ticket-list" class="w-96 shrink-0 bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700 overflow-hidden flex flex-col max-h-[calc(100vh-240px)]">
+            <div id="ticket-list" class="w-full md:w-96 md:shrink-0 bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700 overflow-hidden flex flex-col max-h-[calc(100vh-240px)]">
                 <div class="overflow-y-auto flex-1">
                     <?php if (empty($tickets)): ?>
                         <div class="px-4 py-12 text-center text-sm text-gray-400 dark:text-gray-500">
@@ -147,7 +151,7 @@ require_once __DIR__ . '/../includes/header.php';
             </div>
 
             <!-- Detail Panel -->
-            <div id="ticket-details" data-api-url="<?php echo BASE_URL; ?>students/ajax/ticket-details.php" class="flex-1 bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700 p-8 min-h-[300px] overflow-y-auto">
+            <div id="ticket-details" data-api-url="<?php echo BASE_URL; ?>students/ajax/ticket-details.php" class="flex-1 bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700 p-4 md:p-8 min-h-[300px] overflow-y-auto hidden md:block">
                 <div class="flex items-center justify-center h-full">
                     <div class="text-center">
                         <svg class="w-12 h-12 mx-auto mb-3 text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>

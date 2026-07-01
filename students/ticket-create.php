@@ -99,7 +99,7 @@ require_once __DIR__ . '/../includes/header.php';
 <div class="min-h-screen bg-gray-50 dark:bg-gray-900 px-4 md:px-8 pb-8 md:pb-12 pt-6">
     <div class="max-w-6xl mx-auto mb-6">
         <div class="bg-gradient-to-l from-blue-600/10 to-transparent dark:from-blue-400/5 dark:to-transparent rounded-3xl p-6 border border-blue-100 dark:border-blue-900/30">
-            <div class="flex items-center justify-between">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div class="flex items-center gap-4">
                     <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white shadow-lg shrink-0">
                         <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
@@ -109,7 +109,7 @@ require_once __DIR__ . '/../includes/header.php';
                         <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">يرجى تعبئة النموذج لتقديم تذكرتك أو استفسارك</p>
                     </div>
                 </div>
-                <a href="<?php echo BASE_URL; ?>students/index.php" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 rounded-xl transition-all shrink-0">عودة للرئيسية</a>
+                <a href="<?php echo BASE_URL; ?>students/index.php" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 rounded-xl transition-all shrink-0 self-start sm:self-auto">عودة للرئيسية</a>
             </div>
         </div>
     </div>
@@ -130,7 +130,7 @@ require_once __DIR__ . '/../includes/header.php';
         </div>
 
         <!-- Form Card -->
-        <div class="p-6 bg-gradient-to-l from-blue-600/10 to-transparent dark:from-blue-400/5 dark:to-transparent rounded-2xl border border-blue-100 dark:border-blue-900/30">
+        <div class="p-4 md:p-6 bg-gradient-to-l from-blue-600/10 to-transparent dark:from-blue-400/5 dark:to-transparent rounded-2xl border border-blue-100 dark:border-blue-900/30">
             <form class="space-y-6" action="" method="POST">
                 <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
 

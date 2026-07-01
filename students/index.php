@@ -38,26 +38,51 @@ require_once __DIR__ . '/../includes/header.php';
     <!-- Welcome Bar -->
     <div class="max-w-6xl mx-auto mb-6">
         <div class="bg-gradient-to-l from-blue-600/10 to-transparent dark:from-blue-400/5 dark:to-transparent rounded-3xl p-6 border border-blue-100 dark:border-blue-900/30">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center gap-4">
-                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white shadow-lg shrink-0">
-                        <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/></svg>
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+                <div class="flex items-center gap-3 sm:gap-4 order-2 sm:order-1">
+                    <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white shadow-lg shrink-0">
+                        <svg class="w-5 h-5 sm:w-7 sm:h-7" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/></svg>
                     </div>
-                    <div>
-                        <h1 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">مرحباً بك، <?php echo htmlspecialchars($student_name); ?></h1>
-                        <div class="flex items-center gap-2 mt-1 font-bold">
-                            <span class="text-sm text-gray-500 dark:text-gray-400">بوابة الطلاب .. تذاكر خدمة العملاء</span>
-                            <span class="w-1 h-1 rounded-full bg-gray-300 dark:bg-gray-600"></span>
-                            <span class="text-sm text-gray-500 dark:text-gray-400"><?php echo $totalTickets; ?> تذاكر</span>
+                    <div class="min-w-0 flex-1">
+                        <h1 class="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 dark:text-white truncate">مرحباً بك، <?php echo htmlspecialchars($student_name); ?></h1>
+                        <div class="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 mt-1 font-bold">
+                            <span class="text-xs sm:text-sm text-gray-500 dark:text-gray-400">بوابة الطلاب .. تذاكر خدمة العملاء</span>
+                            <span class="w-1 h-1 rounded-full bg-gray-300 dark:bg-gray-600 shrink-0 hidden sm:inline-block"></span>
+                            <span class="hidden sm:inline text-xs sm:text-sm text-gray-500 dark:text-gray-400"><?php echo $totalTickets; ?> تذاكر</span>
+                        </div>
+                    </div>
+                    <!-- Mobile three-dots -->
+                    <div class="sm:hidden relative">
+                        <button type="button" class="flex items-center justify-center w-9 h-9 text-gray-500 dark:text-gray-400 hover:bg-white/60 dark:hover:bg-gray-800/60 rounded-xl transition-all" data-dropdown-toggle="mobile-menu-dropdown">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zm0 6a2 2 0 110-4 2 2 0 010 4zm0 6a2 2 0 110-4 2 2 0 010 4z"/></svg>
+                        </button>
+                        <div class="z-50 hidden my-2 text-base list-none bg-white divide-y divide-gray-100 rounded-2xl shadow-xl dark:bg-gray-700 dark:divide-gray-600 min-w-[200px]" id="mobile-menu-dropdown">
+                            <div class="px-4 py-3" role="none">
+                                <p class="text-sm font-bold text-gray-900 dark:text-white truncate" role="none"><?php echo htmlspecialchars($student_name); ?></p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 truncate" role="none"><?php echo htmlspecialchars($student_code ?: '—'); ?></p>
+                            </div>
+                            <div class="py-1" role="none">
+                                <button id="mobile-theme-toggle" class="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-600/50 rounded-xl transition-all text-right" role="menuitem">
+                                    <svg class="w-4 h-4 shrink-0 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+                                    <span id="mobile-theme-label">الوضع الليلي</span>
+                                </button>
+                                <a href="<?php echo BASE_URL; ?>students/auth/logout.php" class="flex items-center gap-3 w-full px-4 py-2.5 text-sm font-semibold text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20 rounded-xl transition-all" role="menuitem">
+                                    <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                                    تسجيل الخروج
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="flex items-center gap-2">
-                    <button id="theme-toggle" type="button" class="text-gray-500 dark:text-gray-400 hover:bg-white/60 dark:hover:bg-gray-800/60 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-xl text-sm p-2.5 transition-all">
+                <div class="flex items-center gap-2 self-end sm:self-auto order-1 sm:order-2">
+                    <!-- Desktop: theme toggle -->
+                    <button id="theme-toggle" type="button" class="hidden sm:inline-flex text-gray-500 dark:text-gray-400 hover:bg-white/60 dark:hover:bg-gray-800/60 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-xl text-sm p-2.5 transition-all">
                         <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
                         <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.46 5.05L5.75 4.343a1 1 0 10-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2h1a1 1 0 100 2H4z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
                     </button>
-                    <div class="flex items-center">
+
+                    <!-- Desktop: user avatar -->
+                    <div class="hidden sm:flex items-center">
                         <button type="button" class="flex text-sm rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600 transition-all hover:ring-2 hover:ring-blue-300" id="student-menu-button" aria-expanded="false" data-dropdown-toggle="student-dropdown">
                             <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold shadow-md">
                                 <?php echo mb_substr($student_name, 0, 1); ?>
@@ -195,6 +220,38 @@ require_once __DIR__ . '/../includes/header.php';
         &copy; <?php echo date('Y'); ?> <?php echo SYSTEM_NAME; ?> — جميع الحقوق محفوظة
     </footer>
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var mobileToggle = document.getElementById('mobile-theme-toggle');
+    var mobileLabel = document.getElementById('mobile-theme-label');
+    if (mobileToggle && mobileLabel) {
+        var updateLabel = function () {
+            mobileLabel.textContent = document.documentElement.classList.contains('dark') ? 'الوضع النهاري' : 'الوضع الليلي';
+        };
+        updateLabel();
+        mobileToggle.addEventListener('click', function () {
+            if (localStorage.getItem('color-theme')) {
+                if (localStorage.getItem('color-theme') === 'light') {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('color-theme', 'dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('color-theme', 'light');
+                }
+            } else {
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('color-theme', 'light');
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('color-theme', 'dark');
+                }
+            }
+            updateLabel();
+        });
+    }
+});
+</script>
 <?php
 require_once __DIR__ . '/../includes/footer.php';
 ?>
