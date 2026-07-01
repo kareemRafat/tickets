@@ -19,6 +19,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const editDueDate = document.getElementById('edit-todo-due-date');
     const editIdInput = document.getElementById('edit-todo-id');
     const assignedToFilterEl = document.getElementById('todo-assigned-to-filter');
+    const searchFilterEl = document.getElementById('todo-search');
+    const resetFiltersBtn = document.getElementById('todo-reset-filters');
 
     var currentView = container.dataset.currentView || 'assigned_to_me';
 
@@ -223,6 +225,9 @@ document.addEventListener('DOMContentLoaded', function () {
         if (assignedToFilterEl) {
             url += '&assigned_to=' + assignedToFilterEl.value;
         }
+        if (searchFilterEl) {
+            url += '&search=' + encodeURIComponent(searchFilterEl.value);
+        }
         var start = Date.now();
         if (showSpinner) showLoading();
         fetch(url)
@@ -398,6 +403,27 @@ document.addEventListener('DOMContentLoaded', function () {
     // Assigned to filter change
     if (assignedToFilterEl) {
         assignedToFilterEl.addEventListener('change', function () {
+            loadTodos();
+        });
+    }
+
+    // Search filter
+    if (searchFilterEl) {
+        var searchTimeout;
+        searchFilterEl.addEventListener('input', function () {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(function () {
+                loadTodos();
+            }, 300);
+        });
+    }
+
+    // Reset filters
+    if (resetFiltersBtn) {
+        resetFiltersBtn.addEventListener('click', function () {
+            if (dateFilterEl) dateFilterEl.value = todayEgypt();
+            if (assignedToFilterEl) assignedToFilterEl.value = '';
+            if (searchFilterEl) searchFilterEl.value = '';
             loadTodos();
         });
     }

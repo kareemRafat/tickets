@@ -38,6 +38,11 @@ switch ($action) {
                 $sql .= " AND t.assigned_to = :assigned_to_filter";
                 $params['assigned_to_filter'] = $assigned_to_filter;
             }
+            $search = trim($_GET['search'] ?? '');
+            if ($search !== '') {
+                $sql .= " AND t.title LIKE :search";
+                $params['search'] = '%' . $search . '%';
+            }
             $sql .= " ORDER BY t.status ASC, t.created_at DESC";
             $stmt = $db->prepare($sql);
             $stmt->execute($params);

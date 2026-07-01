@@ -84,6 +84,11 @@ require_once __DIR__ . '/../includes/sidebar.php';
                     <?php endforeach; ?>
                 </select>
             </div>
+            <div class="flex items-center gap-3">
+                <label for="todo-search" class="text-sm font-semibold text-gray-700 dark:text-gray-300">بحث:</label>
+                <input type="text" id="todo-search" placeholder="ابحث عن عنوان المهمة..." class="bg-white border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white w-64">
+            </div>
+            <button type="button" id="todo-reset-filters" class="px-4 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600 rounded-xl transition-all">إعادة تعيين</button>
             <?php endif; ?>
         </div>
 
