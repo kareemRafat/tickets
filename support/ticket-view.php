@@ -247,12 +247,12 @@ $pageTitle = "التذكرة {$ticket['ticket_number']}";
 require_once __DIR__ . '/../includes/header.php';
 require_once __DIR__ . '/../includes/sidebar.php';
 ?>
-<main class="p-6 space-y-6 flex-1">
+<main class="p-4 md:p-6 space-y-6 flex-1">
     <!-- Ticket Header -->
     <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
         <div>
-            <div class="flex items-center gap-2 mb-1">
-                <h1 class="text-2xl font-bold text-gray-900 dark:text-white"><?php echo htmlspecialchars($ticket['ticket_number']); ?></h1>
+            <div class="flex flex-wrap items-center gap-2 mb-1">
+                <h1 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white"><?php echo htmlspecialchars($ticket['ticket_number']); ?></h1>
                 <span class="px-2.5 py-0.5 text-sm font-medium rounded-full <?php echo $ticket['status'] === 'open' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' : ($ticket['status'] === 'in_progress' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'); ?>">
                     <?php echo $status_labels[$ticket['status']]; ?>
                 </span>

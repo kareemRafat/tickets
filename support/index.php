@@ -79,10 +79,10 @@ $pageTitle = 'لوحة تحكم الدعم الفني';
 require_once __DIR__ . '/../includes/header.php';
 require_once __DIR__ . '/../includes/sidebar.php';
 ?>
-<main class="p-6 space-y-6 flex-1">
+<main class="p-4 md:p-6 space-y-6 flex-1">
     <div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
         <div>
-            <h1 class="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
+            <h1 class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
                 لوحة تحكم الدعم الفني
             </h1>
             <p class="mt-1 text-base text-gray-500 dark:text-gray-400">
@@ -97,54 +97,54 @@ require_once __DIR__ . '/../includes/sidebar.php';
         </div>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-        <div class="p-5 bg-white rounded-2xl border border-gray-100 shadow-sm dark:bg-gray-800 dark:border-gray-700">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 md:gap-4">
+        <div class="p-4 md:p-5 bg-white rounded-2xl border border-gray-100 shadow-sm dark:bg-gray-800 dark:border-gray-700">
             <div class="flex items-center justify-between">
-                <span class="text-base font-medium text-gray-500 dark:text-gray-400">مفتوحة</span>
-                <span class="inline-flex items-center px-2.5 py-0.5 text-sm font-medium rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">مفتوحة</span>
+                <span class="text-sm md:text-base font-medium text-gray-500 dark:text-gray-400">مفتوحة</span>
+                <span class="inline-flex items-center px-2 py-0.5 text-xs md:text-sm font-medium rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">مفتوحة</span>
             </div>
-            <div class="mt-4 flex items-baseline justify-between">
-                <span class="text-3xl font-extrabold text-gray-900 dark:text-white"><?php echo $open_count; ?></span>
-                <span class="text-sm text-gray-500 dark:text-gray-400">تذكرة</span>
+            <div class="mt-3 md:mt-4 flex items-baseline justify-between">
+                <span class="text-2xl md:text-3xl font-extrabold text-gray-900 dark:text-white"><?php echo $open_count; ?></span>
+                <span class="text-xs md:text-sm text-gray-500 dark:text-gray-400">تذكرة</span>
             </div>
         </div>
-        <div class="p-5 bg-white rounded-2xl border border-gray-100 shadow-sm dark:bg-gray-800 dark:border-gray-700">
+        <div class="p-4 md:p-5 bg-white rounded-2xl border border-gray-100 shadow-sm dark:bg-gray-800 dark:border-gray-700">
             <div class="flex items-center justify-between">
-                <span class="text-base font-medium text-gray-500 dark:text-gray-400">قيد التنفيذ</span>
-                <span class="inline-flex items-center px-2.5 py-0.5 text-sm font-medium rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">قيد التنفيذ</span>
+                <span class="text-sm md:text-base font-medium text-gray-500 dark:text-gray-400">قيد التنفيذ</span>
+                <span class="inline-flex items-center px-2 py-0.5 text-xs md:text-sm font-medium rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">قيد التنفيذ</span>
             </div>
-            <div class="mt-4 flex items-baseline justify-between">
-                <span class="text-3xl font-extrabold text-gray-900 dark:text-white"><?php echo $in_progress_count; ?></span>
-                <span class="text-sm text-gray-500 dark:text-gray-400">تذكرة</span>
+            <div class="mt-3 md:mt-4 flex items-baseline justify-between">
+                <span class="text-2xl md:text-3xl font-extrabold text-gray-900 dark:text-white"><?php echo $in_progress_count; ?></span>
+                <span class="text-xs md:text-sm text-gray-500 dark:text-gray-400">تذكرة</span>
             </div>
         </div>
-        <div class="p-5 bg-white rounded-2xl border border-gray-100 shadow-sm dark:bg-gray-800 dark:border-gray-700">
+        <div class="p-4 md:p-5 bg-white rounded-2xl border border-gray-100 shadow-sm dark:bg-gray-800 dark:border-gray-700">
             <div class="flex items-center justify-between">
-                <span class="text-base font-medium text-gray-500 dark:text-gray-400">مغلقة</span>
-                <span class="inline-flex items-center px-2.5 py-0.5 text-sm font-medium rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">مغلقة</span>
+                <span class="text-sm md:text-base font-medium text-gray-500 dark:text-gray-400">مغلقة</span>
+                <span class="inline-flex items-center px-2 py-0.5 text-xs md:text-sm font-medium rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">مغلقة</span>
             </div>
-            <div class="mt-4 flex items-baseline justify-between">
-                <span class="text-3xl font-extrabold text-gray-900 dark:text-white"><?php echo $closed_count; ?></span>
-                <span class="text-sm text-gray-500 dark:text-gray-400">تذكرة</span>
+            <div class="mt-3 md:mt-4 flex items-baseline justify-between">
+                <span class="text-2xl md:text-3xl font-extrabold text-gray-900 dark:text-white"><?php echo $closed_count; ?></span>
+                <span class="text-xs md:text-sm text-gray-500 dark:text-gray-400">تذكرة</span>
             </div>
         </div>
-        <div class="p-5 bg-white rounded-2xl border border-gray-100 shadow-sm dark:bg-gray-800 dark:border-gray-700">
+        <div class="p-4 md:p-5 bg-white rounded-2xl border border-gray-100 shadow-sm dark:bg-gray-800 dark:border-gray-700">
             <div class="flex items-center justify-between">
-                <span class="text-base font-medium text-gray-500 dark:text-gray-400">شكاوى طلاب نشطة</span>
-                <span class="inline-flex items-center px-2.5 py-0.5 text-sm font-medium rounded-full bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200">نشطة</span>
+                <span class="text-sm md:text-base font-medium text-gray-500 dark:text-gray-400">شكاوى طلاب نشطة</span>
+                <span class="inline-flex items-center px-2 py-0.5 text-xs md:text-sm font-medium rounded-full bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200">نشطة</span>
             </div>
-            <div class="mt-4 flex items-baseline justify-between">
-                <span class="text-3xl font-extrabold text-gray-900 dark:text-white"><?php echo $student_active; ?></span>
-                <span class="text-sm text-gray-500 dark:text-gray-400">من أصل <?php echo $student_total; ?></span>
+            <div class="mt-3 md:mt-4 flex items-baseline justify-between">
+                <span class="text-2xl md:text-3xl font-extrabold text-gray-900 dark:text-white"><?php echo $student_active; ?></span>
+                <span class="text-xs md:text-sm text-gray-500 dark:text-gray-400">من أصل <?php echo $student_total; ?></span>
             </div>
         </div>
-        <div class="p-5 bg-white rounded-2xl border border-gray-100 shadow-sm dark:bg-gray-800 dark:border-gray-700">
+        <div class="p-4 md:p-5 bg-white rounded-2xl border border-gray-100 shadow-sm dark:bg-gray-800 dark:border-gray-700">
             <div class="flex items-center justify-between">
-                <span class="text-base font-medium text-gray-500 dark:text-gray-400">المهام المعلقة</span>
-                <span class="inline-flex items-center px-2.5 py-0.5 text-sm font-medium rounded-full bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200">مهامي</span>
+                <span class="text-sm md:text-base font-medium text-gray-500 dark:text-gray-400">المهام المعلقة</span>
+                <span class="inline-flex items-center px-2 py-0.5 text-xs md:text-sm font-medium rounded-full bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200">مهامي</span>
             </div>
-            <div class="mt-4 flex items-baseline justify-between">
-                <span class="text-3xl font-extrabold text-gray-900 dark:text-white"><?php echo $pending_todos; ?></span>
+            <div class="mt-3 md:mt-4 flex items-baseline justify-between">
+                <span class="text-2xl md:text-3xl font-extrabold text-gray-900 dark:text-white"><?php echo $pending_todos; ?></span>
                 <a href="<?php echo BASE_URL; ?>support/todos.php" class="text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline">عرض الكل</a>
             </div>
         </div>

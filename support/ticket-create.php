@@ -90,20 +90,20 @@ $pageTitle = 'إنشاء تذكرة دعم فني جديدة';
 require_once __DIR__ . '/../includes/header.php';
 require_once __DIR__ . '/../includes/sidebar.php';
 ?>
-<main class="p-6 space-y-6 flex-1">
-    <div class="flex items-center justify-between">
+<main class="p-4 md:p-6 space-y-6 flex-1">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-            <h1 class="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
+            <h1 class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
                 إنشاء تذكرة دعم فني
             </h1>
             <p class="mt-1 text-base text-gray-500 dark:text-gray-400">تقديم طلب دعم فني داخلي لفريق الفرع.</p>
         </div>
-        <a href="<?php echo BASE_URL; ?>support/tickets.php" class="px-4 py-2 text-base font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 rounded-xl transition-all">
+        <a href="<?php echo BASE_URL; ?>support/tickets.php" class="px-4 py-2 text-base font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 rounded-xl transition-all shrink-0 self-start sm:self-auto">
             عودة للتذاكر
         </a>
     </div>
 
-    <div class="p-6 bg-white border border-gray-100 rounded-2xl shadow-sm dark:bg-gray-800 dark:border-gray-700 w-full">
+    <div class="p-4 md:p-6 bg-white border border-gray-100 rounded-2xl shadow-sm dark:bg-gray-800 dark:border-gray-700 w-full">
         <!-- Employee Info Card -->
         <div class="mb-6 bg-gradient-to-l from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl border border-blue-100 dark:border-blue-800/30 p-5">
             <div class="flex items-center gap-2.5 mb-4">

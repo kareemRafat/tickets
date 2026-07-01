@@ -31,10 +31,10 @@ $pageTitle = 'قائمة التذاكر';
 require_once __DIR__ . '/../includes/header.php';
 require_once __DIR__ . '/../includes/sidebar.php';
 ?>
-<main class="p-6 space-y-6 flex-1">
+<main class="p-4 md:p-6 space-y-6 flex-1">
     <div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
         <div>
-            <h1 class="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
+            <h1 class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
                 قائمة التذاكر
             </h1>
             <p class="mt-1 text-base text-gray-500 dark:text-gray-400">متابعة وإدارة جميع تذاكر الدعم الفني وشكاوى الطلاب الخاصة بالفرع.</p>
