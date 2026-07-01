@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded', function () {
             '</div>' +
             '<h2 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white leading-snug mb-3">' + t.subject + '</h2>' +
             
-            '<div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-gray-500 dark:text-gray-400 border-b border-gray-100 dark:border-gray-850 pb-4 mb-4">' +
+            '<div class="flex flex-col sm:flex-row sm:items-center flex-wrap gap-x-4 gap-y-2 text-xs text-gray-500 dark:text-gray-400 border-b border-gray-100 dark:border-gray-850 pb-4 mb-4">' +
             '<div class="flex items-center gap-1">' +
             '<svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581a1.462 1.462 0 002.063 0l4.317-4.317a1.462 1.462 0 000-2.063L10.038 3.659a2.25 2.25 0 00-1.591-.659z"/><path stroke-linecap="round" stroke-linejoin="round" d="M6 7.5h.008v.008H6V7.5z"/></svg>' +
             '<span>التصنيف: <span class="font-semibold text-gray-800 dark:text-gray-200">' + t.category_name + '</span></span>' +

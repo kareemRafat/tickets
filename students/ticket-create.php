@@ -108,8 +108,31 @@ require_once __DIR__ . '/../includes/header.php';
                         <h1 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">تقديم تذكرة</h1>
                         <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">يرجى تعبئة النموذج لتقديم تذكرتك أو استفسارك</p>
                     </div>
+                    <!-- Mobile three-dots menu -->
+                    <div class="sm:hidden relative mr-auto">
+                        <button type="button" class="flex items-center justify-center w-9 h-9 text-gray-500 dark:text-gray-400 hover:bg-white/60 dark:hover:bg-gray-800/60 rounded-xl transition-all" data-dropdown-toggle="mobile-menu-dropdown">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zm0 6a2 2 0 110-4 2 2 0 010 4zm0 6a2 2 0 110-4 2 2 0 010 4z"/></svg>
+                        </button>
+                        <div class="z-50 hidden my-2 text-base list-none bg-white divide-y divide-gray-100 rounded-2xl shadow-xl dark:bg-gray-700 dark:divide-gray-600 min-w-[200px]" id="mobile-menu-dropdown">
+                            <div class="py-1" role="none">
+                                <button id="mobile-theme-toggle" class="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-600/50 rounded-xl transition-all text-right" role="menuitem">
+                                    <svg class="w-4 h-4 shrink-0 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+                                    <span id="mobile-theme-label">الوضع الليلي</span>
+                                </button>
+                                <a href="<?php echo BASE_URL; ?>students/auth/logout.php" class="flex items-center gap-3 w-full px-4 py-2.5 text-sm font-semibold text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20 rounded-xl transition-all" role="menuitem">
+                                    <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                                    تسجيل الخروج
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <a href="<?php echo BASE_URL; ?>students/index.php" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 rounded-xl transition-all shrink-0 self-start sm:self-auto">عودة للرئيسية</a>
+                <a href="<?php echo BASE_URL; ?>students/index.php" class="self-start sm:self-auto inline-flex items-center px-4 py-2.5 text-sm font-semibold text-gray-700 bg-white border border-gray-200 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700 rounded-xl transition-all shadow-sm shrink-0 gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                        </svg>
+                        الرئيسية
+                    </a>
             </div>
         </div>
     </div>
@@ -178,6 +201,38 @@ require_once __DIR__ . '/../includes/header.php';
         &copy; <?php echo date('Y'); ?> <?php echo SYSTEM_NAME; ?> — جميع الحقوق محفوظة
     </footer>
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var mobileToggle = document.getElementById('mobile-theme-toggle');
+    var mobileLabel = document.getElementById('mobile-theme-label');
+    if (mobileToggle && mobileLabel) {
+        var updateLabel = function () {
+            mobileLabel.textContent = document.documentElement.classList.contains('dark') ? 'الوضع النهاري' : 'الوضع الليلي';
+        };
+        updateLabel();
+        mobileToggle.addEventListener('click', function () {
+            if (localStorage.getItem('color-theme')) {
+                if (localStorage.getItem('color-theme') === 'light') {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('color-theme', 'dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('color-theme', 'light');
+                }
+            } else {
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('color-theme', 'light');
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('color-theme', 'dark');
+                }
+            }
+            updateLabel();
+        });
+    }
+});
+</script>
 <?php
 if (!empty($error_message)) {
     $_SESSION['error'] = $error_message;
