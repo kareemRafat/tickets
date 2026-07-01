@@ -38,7 +38,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 // Global constant definitions
 if (!defined('SYSTEM_NAME')) {
-    define('SYSTEM_NAME', 'نظام تذاكر خدمة العملاء');
+    define('SYSTEM_NAME', 'تذاكر خدمة العملاء');
 }
 
 if (!defined('BASE_URL')) {

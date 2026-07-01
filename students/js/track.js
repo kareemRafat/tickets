@@ -80,11 +80,6 @@ document.addEventListener('DOMContentLoaded', function () {
         } else {
             var items = '';
             replies.forEach(function (r) {
-                var statusChange = '';
-                if (r.old_status && r.new_status) {
-                    statusChange = '<div class="mb-3 text-sm text-gray-500 dark:text-gray-400 font-semibold">تم تغيير الحالة من <span class="font-medium">' + (sl[r.old_status] || r.old_status) + '</span> إلى <span class="font-medium">' + (sl[r.new_status] || r.new_status) + '</span></div>';
-                }
-
                 var initial = r.employee_name ? r.employee_name.charAt(0).toUpperCase() : '?';
 
                 items += '<div class="flex gap-3 p-5 bg-gray-50 rounded-xl border border-gray-200 dark:bg-gray-700/30 dark:border-gray-700">' +
@@ -95,7 +90,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     '<time class="text-sm text-gray-400 dark:text-gray-500 shrink-0">' + formatDate(r.created_at) + '</time>' +
                     '</div>' +
                     '<hr class="my-3 border-gray-200 dark:border-gray-600">' +
-                    statusChange +
                     '<p class="text-base text-gray-700 dark:text-gray-300 whitespace-pre-wrap leading-relaxed">' + r.reply + '</p>' +
                     '</div>' +
                     '</div>';

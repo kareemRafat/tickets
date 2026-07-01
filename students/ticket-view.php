@@ -103,11 +103,6 @@ require_once __DIR__ . '/../includes/header.php';
                                         <span class="text-base font-semibold text-gray-900 dark:text-white"><?php echo htmlspecialchars($reply['employee_name']); ?></span>
                                         <time class="text-sm text-gray-500 dark:text-gray-400"><?php echo date('Y-m-d H:i', strtotime($reply['created_at'])); ?></time>
                                     </div>
-                                    <?php if ($reply['old_status'] && $reply['new_status']): ?>
-                                        <div class="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                                            تم تغيير الحالة من <span class="font-medium"><?php echo $status_labels[$reply['old_status']]; ?></span> إلى <span class="font-medium"><?php echo $status_labels[$reply['new_status']]; ?></span>
-                                        </div>
-                                    <?php endif; ?>
                                     <p class="text-base text-gray-700 dark:text-gray-300 whitespace-pre-wrap"><?php echo htmlspecialchars($reply['reply']); ?></p>
                                 </div>
                             </li>
