@@ -20,12 +20,15 @@ if (!empty($priority_filter)) {
     $params['priority'] = $priority_filter;
 }
 if (!empty($search)) {
-    $where[] = "(st.ticket_number LIKE :search OR st.subject LIKE :search_subject OR st.student_name LIKE :search_name OR st.national_id LIKE :search_nid OR st.contact_phone LIKE :search_phone)";
+    $where[] = "(st.ticket_number LIKE :search OR st.subject LIKE :search_subject OR st.national_id LIKE :search_nid OR st.contact_phone LIKE :search_phone)";
     $params['search'] = '%' . $search . '%';
     $params['search_subject'] = '%' . $search . '%';
-    $params['search_name'] = '%' . $search . '%';
     $params['search_nid'] = '%' . $search . '%';
     $params['search_phone'] = '%' . $search . '%';
+}
+if (!empty($student_name)) {
+    $where[] = "st.student_name LIKE :student_name";
+    $params['student_name'] = '%' . $student_name . '%';
 }
 if (!empty($from_date)) {
     $where[] = "st.created_at >= :from_date";
@@ -89,7 +92,7 @@ try {
                 <?php if (empty($tickets)): ?>
                     <tr>
                         <td colspan="8" class="px-4 py-8 text-center text-gray-500 dark:text-gray-400">
-                            لا توجد شكاوى طلابية تطابق معايير البحث.
+                            لا توجد تذاكر طلابية تطابق معايير البحث.
                         </td>
                     </tr>
                 <?php else: ?>

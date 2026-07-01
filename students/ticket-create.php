@@ -77,11 +77,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ]);
             $new_ticket_id = $db->lastInsertId();
 
-            log_audit_action("إنشاء شكوى طلابية جديدة: {$ticket_number} بواسطة {$student_name}", 'student_tickets', $new_ticket_id, null, [
+            log_audit_action("إنشاء تذكرة طلابية جديدة: {$ticket_number} بواسطة {$student_name}", 'student_tickets', $new_ticket_id, null, [
                 'ticket_number' => $ticket_number, 'subject' => $subject, 'category_id' => $category_id, 'priority' => $priority
             ]);
 
-            $_SESSION['success'] = "تم تقديم شكواك {$ticket_number} بنجاح. سنقوم بالرد في أقرب وقت.";
+            $_SESSION['success'] = "تم تقديم تذكرتك {$ticket_number} بنجاح. سنقوم بالرد في أقرب وقت.";
             header('Location: ' . BASE_URL . 'students/track.php');
             exit();
         } catch (Exception $e) {
@@ -93,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $hide_sidebar = true;
 $hide_navbar = true;
-$pageTitle = 'تقديم شكوى أو تذكرة';
+$pageTitle = 'تقديم تذكرة';
 require_once __DIR__ . '/../includes/header.php';
 ?>
 <div class="min-h-screen bg-gray-50 dark:bg-gray-900 px-4 md:px-8 pb-8 md:pb-12 pt-6">
@@ -105,8 +105,8 @@ require_once __DIR__ . '/../includes/header.php';
                         <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
                     </div>
                     <div>
-                        <h1 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">تقديم شكوى / تذكرة</h1>
-                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">يرجى تعبئة النموذج لتقديم شكواك أو استفسارك</p>
+                        <h1 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">تقديم تذكرة</h1>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">يرجى تعبئة النموذج لتقديم تذكرتك أو استفسارك</p>
                     </div>
                 </div>
                 <a href="<?php echo BASE_URL; ?>students/index.php" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 rounded-xl transition-all shrink-0">عودة للرئيسية</a>
@@ -136,7 +136,7 @@ require_once __DIR__ . '/../includes/header.php';
 
                 <div>
                     <label class="block mb-2 text-base font-medium text-gray-900 dark:text-white">الموضوع</label>
-                    <input type="text" name="subject" class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2 placeholder-gray-400 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-500" placeholder="عنوان الشكوى" required value="<?php echo isset($_POST['subject']) ? htmlspecialchars($_POST['subject']) : ''; ?>">
+                    <input type="text" name="subject" class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2 placeholder-gray-400 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-500" placeholder="عنوان التذكرة" required value="<?php echo isset($_POST['subject']) ? htmlspecialchars($_POST['subject']) : ''; ?>">
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -166,10 +166,10 @@ require_once __DIR__ . '/../includes/header.php';
 
                 <div>
                     <label class="block mb-2 text-base font-medium text-gray-900 dark:text-white">الوصف</label>
-                    <textarea name="description" rows="6" class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-gray-400 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-500" placeholder="اكتب وصفاً تفصيلياً للشكوى" required><?php echo isset($_POST['description']) ? htmlspecialchars($_POST['description']) : ''; ?></textarea>
+                    <textarea name="description" rows="6" class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-gray-400 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-500" placeholder="اكتب وصفاً تفصيلياً للتذكرة" required><?php echo isset($_POST['description']) ? htmlspecialchars($_POST['description']) : ''; ?></textarea>
                 </div>
 
-                <button type="submit" class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-base px-5 py-3 text-center dark:bg-blue-600 dark:hover:bg-blue-700">تقديم الشكوى</button>
+                <button type="submit" class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-base px-5 py-3 text-center dark:bg-blue-600 dark:hover:bg-blue-700">تقديم التذكرة</button>
             </form>
         </div>
     </div>

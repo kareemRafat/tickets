@@ -93,7 +93,7 @@ require_once __DIR__ . '/../includes/header.php';
             <div class="h-48 bg-cover bg-center relative" style="background-image: url('<?php echo BASE_URL; ?>images/add%20ticket.jfif');">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
                 <div class="absolute bottom-4 right-4">
-                    <span class="bg-white/20 backdrop-blur-md text-white text-xs px-3 py-1 rounded-full border border-white/20">شكوى جديدة</span>
+                    <span class="bg-white/20 backdrop-blur-md text-white text-xs px-3 py-1 rounded-full border border-white/20">تذكرة جديدة</span>
                 </div>
             </div>
             <div class="p-6">
@@ -102,11 +102,11 @@ require_once __DIR__ . '/../includes/header.php';
                         <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
                     </div>
                     <div>
-                        <h2 class="font-bold text-gray-900 dark:text-white">تقديم شكوى / تذكرة</h2>
-                        <p class="text-sm text-gray-500 dark:text-gray-400">إنشاء شكوى أو تذكرة جديدة</p>
+                        <h2 class="font-bold text-gray-900 dark:text-white">تقديم تذكرة</h2>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">إنشاء تذكرة جديدة</p>
                     </div>
                 </div>
-                <p class="text-sm text-gray-500 dark:text-gray-400 mb-4 leading-relaxed">للتواصل مع فريق الدعم الفني حول مشكلة أو استفسار، يمكنك تقديم شكوى جديدة وسيتم الرد عليها في أقرب وقت.</p>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mb-4 leading-relaxed">للتواصل مع فريق الدعم الفني حول مشكلة أو استفسار، يمكنك تقديم تذكرة جديدة وسيتم الرد عليها في أقرب وقت.</p>
                 <div class="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-700">
                     <span class="text-sm font-medium text-blue-600 dark:text-blue-400">تقديم الآن</span>
                     <svg class="w-5 h-5 text-blue-600 dark:text-blue-400 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>

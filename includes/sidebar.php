@@ -93,7 +93,7 @@ $icon_default = 'text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark
                   <svg class="w-5 h-5 transition duration-75 <?php echo $nav === 'student-tickets' ? $icon_active : $icon_default; ?>" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
                   </svg>
-                  <span class="mr-3">شكاوى الطلاب</span>
+                  <span class="mr-3">تذاكر الطلاب</span>
                </a>
             </li>
              <li>
@@ -101,19 +101,19 @@ $icon_default = 'text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark
                    <svg class="w-5 h-5 transition duration-75 <?php echo $current_page === 'todos' ? $icon_active : $icon_default; ?>" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
                    </svg>
-                   <span class="mr-3">المهام</span>
-                </a>
-             </li>
-             <li>
-                <a href="<?php echo BASE_URL; ?>support/tickets.php?type=student" class="flex items-center py-2.5 pe-0 ps-2.5 text-gray-900  dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group text-sm transition-all <?php echo $nav === 'student-tickets' ? $active_classes : ''; ?>">
-                   <svg class="w-5 h-5 transition duration-75 <?php echo $nav === 'student-tickets' ? $icon_active : $icon_default; ?>" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
-                   </svg>
-                   <span class="mr-3">شكاوى الطلاب</span>
-                </a>
-             </li>
-  
-           <?php elseif ($role === 'employee'): ?>
+                    <span class="mr-3">المهام</span>
+                 </a>
+              </li>
+              <li>
+                 <a href="<?php echo BASE_URL; ?>admin/all-todos.php" class="flex items-center py-2.5 pe-0 ps-2.5 text-gray-900  dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group text-sm transition-all <?php echo $nav === 'all-todos' ? $active_classes : ''; ?>">
+                    <svg class="w-5 h-5 transition duration-75 <?php echo $nav === 'all-todos' ? $icon_active : $icon_default; ?>" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                       <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"/>
+                    </svg>
+                    <span class="mr-3">جميع المهام</span>
+                 </a>
+              </li>
+   
+            <?php elseif ($role === 'employee'): ?>
             <div class="pt-2 pb-1 ps-2 pe-0 text-xs font-semibold text-gray-400 uppercase tracking-wider dark:text-gray-500">
                 لوحة الدعم الفني
             </div>
@@ -139,7 +139,7 @@ $icon_default = 'text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark
                   <svg class="w-5 h-5 transition duration-75 <?php echo $nav === 'student-tickets' ? $icon_active : $icon_default; ?>" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
                   </svg>
-                   <span class="mr-3">شكاوى الطلاب</span>
+                   <span class="mr-3">تذاكر الطلاب</span>
                 </a>
              </li>
              <li>
@@ -179,7 +179,7 @@ $icon_default = 'text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark
                    <svg class="w-5 h-5 transition duration-75 <?php echo $nav === 'ticket-create' ? $icon_active : $icon_default; ?>" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                       <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/>
                    </svg>
-                   <span class="mr-3">تقديم شكوى / تذكرة</span>
+                   <span class="mr-3">تقديم تذكرة</span>
                 </a>
              </li>
              <li>
