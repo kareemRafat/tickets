@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const ticketList = document.getElementById('ticket-list');
     const detailsPanel = document.getElementById('ticket-details');
     const apiUrl = detailsPanel ? detailsPanel.dataset.apiUrl : null;
+    const logoUrl = detailsPanel ? detailsPanel.dataset.logoUrl || '../images/logo.webp' : '../images/logo.webp';
 
     if (!ticketList || !detailsPanel || !apiUrl) return;
 
@@ -80,13 +81,13 @@ document.addEventListener('DOMContentLoaded', function () {
         } else {
             var items = '';
             replies.forEach(function (r) {
-                var initial = r.employee_name ? r.employee_name.charAt(0).toUpperCase() : '?';
-
                 items += '<div class="flex gap-3 p-5 bg-gray-50 rounded-xl border border-gray-200 dark:bg-gray-700/30 dark:border-gray-700">' +
-                    '<div class="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center text-blue-700 dark:text-blue-300 text-base font-bold shrink-0 mt-0.5">' + initial + '</div>' +
+                    '<div class="w-10 h-10 rounded-full overflow-hidden shrink-0 mt-0.5">' +
+                    '<img src="' + logoUrl + '" alt="Createivo" class="w-full h-full object-cover">' +
+                    '</div>' +
                     '<div class="flex-1 min-w-0">' +
                     '<div class="flex items-center justify-between gap-2">' +
-                    '<span class="text-base font-semibold text-gray-900 dark:text-white">' + r.employee_name + '</span>' +
+                    '<span class="text-base font-semibold text-gray-900 dark:text-white">Createivo</span>' +
                     '<time class="text-sm text-gray-400 dark:text-gray-500 shrink-0">' + formatDate(r.created_at) + '</time>' +
                     '</div>' +
                     '<hr class="my-3 border-gray-200 dark:border-gray-600">' +

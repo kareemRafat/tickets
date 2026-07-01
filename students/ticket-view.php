@@ -95,12 +95,12 @@ require_once __DIR__ . '/../includes/header.php';
                     <ol class="relative border-r border-gray-200 dark:border-gray-700 pr-6">
                         <?php foreach ($replies as $reply): ?>
                             <li class="mb-6 last:mb-0">
-                                <span class="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -right-3 ring-8 ring-white dark:ring-gray-800 dark:bg-blue-900">
-                                    <svg class="w-3 h-3 text-blue-800 dark:text-blue-200" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a8 8 0 100 16 8 8 0 000-16zm1 11a1 1 0 11-2 0 1 1 0 012 0zm0-3a1 1 0 01-2 0V7a1 1 0 112 0v3z"/></svg>
+                                <span class="absolute flex items-center justify-center w-6 h-6 rounded-full -right-3 ring-8 ring-white dark:ring-gray-800 overflow-hidden">
+                                    <img src="<?php echo BASE_URL; ?>images/logo.webp" alt="Createivo" class="w-full h-full object-cover">
                                 </span>
                                 <div class="p-4 bg-gray-50 rounded-xl border border-gray-100 dark:bg-gray-700/30 dark:border-gray-700/50">
                                     <div class="flex items-center justify-between mb-2">
-                                        <span class="text-base font-semibold text-gray-900 dark:text-white"><?php echo htmlspecialchars($reply['employee_name']); ?></span>
+                                        <span class="text-base font-semibold text-gray-900 dark:text-white">Createivo</span>
                                         <time class="text-sm text-gray-500 dark:text-gray-400"><?php echo date('Y-m-d H:i', strtotime($reply['created_at'])); ?></time>
                                     </div>
                                     <p class="text-base text-gray-700 dark:text-gray-300 whitespace-pre-wrap"><?php echo htmlspecialchars($reply['reply']); ?></p>

@@ -151,7 +151,7 @@ require_once __DIR__ . '/../includes/header.php';
             </div>
 
             <!-- Detail Panel -->
-            <div id="ticket-details" data-api-url="<?php echo BASE_URL; ?>students/ajax/ticket-details.php" class="flex-1 bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700 p-4 md:p-8 min-h-[300px] overflow-y-auto hidden md:block">
+            <div id="ticket-details" data-api-url="<?php echo BASE_URL; ?>students/ajax/ticket-details.php" data-logo-url="<?php echo BASE_URL; ?>images/logo.webp" class="flex-1 bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700 p-4 md:p-8 min-h-[300px] overflow-y-auto hidden md:block">
                 <div class="flex items-center justify-center h-full">
                     <div class="text-center">
                         <svg class="w-12 h-12 mx-auto mb-3 text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
