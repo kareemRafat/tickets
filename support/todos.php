@@ -8,6 +8,11 @@ $db = getDBConnection();
 $user_id = (int)$_SESSION['user_id'];
 $is_admin = ($_SESSION['user_role'] ?? '') === 'admin';
 
+$currentView = $_GET['view'] ?? 'assigned_to_me';
+if (!in_array($currentView, ['assigned_to_me', 'created_by_me'])) {
+    $currentView = 'assigned_to_me';
+}
+
 $employees = [];
 try {
     $stmt = $db->query("SELECT e.id, e.name, e.role, b.name as branch_name FROM employees e LEFT JOIN branches b ON e.branch_id = b.id WHERE e.status = 'active' ORDER BY e.role != 'admin', b.name, e.name");
@@ -44,15 +49,48 @@ require_once __DIR__ . '/../includes/sidebar.php';
 
         <!-- Toasts injected via JS -->
 
-        <!-- Date Filter -->
-        <div class="mb-6 flex items-center gap-3">
-            <label for="todo-date-filter" class="text-sm font-semibold text-gray-700 dark:text-gray-300">تاريخ المهام:</label>
-            <input type="date" id="todo-date-filter" value="<?php echo date('Y-m-d'); ?>" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+        <!-- View Toggle -->
+        <div class="flex justify-start mb-6">
+            <div class="inline-flex rounded-xl overflow-hidden border-2 border-gray-300 dark:border-gray-600 shadow-sm">
+                <a href="?view=assigned_to_me" class="px-8 py-2.5 text-sm font-bold transition-all border-l border-gray-300 dark:border-gray-600 last:border-l-0 <?php echo $currentView === 'assigned_to_me' ? 'bg-blue-600 text-white' : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600'; ?>">
+                    <svg class="w-4 h-4 inline ml-1.5 -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
+                    المهام المسندة إليّ
+                </a>
+                <a href="?view=created_by_me" class="px-8 py-2.5 text-sm font-bold transition-all border-l border-gray-300 dark:border-gray-600 last:border-l-0 <?php echo $currentView === 'created_by_me' ? 'bg-blue-600 text-white' : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600'; ?>">
+                    <svg class="w-4 h-4 inline ml-1.5 -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 16.604a1.875 1.875 0 01-1.07.603l-2.685.8.8-2.685a1.875 1.875 0 01.603-1.07L16.863 4.487zm0 0L19.5 7.125"/></svg>
+                    المهام التي أنشأتها
+                </a>
+            </div>
+        </div>
+
+        <!-- Filters Row -->
+        <div class="mb-6 flex flex-wrap items-center gap-x-4 gap-y-2">
+            <div class="flex items-center gap-3">
+                <label for="todo-date-filter" id="date-filter-label" class="text-sm font-semibold text-gray-700 dark:text-gray-300">تاريخ الاستحقاق:</label>
+                <input type="date" id="todo-date-filter" value="<?php echo date('Y-m-d'); ?>" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white w-56">
+            </div>
+
+            <?php if ($currentView === 'created_by_me'): ?>
+            <div class="flex items-center gap-3">
+                <label for="todo-assigned-to-filter" class="text-sm font-semibold text-gray-700 dark:text-gray-300">الموظف:</label>
+                <select id="todo-assigned-to-filter" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white w-56">
+                    <option value="">الكل</option>
+                    <?php foreach ($employees as $emp): ?>
+                        <?php if ((int)$emp['id'] !== $user_id): ?>
+                        <option value="<?php echo $emp['id']; ?>">
+                            <?php echo htmlspecialchars($emp['name']); if (!empty($emp['branch_name']) && $emp['role'] !== 'admin') { echo ' ( ' . htmlspecialchars($emp['branch_name']) . ' )'; } ?>
+                        </option>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <?php endif; ?>
         </div>
 
         <!-- Main Grid -->
         <div class="flex flex-col lg:flex-row gap-6">
 
+            <?php if ($currentView === 'assigned_to_me'): ?>
             <!-- Left Column: Create Form -->
             <div class="lg:w-80 shrink-0">
                 <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-300 dark:border-gray-700 shadow-sm overflow-hidden">
@@ -96,11 +134,13 @@ require_once __DIR__ . '/../includes/sidebar.php';
                     </form>
                 </div>
             </div>
+            <?php endif; ?>
 
             <!-- Right Column: Todo Lists -->
             <div class="flex-1 min-w-0">
                 <div id="todos-container"
-                     data-list-url="<?php echo BASE_URL; ?>support/ajax/todos.php?action=list"
+                     data-current-view="<?php echo $currentView; ?>"
+                     data-list-url="<?php echo BASE_URL; ?>support/ajax/todos.php?action=list&view=<?php echo $currentView; ?>"
                      data-create-url="<?php echo BASE_URL; ?>support/ajax/todos.php"
                      data-toggle-url="<?php echo BASE_URL; ?>support/ajax/todos.php"
                      data-edit-url="<?php echo BASE_URL; ?>support/ajax/todos.php">

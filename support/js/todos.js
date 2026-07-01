@@ -18,6 +18,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const editAssignedTo = document.getElementById('edit-todo-assigned-to');
     const editDueDate = document.getElementById('edit-todo-due-date');
     const editIdInput = document.getElementById('edit-todo-id');
+    const assignedToFilterEl = document.getElementById('todo-assigned-to-filter');
+
+    var currentView = container.dataset.currentView || 'assigned_to_me';
 
     function showToast(msg, type) {
         var isSuccess = type === 'success';
@@ -101,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function () {
         html += '<div class="flex items-center gap-2 mb-4">';
         html += '<h3 class="text-lg font-bold text-gray-900 dark:text-white">المهام الحالية</h3>';
         html += '<span class="px-2 py-0.5 text-xs font-medium bg-amber-100 text-amber-800 dark:bg-amber-800/40 dark:text-amber-300 rounded-full">' + pending.length + '</span>';
-        html += '<span class="mr-auto px-2 py-1.5 text-sm font-semibold bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300 rounded inline-flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18"/></svg>يمكنك تعديل المهام التي قمت بإنشائها فقط</span>';
+        html += (currentView === 'assigned_to_me' ? '<span class="mr-auto px-2 py-1.5 text-sm font-semibold bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300 rounded inline-flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18"/></svg>يمكنك تعديل المهام التي قمت بإنشائها فقط</span>' : '');
         html += '</div>';
 
         if (pending.length === 0) {
@@ -157,17 +160,26 @@ document.addEventListener('DOMContentLoaded', function () {
             completedHtml = '<span class="text-sm font-bold text-green-600 dark:text-green-400">أُنجزت في ' + formatDate(t.completed_at) + '</span>';
         }
 
+        var toggleHtml = '';
+        if (t.can_toggle) {
+            toggleHtml = '<button class="todo-toggle shrink-0 mt-0.5 w-5 h-5 rounded border-2 flex items-center justify-center transition-all ' +
+                (isDone
+                    ? 'bg-green-500 border-green-500 text-white hover:bg-green-600'
+                    : 'border-gray-400 dark:border-gray-500 hover:border-blue-500 dark:hover:border-blue-400 bg-gray-50 dark:bg-gray-700') +
+                '" data-id="' + t.id + '" title="' + (isDone ? 'إعادة فتح' : 'إتمام') + '">' +
+                (isDone
+                    ? '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>'
+                    : '') +
+                '</button>';
+        }
+
+        var nameLabel = currentView === 'assigned_to_me'
+            ? 'بواسطة : ' + t.assigned_by_name
+            : 'إلى : ' + t.assigned_to_name;
+
         return '<div class="flex items-stretch gap-0 bg-white rounded-xl border border-gray-300 dark:bg-gray-800 dark:border-gray-700 hover:shadow-sm transition-shadow todo-card overflow-hidden ' + (isDone ? 'opacity-75' : '') + '" data-id="' + t.id + '">' +
             '<div class="flex items-start gap-4 p-5 flex-1 min-w-0">' +
-            '<button class="todo-toggle shrink-0 mt-0.5 w-5 h-5 rounded border-2 flex items-center justify-center transition-all ' +
-            (isDone
-                ? 'bg-green-500 border-green-500 text-white hover:bg-green-600'
-                : 'border-gray-400 dark:border-gray-500 hover:border-blue-500 dark:hover:border-blue-400 bg-gray-50 dark:bg-gray-700') +
-            '" data-id="' + t.id + '" title="' + (isDone ? 'إعادة فتح' : 'إتمام') + '">' +
-            (isDone
-                ? '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>'
-                : '') +
-            '</button>' +
+            toggleHtml +
 
             '<div class="flex-1 min-w-0">' +
             '<div class="flex items-start justify-between gap-2">' +
@@ -176,14 +188,14 @@ document.addEventListener('DOMContentLoaded', function () {
             '<div class="flex items-center gap-3 mt-2 flex-wrap">' +
             '<span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-sm font-semibold bg-pink-700 text-white rounded dark:bg-gray-700 dark:text-gray-300">' +
             '<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>' +
-            'بواسطة : ' + t.assigned_by_name +
+            nameLabel +
             '</span>' +
             (dueHtml ? dueHtml : '') +
             (completedHtml ? completedHtml : '') +
             '</div>' +
             '</div>' +
             '</div>' +
-            (t.assigned_by_id === CURRENT_USER_ID
+            (currentView === 'assigned_to_me' && t.can_edit
                 ? '<button class="todo-edit flex flex-col items-center justify-center gap-1 px-5 text-xs font-bold transition-all shrink-0 ' +
                 (isEditable(t)
                     ? 'text-white bg-sky-500 hover:bg-sky-600 dark:bg-sky-600 dark:hover:bg-sky-700 cursor-pointer'
@@ -208,6 +220,9 @@ document.addEventListener('DOMContentLoaded', function () {
         if (showSpinner === undefined) showSpinner = true;
         var dateVal = dateFilterEl ? dateFilterEl.value : '';
         var url = listUrl + '&date=' + (dateVal || todayEgypt());
+        if (assignedToFilterEl) {
+            url += '&assigned_to=' + assignedToFilterEl.value;
+        }
         var start = Date.now();
         if (showSpinner) showLoading();
         fetch(url)
@@ -376,6 +391,13 @@ document.addEventListener('DOMContentLoaded', function () {
     // Date filter change
     if (dateFilterEl) {
         dateFilterEl.addEventListener('change', function () {
+            loadTodos();
+        });
+    }
+
+    // Assigned to filter change
+    if (assignedToFilterEl) {
+        assignedToFilterEl.addEventListener('change', function () {
             loadTodos();
         });
     }

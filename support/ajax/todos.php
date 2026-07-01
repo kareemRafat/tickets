@@ -8,24 +8,53 @@ require_employee_or_admin();
 header('Content-Type: application/json; charset=utf-8');
 
 $db = getDBConnection();
+$db->exec("SET time_zone = '+02:00'");
 $user_id = (int)$_SESSION['user_id'];
 $action = $_GET['action'] ?? $_POST['action'] ?? '';
 
 switch ($action) {
 
     case 'list':
+        $view = $_GET['view'] ?? 'assigned_to_me';
+        $view = in_array($view, ['assigned_to_me', 'created_by_me']) ? $view : 'assigned_to_me';
         $date_filter = $_GET['date'] ?? date('Y-m-d');
         $date_filter = preg_match('/^\d{4}-\d{2}-\d{2}$/', $date_filter) ? $date_filter : date('Y-m-d');
 
-        $stmt = $db->prepare("
-            SELECT t.*, a.name as assigned_by_name
-            FROM employee_todos t
-            JOIN employees a ON t.assigned_by = a.id
-            WHERE t.assigned_to = :user_id
-            AND t.due_date = :due_date
-            ORDER BY t.status ASC, t.created_at DESC
-        ");
-        $stmt->execute(['user_id' => $user_id, 'due_date' => $date_filter]);
+        $assigned_to_filter = isset($_GET['assigned_to']) ? (int)$_GET['assigned_to'] : 0;
+
+        if ($view === 'created_by_me') {
+            $sql = "
+                SELECT t.*,
+                       a.name as assigned_by_name,
+                       e.name as assigned_to_name
+                FROM employee_todos t
+                JOIN employees a ON t.assigned_by = a.id
+                JOIN employees e ON t.assigned_to = e.id
+                WHERE t.assigned_by = :user_id
+                AND t.due_date = :filter_date
+            ";
+            $params = ['user_id' => $user_id, 'filter_date' => $date_filter];
+            if ($assigned_to_filter > 0) {
+                $sql .= " AND t.assigned_to = :assigned_to_filter";
+                $params['assigned_to_filter'] = $assigned_to_filter;
+            }
+            $sql .= " ORDER BY t.status ASC, t.created_at DESC";
+            $stmt = $db->prepare($sql);
+            $stmt->execute($params);
+        } else {
+            $stmt = $db->prepare("
+                SELECT t.*,
+                       a.name as assigned_by_name,
+                       e.name as assigned_to_name
+                FROM employee_todos t
+                JOIN employees a ON t.assigned_by = a.id
+                JOIN employees e ON t.assigned_to = e.id
+                WHERE t.assigned_to = :user_id
+                AND t.due_date = :filter_date
+                ORDER BY t.status ASC, t.created_at DESC
+            ");
+            $stmt->execute(['user_id' => $user_id, 'filter_date' => $date_filter]);
+        }
         $rows = $stmt->fetchAll();
 
         $pending = [];
@@ -38,8 +67,12 @@ switch ($action) {
                 'status'           => $r['status'],
                 'assigned_by_id'   => (int)$r['assigned_by'],
                 'assigned_by_name' => xss_clean($r['assigned_by_name']),
+                'assigned_to_id'   => (int)$r['assigned_to'],
+                'assigned_to_name' => xss_clean($r['assigned_to_name']),
                 'completed_at'     => $r['completed_at'],
                 'created_at'       => $r['created_at'],
+                'can_toggle'       => ((int)$r['assigned_to'] === $user_id),
+                'can_edit'         => ((int)$r['assigned_by'] === $user_id),
             ];
             if ($r['status'] === 'done') {
                 $done[] = $item;
