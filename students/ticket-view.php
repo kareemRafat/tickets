@@ -99,7 +99,7 @@ require_once __DIR__ . '/../includes/header.php';
                                     <img src="<?php echo BASE_URL; ?>images/logo.webp" alt="Createivo" class="w-full h-full object-cover">
                                 </span>
                                 <div class="p-4 bg-gray-50 rounded-xl border border-gray-100 dark:bg-gray-700/30 dark:border-gray-700/50">
-                                    <div class="flex items-center justify-between mb-2">
+                                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2">
                                         <span class="text-base font-semibold text-gray-900 dark:text-white">Createivo</span>
                                         <time class="text-sm text-gray-500 dark:text-gray-400"><?php echo date('Y-m-d H:i', strtotime($reply['created_at'])); ?></time>
                                     </div>
