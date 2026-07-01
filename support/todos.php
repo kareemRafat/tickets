@@ -50,14 +50,14 @@ require_once __DIR__ . '/../includes/sidebar.php';
         <!-- Toasts injected via JS -->
 
         <!-- View Toggle -->
-        <div class="flex justify-start mb-6">
-            <div class="inline-flex rounded-xl overflow-hidden border-2 border-gray-300 dark:border-gray-600 shadow-sm">
-                <a href="?view=assigned_to_me" class="px-4 md:px-8 py-2.5 text-xs md:text-sm font-bold transition-all border-l border-gray-300 dark:border-gray-600 last:border-l-0 whitespace-nowrap <?php echo $currentView === 'assigned_to_me' ? 'bg-blue-600 text-white' : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600'; ?>">
+        <div class="flex mb-6">
+            <div class="flex w-full md:inline-flex md:w-auto rounded-xl overflow-hidden border-2 border-gray-300 dark:border-gray-600 shadow-sm">
+                <a href="?view=assigned_to_me" class="flex-1 md:flex-none px-4 md:px-8 py-2.5 text-xs md:text-sm font-bold transition-all text-center border-l border-gray-300 dark:border-gray-600 last:border-l-0 whitespace-nowrap <?php echo $currentView === 'assigned_to_me' ? 'bg-blue-600 text-white' : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600'; ?>">
                     <svg class="w-4 h-4 inline ml-1.5 -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
                     <span class="hidden md:inline">المهام المسندة إليّ</span>
                     <span class="md:hidden">مسندة إليّ</span>
                 </a>
-                <a href="?view=created_by_me" class="px-4 md:px-8 py-2.5 text-xs md:text-sm font-bold transition-all border-l border-gray-300 dark:border-gray-600 last:border-l-0 whitespace-nowrap <?php echo $currentView === 'created_by_me' ? 'bg-blue-600 text-white' : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600'; ?>">
+                <a href="?view=created_by_me" class="flex-1 md:flex-none px-4 md:px-8 py-2.5 text-xs md:text-sm font-bold transition-all text-center border-l border-gray-300 dark:border-gray-600 last:border-l-0 whitespace-nowrap <?php echo $currentView === 'created_by_me' ? 'bg-blue-600 text-white' : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600'; ?>">
                     <svg class="w-4 h-4 inline ml-1.5 -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 16.604a1.875 1.875 0 01-1.07.603l-2.685.8.8-2.685a1.875 1.875 0 01.603-1.07L16.863 4.487zm0 0L19.5 7.125"/></svg>
                     <span class="hidden md:inline">المهام التي أنشأتها</span>
                     <span class="md:hidden">أنشأتها</span>
@@ -66,16 +66,16 @@ require_once __DIR__ . '/../includes/sidebar.php';
         </div>
 
         <!-- Filters Row -->
-        <div class="mb-6 flex flex-wrap items-center gap-x-4 gap-y-2">
-            <div class="flex items-center gap-3">
-                <label for="todo-date-filter" id="date-filter-label" class="text-sm font-semibold text-gray-700 dark:text-gray-300">تاريخ الاستحقاق:</label>
-                <input type="date" id="todo-date-filter" value="<?php echo date('Y-m-d'); ?>" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white w-full sm:w-56">
+        <div class="mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            <div class="w-full">
+                <label for="todo-date-filter" class="block mb-1 text-xs font-medium text-gray-900 dark:text-white">تاريخ الاستحقاق</label>
+                <input type="date" id="todo-date-filter" value="<?php echo date('Y-m-d'); ?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
             </div>
 
             <?php if ($currentView === 'created_by_me'): ?>
-            <div class="flex flex-wrap items-center gap-3">
-                <label for="todo-assigned-to-filter" class="text-sm font-semibold text-gray-700 dark:text-gray-300">الموظف:</label>
-                <select id="todo-assigned-to-filter" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white w-full sm:w-56">
+            <div class="w-full">
+                <label for="todo-assigned-to-filter" class="block mb-1 text-xs font-medium text-gray-900 dark:text-white">الموظف</label>
+                <select id="todo-assigned-to-filter" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                     <option value="">الكل</option>
                     <?php foreach ($employees as $emp): ?>
                         <?php if ((int)$emp['id'] !== $user_id): ?>
@@ -86,11 +86,13 @@ require_once __DIR__ . '/../includes/sidebar.php';
                     <?php endforeach; ?>
                 </select>
             </div>
-            <div class="flex flex-wrap items-center gap-3">
-                <label for="todo-search" class="text-sm font-semibold text-gray-700 dark:text-gray-300">بحث:</label>
-                <input type="text" id="todo-search" placeholder="ابحث عن عنوان المهمة..." class="bg-white border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white w-full sm:w-64">
+            <div class="w-full">
+                <label for="todo-search" class="block mb-1 text-xs font-medium text-gray-900 dark:text-white">بحث</label>
+                <div class="flex gap-2">
+                    <input type="text" id="todo-search" placeholder="ابحث عن عنوان المهمة..." class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 placeholder-gray-400 dark:placeholder-gray-500 dark:text-white">
+                    <button type="button" id="todo-reset-filters" class="px-3 py-1.5 text-sm font-bold text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 whitespace-nowrap">إعادة تعيين</button>
+                </div>
             </div>
-            <button type="button" id="todo-reset-filters" class="px-4 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600 rounded-xl transition-all">إعادة تعيين</button>
             <?php endif; ?>
         </div>
 

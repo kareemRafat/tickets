@@ -31,9 +31,10 @@ switch ($action) {
                 JOIN employees a ON t.assigned_by = a.id
                 JOIN employees e ON t.assigned_to = e.id
                 WHERE t.assigned_by = :user_id
+                AND t.assigned_to != :not_self_id
                 AND t.due_date = :filter_date
             ";
-            $params = ['user_id' => $user_id, 'filter_date' => $date_filter];
+            $params = ['user_id' => $user_id, 'not_self_id' => $user_id, 'filter_date' => $date_filter];
             if ($assigned_to_filter > 0) {
                 $sql .= " AND t.assigned_to = :assigned_to_filter";
                 $params['assigned_to_filter'] = $assigned_to_filter;

@@ -41,14 +41,14 @@ require_once __DIR__ . '/../includes/sidebar.php';
         </div>
 
         <!-- Filters Row -->
-        <div class="w-full lg:w-4/5 mb-6 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
-            <div class="flex items-center gap-3">
-                <label for="all-todos-date" class="text-sm font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">تاريخ الاستحقاق:</label>
-                <input type="date" id="all-todos-date" value="<?php echo date('Y-m-d'); ?>" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white w-full">
+        <div class="w-full mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            <div class="w-full">
+                <label for="all-todos-date" class="block mb-1 text-xs font-medium text-gray-900 dark:text-white">تاريخ الاستحقاق</label>
+                <input type="date" id="all-todos-date" value="<?php echo date('Y-m-d'); ?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
             </div>
-            <div class="flex items-center gap-3">
-                <label for="all-todos-employee" class="text-sm font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">الموظف:</label>
-                <select id="all-todos-employee" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white w-full">
+            <div class="w-full">
+                <label for="all-todos-employee" class="block mb-1 text-xs font-medium text-gray-900 dark:text-white">الموظف</label>
+                <select id="all-todos-employee" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                     <option value="">جميع الموظفين</option>
                     <?php foreach ($employees as $emp): ?>
                         <option value="<?php echo $emp['id']; ?>">
@@ -57,20 +57,20 @@ require_once __DIR__ . '/../includes/sidebar.php';
                     <?php endforeach; ?>
                 </select>
             </div>
-            <div class="flex items-center gap-3">
-                <label for="all-todos-status" class="text-sm font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">الحالة:</label>
-                <select id="all-todos-status" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white w-full">
+            <div class="w-full">
+                <label for="all-todos-status" class="block mb-1 text-xs font-medium text-gray-900 dark:text-white">الحالة</label>
+                <select id="all-todos-status" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                     <option value="">الكل</option>
                     <option value="pending">معلقة</option>
                     <option value="done">منتهية</option>
                 </select>
             </div>
-            <div class="flex items-center gap-3">
-                <label for="all-todos-search" class="text-sm font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">بحث:</label>
-                <input type="text" id="all-todos-search" placeholder="عنوان المهمة..." class="bg-white border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white w-full">
-            </div>
-            <div class="flex items-center justify-end sm:col-span-2">
-                <button type="button" id="all-todos-reset" class="text-sm font-bold text-red-600 dark:text-red-400 hover:underline cursor-pointer">إعادة تعيين</button>
+            <div class="w-full">
+                <label for="all-todos-search" class="block mb-1 text-xs font-medium text-gray-900 dark:text-white">بحث</label>
+                <div class="flex gap-2">
+                    <input type="text" id="all-todos-search" placeholder="عنوان المهمة..." class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 placeholder-gray-400 dark:placeholder-gray-500 dark:text-white">
+                    <button type="button" id="all-todos-reset" class="px-3 py-1.5 text-sm font-bold text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 whitespace-nowrap">إعادة تعيين</button>
+                </div>
             </div>
         </div>
 

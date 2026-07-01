@@ -107,14 +107,22 @@ require_once __DIR__ . '/../includes/sidebar.php';
 <!-- Main Content Area -->
 <main class="p-6 space-y-6 flex-1">
     <!-- Header -->
-    <div class="flex items-center justify-between">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-            <h1 class="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
+            <h1 class="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
                 إضافة موظف جديد
             </h1>
             <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">سجل حساباً جديداً لإداري أو موظف دعم فني وحدد صلاحياته.</p>
         </div>
-        <a href="<?php echo BASE_URL; ?>admin/employees.php" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 rounded-xl transition-all">
+        <a href="<?php echo BASE_URL; ?>admin/employees.php" class="hidden sm:inline-flex px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 rounded-xl transition-all">
+            عودة للقائمة
+        </a>
+    </div>
+    
+    <!-- Fixed Back Button (Mobile) -->
+    <div class="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 shadow-lg">
+        <a href="<?php echo BASE_URL; ?>admin/employees.php" class="flex items-center justify-center gap-2 w-full px-4 py-3 text-sm font-bold text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
             عودة للقائمة
         </a>
     </div>
@@ -205,6 +213,9 @@ require_once __DIR__ . '/../includes/sidebar.php';
             <button type="submit" class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-3 text-center dark:bg-blue-600 dark:hover:bg-blue-700">حفظ الموظف</button>
         </form>
     </div>
+
+    <!-- Mobile bottom padding to account for fixed button -->
+    <div class="sm:hidden h-16"></div>
 </main>
 
 <?php

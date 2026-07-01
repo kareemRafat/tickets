@@ -103,10 +103,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Pending section
         html += '<div class="mb-2">';
-        html += '<div class="flex items-center gap-2 mb-4">';
+        html += '<div class="flex items-start sm:items-center gap-2 mb-4 flex-wrap">';
         html += '<h3 class="text-lg font-bold text-gray-900 dark:text-white">المهام الحالية</h3>';
         html += '<span class="px-2 py-0.5 text-xs font-medium bg-amber-100 text-amber-800 dark:bg-amber-800/40 dark:text-amber-300 rounded-full">' + pending.length + '</span>';
-        html += (currentView === 'assigned_to_me' ? '<span class="mr-auto px-2 py-1.5 text-sm font-semibold bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300 rounded inline-flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18"/></svg>يمكنك تعديل المهام التي قمت بإنشائها فقط</span>' : '');
+        html += (currentView === 'assigned_to_me' ? '<span class="sm:mr-auto w-full sm:w-auto px-2 py-1.5 text-xs sm:text-sm font-semibold bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300 rounded inline-flex items-center gap-1"><svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18"/></svg>يمكنك تعديل المهام التي قمت بإنشائها فقط</span>' : '');
         html += '</div>';
 
         if (pending.length === 0) {
